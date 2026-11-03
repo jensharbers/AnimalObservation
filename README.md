@@ -42,6 +42,67 @@ It is built for **farmers** (quick checks, welfare indicators) and **scientists*
 - **Field-ready:** outdoor mode (black/yellow, large buttons), night mode (red light), screen lock, screen stays on while recording, vibration feedback, screen-reader support.
 - **Works offline** once the files are on your device, and keeps everything in the browser.
 
+## Software Features and Functional Scope
+
+AnimalObservation combines behavioural data collection, data management and exploratory analysis in a single browser-based application.
+
+### Behavioural data collection
+
+The application supports individual animal observations and group-based herd scans. Behaviours can be recorded using start/stop interactions, allowing the simultaneous recording of multiple behaviours per animal.
+
+Each observation can be associated with animal identification, species, observer, study, group, location and additional session metadata.
+
+### Configurable ethograms
+
+The built-in ethogram contains 32 predefined behaviours for cattle, pigs and sheep, organized into eight behavioural categories.
+
+Users can add their own behaviours, edit definitions and examples, and configure which behaviours are displayed for each observation scenario.
+
+### Observation methods
+
+The application supports:
+
+- Continuous behavioural recording using start/stop events.
+- Individual animal observations.
+- Group observations and scan sampling.
+- Interval-based observation reminders.
+- Recording of simultaneous behaviours.
+- GPS-supported location tagging, where available.
+
+### Data analysis and visualization
+
+AnimalObservation provides integrated tools for exploratory behavioural analysis, including:
+
+- Behavioural time budgets.
+- Daily activity patterns.
+- Behavioural bout analysis.
+- Behavioural transition analysis.
+- Synchrony analysis.
+- Herd scan summaries.
+- Behavioural heatmaps.
+- Configurable welfare-related indicators.
+
+### Data management and interoperability
+
+Observation data can be exported in several formats, including JSON and CSV.
+
+Additional export options include BORIS-style event data, one-second observation grids for agreement statistics, PDF reports and visualization exports.
+
+The application also supports merging observation datasets from different observers.
+
+### Field-oriented interface
+
+The interface includes features designed for practical observation environments:
+
+- Outdoor mode with high-contrast colours and large buttons.
+- Red-light night mode.
+- Screen lock to prevent accidental input.
+- Screen wake lock during recording, where supported.
+- Vibration and audio feedback.
+- Keyboard and screen-reader accessibility support.
+
+These features are intended to facilitate data collection in barns, on pasture and during video-based observations.
+
 ## Quick start
 
 1. Open the [online version](https://jensharbers.github.io/AnimalObservation/Tierverhalten/).
@@ -51,7 +112,94 @@ It is built for **farmers** (quick checks, welfare indicators) and **scientists*
 
 Want to look around first? Open **Data → ⚙ → Load demo data (6 cows, 2 days)**. Remove it again with **Remove demo data**.
 
+## Demonstration Datasets
+
+AnimalObservation includes four predefined demonstration datasets that allow users to explore the application's functionality without collecting their own observational data.
+
+The datasets are synthetically generated for demonstration and testing purposes. They do not represent empirical observations and must not be interpreted as evidence of actual animal behaviour patterns.
+
+They are intended to illustrate different aspects of behavioural data collection and analysis.
+
+### Purpose of the demonstration datasets
+
+The datasets support:
+
+- Familiarization with the recording interface.
+- Demonstration of behavioural time budgets and activity patterns.
+- Exploration of behavioural sequences and transitions.
+- Testing of data export and visualization functions.
+- Reproducible demonstrations in teaching and research contexts.
+
+### Loading demonstration data
+
+Demonstration data can be loaded directly from the application:
+
+1. Open the Data tab.
+2. Select the additional options menu (⚙).
+3. Choose Load demo data.
+4. Explore the available recording and analysis functions.
+
+The demonstration data can be removed again using Remove demo data.
+
+### Importing user datasets
+
+In addition to the predefined demonstration datasets, users can import their own observation datasets.
+
+This allows AnimalObservation to be adapted to different animal species, research questions and observation scenarios.
+
+The distinction between synthetic demonstration data and empirical research data is maintained throughout the documentation.
+
 ## Run it locally and offline
+
+## Installation and Deployment
+
+AnimalObservation is a self-contained static web application. It does not require a database, backend server, user account or installation of additional software packages.
+
+### Local installation
+
+1. Download or clone the repository from GitHub.
+2. Extract the downloaded files if necessary.
+3. Open the project folder.
+4. Open `index.html` in a modern web browser.
+
+The application can be used directly from the local file system. Recording, data management, analysis and data export are available without running a web server.
+
+### Recommended local deployment
+
+For features that require a secure browser context, such as camera access, GPS tagging and service worker registration, a local web server is recommended.
+
+From the project directory, run:
+
+```bash
+python3 -m http.server 8000
+```
+
+Then open:
+
+```text
+http://localhost:8000
+```
+
+### Offline deployment
+
+For fully offline operation, all required application files and third-party JavaScript libraries must be available locally.
+
+The following libraries should be kept in the project directory:
+
+- `lib/jszip.min.js`
+- `lib/jsQR.min.js`
+- `plotly-cartesian.min.js`
+
+This prevents the application from attempting to retrieve missing libraries from external content delivery networks.
+
+The application can subsequently be used without an active internet connection.
+
+### Supported platforms
+
+AnimalObservation runs in current versions of Chrome, Edge, Firefox and Safari on desktop computers, tablets and smartphones.
+
+No central infrastructure or cloud service is required. Data is stored locally in the browser of the device being used.
+
 
 The app is a static page. There is nothing to build and no server component.
 
@@ -258,6 +406,61 @@ Short description of the app, a link to the author's website and the legal notic
 ## Privacy
 
 All data stays in your browser (`localStorage` plus IndexedDB, soft limit about 15 MB). Nothing is sent to a server, and there is no tracking or account. Clearing your browser data deletes your records, so export first. GPS, camera and the optional backup file are only used when you switch them on and allow them. If a local library file is missing, the page may load it once from a public CDN (jsDelivr or cdnjs); keep the files from `lib/` next to the page to avoid this.
+
+## Scientific Background and Research Relevance
+
+### Motivation
+
+Systematic behavioural observation is an established method in animal science, ethology and livestock research. However, behavioural data collection in practical research environments can involve heterogeneous recording procedures, manual documentation and subsequent transfer of observations into digital analysis tools.
+
+AnimalObservation was developed to provide an integrated digital environment for recording, managing and exploring animal behaviour data.
+
+The software aims to simplify structured behavioural observations while supporting consistent data handling and subsequent analysis.
+
+### Research applications
+
+AnimalObservation is designed for use in different research and educational contexts, including:
+
+- Behavioural studies in cattle, pigs and sheep.
+- Animal welfare research.
+- Livestock behaviour monitoring.
+- Individual and group-based behavioural observations.
+- Teaching and practical training in animal science and ethology.
+- Video-based behavioural coding.
+
+### Standardized data collection
+
+The application combines configurable ethograms with structured recording procedures.
+
+Behavioural events are stored with timestamps and associated metadata. This provides a consistent data structure for subsequent analysis, comparison and export.
+
+The availability of configurable ethograms allows researchers to adapt behavioural categories and definitions to their specific research questions.
+
+### Field applicability
+
+A particular design objective is the use of the application under practical observation conditions.
+
+The browser-based architecture allows deployment on smartphones, tablets and laptops without requiring a central server or permanent internet connection.
+
+Local data storage supports observations in environments where network connectivity is limited or unavailable.
+
+Features such as outdoor mode, night mode, screen locking and vibration feedback are intended to facilitate operation under different environmental conditions.
+
+### Reproducibility and data interoperability
+
+AnimalObservation provides structured data exports in JSON and several CSV formats, including event-based and scan-based representations.
+
+The availability of BORIS-style event exports and one-second observation grids supports data exchange and comparison with other behavioural coding workflows.
+
+Synthetic demonstration datasets allow users to explore the application and reproduce software demonstrations without requiring access to empirical research data.
+
+### Scope and scientific limitations
+
+AnimalObservation is a research support tool for behavioural data collection and exploratory analysis.
+
+The software does not replace the development and validation of species-specific ethograms, observation protocols or experimental designs.
+
+Researchers remain responsible for defining appropriate behavioural categories, establishing observation procedures and assessing the reliability and validity of their collected data.
 
 ## Scientific notes and limitations
 
