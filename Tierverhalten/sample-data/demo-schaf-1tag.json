@@ -1,0 +1,185 @@
+{
+  "app": "verhaltens-tracker",
+  "version": 1,
+  "session": {
+    "study": "Weide-Kurztest",
+    "observer": "C. Weber",
+    "group": "Herde West",
+    "place": "Weide 2"
+  },
+  "observations": [],
+  "exportedAt": "2026-11-02T17:00:52.000Z",
+  "timezone": "Europe/Berlin",
+  "animals": [
+    {
+      "id": "sheep-lotti",
+      "name": "Lotti",
+      "number": "S12",
+      "species": "Sheep"
+    }
+  ],
+  "events": [
+    {
+      "animalId": "sheep-lotti",
+      "behavior": "lying",
+      "session": {
+        "study": "Weide-Kurztest",
+        "observer": "C. Weber",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-30T00:00:00.000Z",
+      "end": "2026-10-30T07:00:00.000Z",
+      "durationSec": 25200
+    },
+    {
+      "animalId": "sheep-lotti",
+      "behavior": "grazing",
+      "session": {
+        "study": "Weide-Kurztest",
+        "observer": "C. Weber",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-30T07:00:00.000Z",
+      "end": "2026-10-30T09:00:00.000Z",
+      "durationSec": 7200
+    },
+    {
+      "animalId": "sheep-lotti",
+      "behavior": "ruminating",
+      "session": {
+        "study": "Weide-Kurztest",
+        "observer": "C. Weber",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-30T09:00:00.000Z",
+      "end": "2026-10-30T10:00:00.000Z",
+      "durationSec": 3600
+    },
+    {
+      "animalId": "sheep-lotti",
+      "behavior": "walking",
+      "session": {
+        "study": "Weide-Kurztest",
+        "observer": "C. Weber",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-30T10:00:00.000Z",
+      "end": "2026-10-30T11:00:00.000Z",
+      "durationSec": 3600
+    },
+    {
+      "animalId": "sheep-lotti",
+      "behavior": "grazing",
+      "session": {
+        "study": "Weide-Kurztest",
+        "observer": "C. Weber",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-30T11:00:00.000Z",
+      "end": "2026-10-30T12:00:00.000Z",
+      "durationSec": 3600
+    },
+    {
+      "animalId": "sheep-lotti",
+      "behavior": "lying",
+      "session": {
+        "study": "Weide-Kurztest",
+        "observer": "C. Weber",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-30T12:00:00.000Z",
+      "end": "2026-10-30T14:00:00.000Z",
+      "durationSec": 7200
+    },
+    {
+      "animalId": "sheep-lotti",
+      "behavior": "ruminating",
+      "session": {
+        "study": "Weide-Kurztest",
+        "observer": "C. Weber",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-30T12:30:00.000Z",
+      "end": "2026-10-30T14:00:00.000Z",
+      "durationSec": 5400
+    },
+    {
+      "animalId": "sheep-lotti",
+      "behavior": "browsing",
+      "session": {
+        "study": "Weide-Kurztest",
+        "observer": "C. Weber",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-30T14:00:00.000Z",
+      "end": "2026-10-30T15:00:00.000Z",
+      "durationSec": 3600
+    },
+    {
+      "animalId": "sheep-lotti",
+      "behavior": "flocking",
+      "session": {
+        "study": "Weide-Kurztest",
+        "observer": "C. Weber",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-30T15:00:00.000Z",
+      "end": "2026-10-30T16:00:00.000Z",
+      "durationSec": 3600
+    },
+    {
+      "animalId": "sheep-lotti",
+      "behavior": "vigilance",
+      "session": {
+        "study": "Weide-Kurztest",
+        "observer": "C. Weber",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-30T16:00:00.000Z",
+      "end": "2026-10-30T17:00:00.000Z",
+      "durationSec": 3600
+    },
+    {
+      "animalId": "sheep-lotti",
+      "behavior": "grazing",
+      "session": {
+        "study": "Weide-Kurztest",
+        "observer": "C. Weber",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-30T17:00:00.000Z",
+      "end": "2026-10-30T18:00:00.000Z",
+      "durationSec": 3600
+    },
+    {
+      "animalId": "sheep-lotti",
+      "behavior": "lying",
+      "session": {
+        "study": "Weide-Kurztest",
+        "observer": "C. Weber",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-30T18:00:00.000Z",
+      "end": "2026-10-31T00:00:00.000Z",
+      "durationSec": 21600
+    }
+  ],
+  "snapshots": [],
+  "behaviors": {},
+  "reminder": {
+    "every": 15,
+    "unit": "minutes"
+  }
+}

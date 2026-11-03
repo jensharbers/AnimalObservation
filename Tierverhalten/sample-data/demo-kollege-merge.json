@@ -1,0 +1,139 @@
+{
+  "app": "verhaltens-tracker",
+  "version": 1,
+  "session": {
+    "study": "Demo-Stallversuch",
+    "observer": "D. Kollege",
+    "group": "Bucht A",
+    "place": "Versuchstall Nord"
+  },
+  "observations": [],
+  "exportedAt": "2026-11-02T17:00:52.000Z",
+  "timezone": "Europe/Berlin",
+  "animals": [
+    {
+      "id": "cow-berta",
+      "name": "Berta",
+      "number": "17",
+      "species": "Cattle"
+    },
+    {
+      "id": "cow-new",
+      "name": "Nora",
+      "number": "44",
+      "species": "Cattle"
+    }
+  ],
+  "events": [
+    {
+      "animalId": "cow-berta",
+      "behavior": "feeding",
+      "session": {
+        "study": "Demo-Stallversuch",
+        "observer": "D. Kollege",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-30T08:00:00.000Z",
+      "end": "2026-10-30T09:00:00.000Z",
+      "durationSec": 3600
+    },
+    {
+      "animalId": "cow-berta",
+      "behavior": "standing",
+      "session": {
+        "study": "Demo-Stallversuch",
+        "observer": "D. Kollege",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-30T09:00:00.000Z",
+      "end": "2026-10-30T11:00:00.000Z",
+      "durationSec": 7200
+    },
+    {
+      "animalId": "cow-berta",
+      "behavior": "ruminating",
+      "session": {
+        "study": "Demo-Stallversuch",
+        "observer": "D. Kollege",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-30T09:30:00.000Z",
+      "end": "2026-10-30T11:00:00.000Z",
+      "durationSec": 5400
+    },
+    {
+      "animalId": "cow-berta",
+      "behavior": "lying",
+      "session": {
+        "study": "Demo-Stallversuch",
+        "observer": "D. Kollege",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-30T11:00:00.000Z",
+      "end": "2026-10-30T13:00:00.000Z",
+      "durationSec": 7200
+    },
+    {
+      "animalId": "cow-new",
+      "behavior": "lying",
+      "session": {
+        "study": "Demo-Stallversuch",
+        "observer": "D. Kollege",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-30T08:00:00.000Z",
+      "end": "2026-10-30T10:00:00.000Z",
+      "durationSec": 7200
+    },
+    {
+      "animalId": "cow-new",
+      "behavior": "feeding",
+      "session": {
+        "study": "Demo-Stallversuch",
+        "observer": "D. Kollege",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-30T10:00:00.000Z",
+      "end": "2026-10-30T12:00:00.000Z",
+      "durationSec": 7200
+    },
+    {
+      "animalId": "cow-new",
+      "behavior": "standing",
+      "session": {
+        "study": "Demo-Stallversuch",
+        "observer": "D. Kollege",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-30T12:00:00.000Z",
+      "end": "2026-10-30T18:00:00.000Z",
+      "durationSec": 21600
+    },
+    {
+      "animalId": "cow-new",
+      "behavior": "lying",
+      "session": {
+        "study": "Demo-Stallversuch",
+        "observer": "D. Kollege",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-30T18:00:00.000Z",
+      "end": "2026-10-31T00:00:00.000Z",
+      "durationSec": 21600
+    }
+  ],
+  "snapshots": [],
+  "behaviors": {},
+  "reminder": {
+    "every": 5,
+    "unit": "minutes"
+  }
+}

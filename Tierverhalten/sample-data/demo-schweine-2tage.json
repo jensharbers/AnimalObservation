@@ -1,0 +1,1146 @@
+{
+  "app": "verhaltens-tracker",
+  "version": 1,
+  "session": {
+    "study": "Schwein-Buchtenvergleich",
+    "observer": "B. Schmidt",
+    "group": "Bucht 3",
+    "place": "Maststall"
+  },
+  "observations": [],
+  "exportedAt": "2026-11-02T17:00:52.000Z",
+  "timezone": "Europe/Berlin",
+  "animals": [
+    {
+      "id": "pig-01",
+      "name": "Paula",
+      "number": "P01",
+      "species": "Pig"
+    },
+    {
+      "id": "pig-02",
+      "name": "Otto",
+      "number": "P02",
+      "species": "Pig"
+    },
+    {
+      "id": "pig-03",
+      "name": "Susi",
+      "number": "P03",
+      "species": "Pig"
+    }
+  ],
+  "events": [
+    {
+      "animalId": "pig-01",
+      "behavior": "lying",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-29T00:00:00.000Z",
+      "end": "2026-10-29T06:00:00.000Z",
+      "durationSec": 21600
+    },
+    {
+      "animalId": "pig-01",
+      "behavior": "postural",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-29T06:00:00.000Z",
+      "end": "2026-10-29T06:30:00.000Z",
+      "durationSec": 1800
+    },
+    {
+      "animalId": "pig-01",
+      "behavior": "feeding",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-29T06:30:00.000Z",
+      "end": "2026-10-29T08:00:00.000Z",
+      "durationSec": 5400
+    },
+    {
+      "animalId": "pig-01",
+      "behavior": "rooting",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-29T08:00:00.000Z",
+      "end": "2026-10-29T09:00:00.000Z",
+      "durationSec": 3600
+    },
+    {
+      "animalId": "pig-01",
+      "behavior": "manip",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-29T09:00:00.000Z",
+      "end": "2026-10-29T10:00:00.000Z",
+      "durationSec": 3600
+    },
+    {
+      "animalId": "pig-01",
+      "behavior": "lying",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-29T10:00:00.000Z",
+      "end": "2026-10-29T12:00:00.000Z",
+      "durationSec": 7200
+    },
+    {
+      "animalId": "pig-01",
+      "behavior": "feeding",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-29T12:00:00.000Z",
+      "end": "2026-10-29T13:00:00.000Z",
+      "durationSec": 3600
+    },
+    {
+      "animalId": "pig-01",
+      "behavior": "nosing",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-29T13:00:00.000Z",
+      "end": "2026-10-29T14:00:00.000Z",
+      "durationSec": 3600
+    },
+    {
+      "animalId": "pig-01",
+      "behavior": "standing",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-29T14:00:00.000Z",
+      "end": "2026-10-29T15:00:00.000Z",
+      "durationSec": 3600
+    },
+    {
+      "animalId": "pig-01",
+      "behavior": "drinking",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-29T15:00:00.000Z",
+      "end": "2026-10-29T15:30:00.000Z",
+      "durationSec": 1800
+    },
+    {
+      "animalId": "pig-01",
+      "behavior": "rooting",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-29T15:30:00.000Z",
+      "end": "2026-10-29T17:00:00.000Z",
+      "durationSec": 5400
+    },
+    {
+      "animalId": "pig-01",
+      "behavior": "feeding",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-29T17:00:00.000Z",
+      "end": "2026-10-29T18:00:00.000Z",
+      "durationSec": 3600
+    },
+    {
+      "animalId": "pig-01",
+      "behavior": "lying",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-29T18:00:00.000Z",
+      "end": "2026-10-29T20:00:00.000Z",
+      "durationSec": 7200
+    },
+    {
+      "animalId": "pig-01",
+      "behavior": "lying",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-29T20:00:00.000Z",
+      "end": "2026-10-30T00:00:00.000Z",
+      "durationSec": 14400
+    },
+    {
+      "animalId": "pig-02",
+      "behavior": "lying",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-29T00:00:00.000Z",
+      "end": "2026-10-29T06:00:00.000Z",
+      "durationSec": 21600
+    },
+    {
+      "animalId": "pig-02",
+      "behavior": "postural",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-29T06:00:00.000Z",
+      "end": "2026-10-29T06:30:00.000Z",
+      "durationSec": 1800
+    },
+    {
+      "animalId": "pig-02",
+      "behavior": "feeding",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-29T06:30:00.000Z",
+      "end": "2026-10-29T08:00:00.000Z",
+      "durationSec": 5400
+    },
+    {
+      "animalId": "pig-02",
+      "behavior": "rooting",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-29T08:00:00.000Z",
+      "end": "2026-10-29T09:00:00.000Z",
+      "durationSec": 3600
+    },
+    {
+      "animalId": "pig-02",
+      "behavior": "manip",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-29T09:00:00.000Z",
+      "end": "2026-10-29T10:00:00.000Z",
+      "durationSec": 3600
+    },
+    {
+      "animalId": "pig-02",
+      "behavior": "lying",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-29T10:00:00.000Z",
+      "end": "2026-10-29T12:00:00.000Z",
+      "durationSec": 7200
+    },
+    {
+      "animalId": "pig-02",
+      "behavior": "feeding",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-29T12:00:00.000Z",
+      "end": "2026-10-29T13:00:00.000Z",
+      "durationSec": 3600
+    },
+    {
+      "animalId": "pig-02",
+      "behavior": "nosing",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-29T13:00:00.000Z",
+      "end": "2026-10-29T14:00:00.000Z",
+      "durationSec": 3600
+    },
+    {
+      "animalId": "pig-02",
+      "behavior": "standing",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-29T14:00:00.000Z",
+      "end": "2026-10-29T15:00:00.000Z",
+      "durationSec": 3600
+    },
+    {
+      "animalId": "pig-02",
+      "behavior": "drinking",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-29T15:00:00.000Z",
+      "end": "2026-10-29T15:30:00.000Z",
+      "durationSec": 1800
+    },
+    {
+      "animalId": "pig-02",
+      "behavior": "rooting",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-29T15:30:00.000Z",
+      "end": "2026-10-29T17:00:00.000Z",
+      "durationSec": 5400
+    },
+    {
+      "animalId": "pig-02",
+      "behavior": "feeding",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-29T17:00:00.000Z",
+      "end": "2026-10-29T18:00:00.000Z",
+      "durationSec": 3600
+    },
+    {
+      "animalId": "pig-02",
+      "behavior": "lying",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-29T18:00:00.000Z",
+      "end": "2026-10-29T20:00:00.000Z",
+      "durationSec": 7200
+    },
+    {
+      "animalId": "pig-02",
+      "behavior": "lying",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-29T20:00:00.000Z",
+      "end": "2026-10-30T00:00:00.000Z",
+      "durationSec": 14400
+    },
+    {
+      "animalId": "pig-03",
+      "behavior": "lying",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-29T00:00:00.000Z",
+      "end": "2026-10-29T06:00:00.000Z",
+      "durationSec": 21600
+    },
+    {
+      "animalId": "pig-03",
+      "behavior": "postural",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-29T06:00:00.000Z",
+      "end": "2026-10-29T06:30:00.000Z",
+      "durationSec": 1800
+    },
+    {
+      "animalId": "pig-03",
+      "behavior": "feeding",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-29T06:30:00.000Z",
+      "end": "2026-10-29T08:00:00.000Z",
+      "durationSec": 5400
+    },
+    {
+      "animalId": "pig-03",
+      "behavior": "rooting",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-29T08:00:00.000Z",
+      "end": "2026-10-29T09:00:00.000Z",
+      "durationSec": 3600
+    },
+    {
+      "animalId": "pig-03",
+      "behavior": "manip",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-29T09:00:00.000Z",
+      "end": "2026-10-29T10:00:00.000Z",
+      "durationSec": 3600
+    },
+    {
+      "animalId": "pig-03",
+      "behavior": "lying",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-29T10:00:00.000Z",
+      "end": "2026-10-29T12:00:00.000Z",
+      "durationSec": 7200
+    },
+    {
+      "animalId": "pig-03",
+      "behavior": "feeding",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-29T12:00:00.000Z",
+      "end": "2026-10-29T13:00:00.000Z",
+      "durationSec": 3600
+    },
+    {
+      "animalId": "pig-03",
+      "behavior": "nosing",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-29T13:00:00.000Z",
+      "end": "2026-10-29T14:00:00.000Z",
+      "durationSec": 3600
+    },
+    {
+      "animalId": "pig-03",
+      "behavior": "standing",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-29T14:00:00.000Z",
+      "end": "2026-10-29T15:00:00.000Z",
+      "durationSec": 3600
+    },
+    {
+      "animalId": "pig-03",
+      "behavior": "drinking",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-29T15:00:00.000Z",
+      "end": "2026-10-29T15:30:00.000Z",
+      "durationSec": 1800
+    },
+    {
+      "animalId": "pig-03",
+      "behavior": "rooting",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-29T15:30:00.000Z",
+      "end": "2026-10-29T17:00:00.000Z",
+      "durationSec": 5400
+    },
+    {
+      "animalId": "pig-03",
+      "behavior": "feeding",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-29T17:00:00.000Z",
+      "end": "2026-10-29T18:00:00.000Z",
+      "durationSec": 3600
+    },
+    {
+      "animalId": "pig-03",
+      "behavior": "lying",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-29T18:00:00.000Z",
+      "end": "2026-10-29T20:00:00.000Z",
+      "durationSec": 7200
+    },
+    {
+      "animalId": "pig-03",
+      "behavior": "lying",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-29T20:00:00.000Z",
+      "end": "2026-10-30T00:00:00.000Z",
+      "durationSec": 14400
+    },
+    {
+      "animalId": "pig-01",
+      "behavior": "lying",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-30T00:00:00.000Z",
+      "end": "2026-10-30T06:00:00.000Z",
+      "durationSec": 21600
+    },
+    {
+      "animalId": "pig-01",
+      "behavior": "postural",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-30T06:00:00.000Z",
+      "end": "2026-10-30T06:30:00.000Z",
+      "durationSec": 1800
+    },
+    {
+      "animalId": "pig-01",
+      "behavior": "feeding",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-30T06:30:00.000Z",
+      "end": "2026-10-30T08:00:00.000Z",
+      "durationSec": 5400
+    },
+    {
+      "animalId": "pig-01",
+      "behavior": "rooting",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-30T08:00:00.000Z",
+      "end": "2026-10-30T09:00:00.000Z",
+      "durationSec": 3600
+    },
+    {
+      "animalId": "pig-01",
+      "behavior": "manip",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-30T09:00:00.000Z",
+      "end": "2026-10-30T10:00:00.000Z",
+      "durationSec": 3600
+    },
+    {
+      "animalId": "pig-01",
+      "behavior": "lying",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-30T10:00:00.000Z",
+      "end": "2026-10-30T12:00:00.000Z",
+      "durationSec": 7200
+    },
+    {
+      "animalId": "pig-01",
+      "behavior": "feeding",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-30T12:00:00.000Z",
+      "end": "2026-10-30T13:00:00.000Z",
+      "durationSec": 3600
+    },
+    {
+      "animalId": "pig-01",
+      "behavior": "nosing",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-30T13:00:00.000Z",
+      "end": "2026-10-30T14:00:00.000Z",
+      "durationSec": 3600
+    },
+    {
+      "animalId": "pig-01",
+      "behavior": "standing",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-30T14:00:00.000Z",
+      "end": "2026-10-30T15:00:00.000Z",
+      "durationSec": 3600
+    },
+    {
+      "animalId": "pig-01",
+      "behavior": "drinking",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-30T15:00:00.000Z",
+      "end": "2026-10-30T15:30:00.000Z",
+      "durationSec": 1800
+    },
+    {
+      "animalId": "pig-01",
+      "behavior": "rooting",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-30T15:30:00.000Z",
+      "end": "2026-10-30T17:00:00.000Z",
+      "durationSec": 5400
+    },
+    {
+      "animalId": "pig-01",
+      "behavior": "feeding",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-30T17:00:00.000Z",
+      "end": "2026-10-30T18:00:00.000Z",
+      "durationSec": 3600
+    },
+    {
+      "animalId": "pig-01",
+      "behavior": "lying",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-30T18:00:00.000Z",
+      "end": "2026-10-30T20:00:00.000Z",
+      "durationSec": 7200
+    },
+    {
+      "animalId": "pig-01",
+      "behavior": "lying",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-30T20:00:00.000Z",
+      "end": "2026-10-31T00:00:00.000Z",
+      "durationSec": 14400
+    },
+    {
+      "animalId": "pig-02",
+      "behavior": "lying",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-30T00:00:00.000Z",
+      "end": "2026-10-30T06:00:00.000Z",
+      "durationSec": 21600
+    },
+    {
+      "animalId": "pig-02",
+      "behavior": "postural",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-30T06:00:00.000Z",
+      "end": "2026-10-30T06:30:00.000Z",
+      "durationSec": 1800
+    },
+    {
+      "animalId": "pig-02",
+      "behavior": "feeding",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-30T06:30:00.000Z",
+      "end": "2026-10-30T08:00:00.000Z",
+      "durationSec": 5400
+    },
+    {
+      "animalId": "pig-02",
+      "behavior": "rooting",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-30T08:00:00.000Z",
+      "end": "2026-10-30T09:00:00.000Z",
+      "durationSec": 3600
+    },
+    {
+      "animalId": "pig-02",
+      "behavior": "manip",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-30T09:00:00.000Z",
+      "end": "2026-10-30T10:00:00.000Z",
+      "durationSec": 3600
+    },
+    {
+      "animalId": "pig-02",
+      "behavior": "lying",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-30T10:00:00.000Z",
+      "end": "2026-10-30T12:00:00.000Z",
+      "durationSec": 7200
+    },
+    {
+      "animalId": "pig-02",
+      "behavior": "feeding",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-30T12:00:00.000Z",
+      "end": "2026-10-30T13:00:00.000Z",
+      "durationSec": 3600
+    },
+    {
+      "animalId": "pig-02",
+      "behavior": "nosing",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-30T13:00:00.000Z",
+      "end": "2026-10-30T14:00:00.000Z",
+      "durationSec": 3600
+    },
+    {
+      "animalId": "pig-02",
+      "behavior": "standing",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-30T14:00:00.000Z",
+      "end": "2026-10-30T15:00:00.000Z",
+      "durationSec": 3600
+    },
+    {
+      "animalId": "pig-02",
+      "behavior": "drinking",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-30T15:00:00.000Z",
+      "end": "2026-10-30T15:30:00.000Z",
+      "durationSec": 1800
+    },
+    {
+      "animalId": "pig-02",
+      "behavior": "rooting",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-30T15:30:00.000Z",
+      "end": "2026-10-30T17:00:00.000Z",
+      "durationSec": 5400
+    },
+    {
+      "animalId": "pig-02",
+      "behavior": "feeding",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-30T17:00:00.000Z",
+      "end": "2026-10-30T18:00:00.000Z",
+      "durationSec": 3600
+    },
+    {
+      "animalId": "pig-02",
+      "behavior": "lying",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-30T18:00:00.000Z",
+      "end": "2026-10-30T20:00:00.000Z",
+      "durationSec": 7200
+    },
+    {
+      "animalId": "pig-02",
+      "behavior": "lying",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-30T20:00:00.000Z",
+      "end": "2026-10-31T00:00:00.000Z",
+      "durationSec": 14400
+    },
+    {
+      "animalId": "pig-03",
+      "behavior": "lying",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-30T00:00:00.000Z",
+      "end": "2026-10-30T06:00:00.000Z",
+      "durationSec": 21600
+    },
+    {
+      "animalId": "pig-03",
+      "behavior": "postural",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-30T06:00:00.000Z",
+      "end": "2026-10-30T06:30:00.000Z",
+      "durationSec": 1800
+    },
+    {
+      "animalId": "pig-03",
+      "behavior": "feeding",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-30T06:30:00.000Z",
+      "end": "2026-10-30T08:00:00.000Z",
+      "durationSec": 5400
+    },
+    {
+      "animalId": "pig-03",
+      "behavior": "rooting",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-30T08:00:00.000Z",
+      "end": "2026-10-30T09:00:00.000Z",
+      "durationSec": 3600
+    },
+    {
+      "animalId": "pig-03",
+      "behavior": "manip",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-30T09:00:00.000Z",
+      "end": "2026-10-30T10:00:00.000Z",
+      "durationSec": 3600
+    },
+    {
+      "animalId": "pig-03",
+      "behavior": "lying",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-30T10:00:00.000Z",
+      "end": "2026-10-30T12:00:00.000Z",
+      "durationSec": 7200
+    },
+    {
+      "animalId": "pig-03",
+      "behavior": "feeding",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-30T12:00:00.000Z",
+      "end": "2026-10-30T13:00:00.000Z",
+      "durationSec": 3600
+    },
+    {
+      "animalId": "pig-03",
+      "behavior": "nosing",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-30T13:00:00.000Z",
+      "end": "2026-10-30T14:00:00.000Z",
+      "durationSec": 3600
+    },
+    {
+      "animalId": "pig-03",
+      "behavior": "standing",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-30T14:00:00.000Z",
+      "end": "2026-10-30T15:00:00.000Z",
+      "durationSec": 3600
+    },
+    {
+      "animalId": "pig-03",
+      "behavior": "drinking",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-30T15:00:00.000Z",
+      "end": "2026-10-30T15:30:00.000Z",
+      "durationSec": 1800
+    },
+    {
+      "animalId": "pig-03",
+      "behavior": "rooting",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-30T15:30:00.000Z",
+      "end": "2026-10-30T17:00:00.000Z",
+      "durationSec": 5400
+    },
+    {
+      "animalId": "pig-03",
+      "behavior": "feeding",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-30T17:00:00.000Z",
+      "end": "2026-10-30T18:00:00.000Z",
+      "durationSec": 3600
+    },
+    {
+      "animalId": "pig-03",
+      "behavior": "lying",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-30T18:00:00.000Z",
+      "end": "2026-10-30T20:00:00.000Z",
+      "durationSec": 7200
+    },
+    {
+      "animalId": "pig-03",
+      "behavior": "lying",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht A",
+        "place": "Versuchstall Nord"
+      },
+      "start": "2026-10-30T20:00:00.000Z",
+      "end": "2026-10-31T00:00:00.000Z",
+      "durationSec": 14400
+    },
+    {
+      "animalId": "pig-02",
+      "behavior": "tailbiting",
+      "session": {
+        "study": "Schwein-Buchtenvergleich",
+        "observer": "B. Schmidt",
+        "group": "Bucht 3",
+        "place": "Maststall"
+      },
+      "start": "2026-10-29T15:10:00.000Z",
+      "end": "2026-10-29T15:18:00.000Z",
+      "durationSec": 480
+    }
+  ],
+  "snapshots": [],
+  "behaviors": {},
+  "reminder": {
+    "every": 10,
+    "unit": "minutes"
+  }
+}

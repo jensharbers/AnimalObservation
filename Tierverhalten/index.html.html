@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+<title>Verhaltens-Tracker · Behavior Tracker</title>
+<style>
+:root{--bg:#f4f6f2;--fg:#15201a;--card:#fff;--ac:#1f6b3f;--ac2:#e1efe6;--mut:#44524a;--bd:#6e7a71;--onfg:#fff;--warn:#8c2a16;--focus:#0b57d0;--tap:44px;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+:focus{outline:none}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px;border-radius:.35rem}
+.btn,button,nav button,input,select,textarea{min-height:var(--tap)}
+.btn,button,nav button{min-width:var(--tap)}
+.b,.btn,button,input,select,textarea,[role="button"]{scroll-margin-top:3.2rem;scroll-margin-bottom:4.5rem}
+.sr-only,.sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+/* species / form checkboxes themed */
+input[type="checkbox"]{
+  accent-color:#2563eb;
+  width:1.15rem;height:1.15rem;
+  flex-shrink:0;
+}
+:root[data-theme="outdoor"] input[type="checkbox"]{accent-color:#ffcf00}
+:root[data-theme="night"] input[type="checkbox"]{accent-color:#ff1a1a}
+:root[data-theme="dark"] input[type="checkbox"]{accent-color:#5fc68a}
+/* stronger fallback where accent-color is weak: label chip look for .bsp */
+label:has(input.bsp){
+  display:inline-flex;align-items:center;gap:.35rem;
+  padding:.25rem .55rem;border-radius:.5rem;
+  border:1.5px solid var(--bd);background:var(--card);color:var(--fg)
+}
+label:has(input.bsp:checked){
+  border-color:#2563eb;background:#dbeafe;color:#1e3a8a
+}
+:root[data-theme="outdoor"] label:has(input.bsp:checked){
+  border-color:#ffcf00;background:#ffcf00;color:#000
+}
+:root[data-theme="night"] label:has(input.bsp:checked){
+  border-color:#ff1a1a;background:#ff1a1a;color:#000
+}
+:root[data-theme="dark"] label:has(input.bsp:checked){
+  border-color:#5fc68a;background:#243227;color:#5fc68a
+}
+
+.skip{position:absolute;left:-999px;top:0;background:var(--ac);color:var(--onfg);padding:.6rem 1rem;z-index:30;border-radius:0 0 .5rem 0}
+.skip:focus{left:0}
+@media (prefers-reduced-motion: reduce){*{transition:none!important;animation:none!important}}
+
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]):not([data-theme="outdoor"]){--bg:#121712;--fg:#eef3ef;--card:#1b231c;--ac:#5fc68a;--ac2:#243227;--mut:#b7c4bb;--bd:#5a675f;--onfg:#07130a;--warn:#ff9178;--focus:#7cc4ff}}
+:root[data-theme="dark"]{--bg:#121712;--fg:#eef3ef;--card:#1b231c;--ac:#5fc68a;--ac2:#243227;--mut:#b7c4bb;--bd:#5a675f;--onfg:#07130a;--warn:#ff9178;--focus:#7cc4ff}
+:root[data-theme="outdoor"]{--bg:#000;--fg:#fff;--card:#000;--ac:#ffcf00;--ac2:#1a1a1a;--mut:#e6e6e6;--bd:#fff;--onfg:#000;--warn:#ff5a36;--focus:#00e5ff;--tap:72px}
+:root[data-theme="outdoor"] :focus-visible{outline:4px solid var(--focus);outline-offset:2px}
+:root[data-theme="outdoor"] .btn,:root[data-theme="outdoor"] input,:root[data-theme="outdoor"] select{min-height:var(--tap);font-size:1.1rem}
+:root[data-theme="outdoor"] .btn.s{border:2px solid var(--ac)}
+:root[data-theme="outdoor"] .row,:root[data-theme="outdoor"] .grid{gap:1rem}
+:root[data-theme="outdoor"] .b{border-width:3px}:root[data-theme="outdoor"] .b .tm{font-size:1.6rem;opacity:1}
+:root[data-theme="outdoor"] .card{border:2px solid var(--bd)}:root[data-theme="outdoor"] nav button{padding:1.2rem .1rem}
+:root[data-theme="outdoor"] .q{width:2.75rem;height:2.75rem;min-width:2.75rem;min-height:2.75rem;max-width:2.75rem;max-height:2.75rem;font-size:1.2rem}
+:root[data-theme="outdoor"] .three .b .q,:root[data-theme="outdoor"] .four .b .q{width:1.35rem;height:1.35rem;min-width:1.35rem;min-height:1.35rem;max-width:1.35rem;max-height:1.35rem;font-size:.75rem}
+:root[data-theme="night"]{
+  --bg:#000;--fg:#ff2a2a;--card:#0a0000;--ac:#ff1a1a;--ac2:#1a0000;
+  --mut:#cc3333;--bd:#990000;--onfg:#000;--warn:#ff6666;--focus:#ff4444;--tap:64px;
+  color-scheme:dark;
+}
+:root[data-theme="night"] body{background:#000;color:#ff2a2a}
+:root[data-theme="night"] :focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+:root[data-theme="night"] .btn,:root[data-theme="night"] input,:root[data-theme="night"] select,:root[data-theme="night"] textarea{
+  min-height:var(--tap);background:#0a0000;color:#ff2a2a;border-color:#990000
+}
+:root[data-theme="night"] .btn{border:2px solid #ff1a1a}
+:root[data-theme="night"] .btn.s{border-color:#990000}
+:root[data-theme="night"] .btn:not(.s),:root[data-theme="night"] nav button.on{
+  background:#ff1a1a;color:#000;border-color:#ff1a1a
+}
+:root[data-theme="night"] .card{background:#0a0000;border:2px solid #990000}
+:root[data-theme="night"] .b{background:#0a0000;border-color:#990000;color:#ff2a2a}
+:root[data-theme="night"] .b.on{background:#ff1a1a;color:#000;border-color:#ff1a1a}
+:root[data-theme="night"] .b .tm{color:#ff6666;opacity:1}
+:root[data-theme="night"] .b.on .tm{color:#000}
+:root[data-theme="night"] .q{background:#0a0000;border-color:#ff1a1a;color:#ff1a1a}
+:root[data-theme="night"] .b.on .q{background:#000;color:#ff1a1a;border-color:#000}
+:root[data-theme="night"] header{background:#000;border-bottom:1px solid #990000}
+:root[data-theme="night"] nav{background:#000;border-top:1px solid #990000}
+:root[data-theme="night"] nav button{color:#ff2a2a}
+:root[data-theme="night"] .mut{color:#cc3333}
+:root[data-theme="night"] a{color:#ff6666}
+:root[data-theme="night"] ::placeholder{color:#992222;opacity:1}
+:root[data-theme="night"] input,select,textarea{caret-color:#ff1a1a}
+:root[data-theme="night"] #mo{background:rgba(0,0,0,.92)}
+:root[data-theme="night"] .box{background:#0a0000;border:2px solid #ff1a1a;color:#ff2a2a}
+:root[data-theme="night"] .em{filter:grayscale(1) brightness(.4) sepia(1) hue-rotate(-42deg) saturate(15)}
+:root[data-theme="night"] .btn:not(.s) .em,:root[data-theme="night"] nav button.on .em,:root[data-theme="night"] .b.on .em{filter:grayscale(1) brightness(0)}
+:root[data-theme="night"]{scrollbar-color:#ff1a1a #1a0000}
+[data-a="theme"]{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none;touch-action:manipulation}
+:root[data-theme="night"] .btn.hold{background-image:linear-gradient(#ff1a1a,#ff1a1a);background-repeat:no-repeat;background-size:0 100%;animation:thfill 3s linear forwards;color:#000}
+@keyframes thfill{to{background-size:100% 100%}}
+.thh{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 4rem);transform:translateX(-50%);z-index:60;max-width:90vw;padding:.7rem 1rem;border-radius:.6rem;background:#000;color:#ff2a2a;border:2px solid #ff1a1a;font-weight:600;text-align:center}
+:root[data-theme="night"] input[type="checkbox"]{-webkit-appearance:none;appearance:none;display:inline-grid;place-content:center;width:1.4rem;height:1.4rem;min-width:1.4rem;min-height:1.4rem;margin:0;border:2px solid #ff1a1a;border-radius:.3rem;background:#0a0000}
+:root[data-theme="night"] input[type="checkbox"]:checked{background:#ff1a1a}
+:root[data-theme="night"] input[type="checkbox"]::after{content:"";width:.8rem;height:.8rem;background:#000;transform:scale(0);clip-path:polygon(14% 44%,0 62%,40% 100%,100% 18%,84% 4%,40% 68%)}
+:root[data-theme="night"] input[type="checkbox"]:checked::after{transform:scale(1)}
+:root[data-theme="night"] ::-webkit-scrollbar{width:14px;height:14px;background:#1a0000}
+:root[data-theme="night"] ::-webkit-scrollbar-track{background:#1a0000}
+:root[data-theme="night"] ::-webkit-scrollbar-thumb{background:#ff1a1a;border:3px solid #1a0000;border-radius:8px}
+:root[data-theme="night"] ::-webkit-scrollbar-thumb:hover{background:#ff6666}
+:root[data-theme="night"] ::-webkit-scrollbar-corner{background:#1a0000}
+:root[data-theme="night"] .skip{background:#ff1a1a;color:#000}
+/* suppress pure white anywhere in night mode */
+:root[data-theme="night"] img, :root[data-theme="night"] video{opacity:.85}
+#lockov{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.92);display:none;align-items:center;justify-content:center;padding:1.5rem}
+#lockov .lockbox{text-align:center;max-width:22rem}
+#lockov #lockhold{width:100%;min-height:4rem;font-size:1.1rem;touch-action:none;user-select:none}
+@media screen and (orientation:landscape){body.force-portrait-hint::before{content:"Portrait preferred";display:block;text-align:center;padding:.3rem;background:var(--warn);color:#fff}}
+
+
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background-color:var(--bg)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--card);z-index:10}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--card);border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:.5rem;padding:.5rem .8rem}
+h1{font-size:1.05rem;margin:0;flex:1}
+main{max-width:720px;margin:0 auto;padding:.8rem .8rem 6rem}
+nav{position:fixed;left:0;right:0;bottom:0;z-index:5;display:flex;background:var(--card);border-top:1px solid var(--bd);padding-bottom:env(safe-area-inset-bottom,0px)}
+nav button{flex:1;border:0;background:none;color:var(--mut);padding:.9rem .1rem;font-size:.8rem;font-weight:600}
+nav button.on{color:var(--ac);box-shadow:inset 0 3px 0 var(--ac)}
+button,input,select,textarea{font:inherit;color:inherit}
+.btn{border:0;background:var(--ac);color:var(--onfg);padding:.7rem 1rem;border-radius:.7rem;font-weight:600}
+a.btn{display:block;text-decoration:none;text-align:center}.btn.s{background:var(--ac2);color:var(--ac)}.btn.w{background:none;color:var(--warn);border:1px solid var(--warn)}
+input,select,textarea{background:var(--bg);border:1px solid var(--bd);border-radius:.6rem;padding:.6rem;width:100%}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:.9rem;padding:.8rem;margin:.6rem 0}
+.row{display:flex;gap:.5rem;align-items:center;flex-wrap:wrap}.row>*{flex:1;min-width:6rem}
+.q{display:inline-flex;align-items:center;justify-content:center;width:1.5rem;height:1.5rem;min-width:1.5rem;min-height:1.5rem;max-width:1.5rem;max-height:1.5rem;padding:0;border-radius:50%;border:2px solid var(--ac);color:var(--ac);font-weight:700;font-size:.85rem;flex:none;flex-shrink:0;aspect-ratio:1/1;box-sizing:border-box;cursor:pointer;background:var(--card);line-height:1}
+button.q{font:inherit}
+.lg{flex:none;padding:.4rem .7rem}
+.row>.q{/* keep square, don't stretch in flex rows */}
+.b .q{position:absolute;top:.45rem;right:.45rem;z-index:1}
+.three .b .q,.four .b .q{width:1.1rem;height:1.1rem;min-width:1.1rem;min-height:1.1rem;max-width:1.1rem;max-height:1.1rem;font-size:.7rem;top:.3rem;right:.3rem;border-width:1.5px}
+.four .b .q{width:1rem;height:1rem;min-width:1rem;min-height:1rem;max-width:1rem;max-height:1rem;font-size:.65rem}
+
+.chips{display:flex;gap:.5rem;overflow-x:auto;padding:.2rem 0}.chips .btn{flex:none;min-width:5rem}
+h3.cat{margin:1rem 0 .3rem;font-size:.85rem;text-transform:uppercase;letter-spacing:.06em;color:var(--mut)}
+.grid{display:grid;gap:.7rem;grid-template-columns:1fr}.two .grid{grid-template-columns:1fr 1fr}
+.b{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:.4rem;background:var(--card);border:2px solid var(--bd);border-radius:1.2rem;padding:1rem;font-size:1.6rem;font-weight:700;min-height:calc(100dvh - 14rem);user-select:none;-webkit-tap-highlight-color:transparent}
+.two .b{min-height:26dvh;font-size:1.2rem}
+.three .grid{grid-template-columns:1fr 1fr 1fr}
+.three .b{min-height:18dvh;font-size:1.05rem;padding:.7rem;border-radius:1rem;gap:.25rem}
+.three .b .tm{font-size:1rem}
+.four .grid{grid-template-columns:1fr 1fr 1fr 1fr}
+.four .b{min-height:14dvh;font-size:.95rem;padding:.55rem;border-radius:.85rem;gap:.2rem}
+.four .b .tm{font-size:.9rem}
+@media (max-width:480px){
+  .three .grid{grid-template-columns:1fr 1fr}
+  .four .grid{grid-template-columns:1fr 1fr}
+  .three .b{min-height:16dvh}
+  .four .b{min-height:14dvh}
+}
+:root[data-theme="outdoor"] .three .b,:root[data-theme="outdoor"] .four .b{border-width:3px}
+:root[data-theme="outdoor"] .three .b .tm,:root[data-theme="outdoor"] .four .b .tm{font-size:1.15rem;opacity:1}
+
+.b.on{background:var(--ac);color:var(--onfg);border-color:var(--ac)}
+.b.nvb{border-style:dashed;border-color:var(--warn);font-size:1.1rem}
+.b.nvb.on{background:var(--warn);color:#fff;border-color:var(--warn)}
+:root[data-theme="night"] .b.nvb{border-color:#ff6666}
+:root[data-theme="night"] .b.nvb.on{background:#ff6666;color:#000}
+
+.b .tm{font-size:1.3rem;font-weight:700;font-variant-numeric:tabular-nums;min-height:1.4em;opacity:.9}
+.b.on .q{background:var(--onfg)}
+.b small{font-weight:400;font-size:.8rem;opacity:.7}
+#mo{position:fixed;inset:0;z-index:20;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;padding:1rem}
+#mo .box{background:var(--card);border-radius:1rem;padding:1.1rem;max-width:34rem;width:100%;max-height:85dvh;overflow:auto}
+pre{background:var(--bg);padding:.6rem;border-radius:.6rem;overflow-x:auto;font-size:.8rem}
+.mut{color:var(--mut);font-size:.9rem}.tb{border-collapse:collapse;font-size:.8rem;font-variant-numeric:tabular-nums}.tb th,.tb td{padding:.35rem .5rem;border-bottom:1px solid var(--bd);text-align:right;white-space:nowrap}.tb th:first-child,.tb td:first-child{text-align:left;position:sticky;left:0;background:var(--card)}.gt text{fill:var(--fg);font-size:11px}.ch text{fill:var(--fg);font-size:11px}.ch .ax{stroke:var(--bd);stroke-width:1}.gt line{stroke:var(--bd)}.li{display:flex;justify-content:space-between;gap:.5rem;padding:.5rem 0;border-bottom:1px solid var(--bd)}
+a{color:var(--ac)}
+</style>
+<!-- JSZip: local for field/offline; place jszip.min.js next to HTML or in ./lib/ -->
+<script src="./lib/jszip.min.js"></script>
+<script>
+if(!window.JSZip){(function(){var s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js';document.head.appendChild(s)})()}
+</script>
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>{navigator.serviceWorker.register('./sw.js').catch(()=>{});});
+}
+</script>
+</head>
+<body>
+<a href="#v" class="skip" id="skip">Zum Inhalt springen</a>
+<div id="sr-status" class="sr-only" aria-live="polite"></div>
+<header><h1 id="ti"></h1><button class="btn s lg" data-a="lock" title="Lock" aria-label="Lock"><span class=em>🔒</span></button><button class="btn s lg" data-a="theme" aria-pressed="false">☀︎</button><button class="btn s lg" data-a="lang"></button><button type="button" class="q" data-h="app" aria-label="Hilfe anzeigen">?</button></header>
+<main id="v"></main>
+<nav id="nv"></nav><div id="lv" class="sr" aria-live="polite"></div>
+<div id="mo" data-a="close" role="presentation"><div class="box" id="mb" role="dialog" aria-modal="true" aria-labelledby="mb-h"></div></div>
+<script>
+const BE=`lying|rest|cps|Lying|Liegen|Animal lies on the ground|Tier liegt auf dem Boden
+standing|rest|cps|Standing|Stehen|Stands without moving|Tier steht, ohne sich fortzubewegen
+walking|loc|cps|Walking|Gehen|Moves forward on foot|Tier bewegt sich gehend fort
+postural|loc|cps|Postural transition|Haltungswechsel|Lying down, getting up|Hinlegen, Aufstehen
+feeding|feed|cps|Feeding|Fressen|Takes up feed|Tier nimmt Futter auf
+grazing|feed|cs|Grazing|Grasen|Eats grass on pasture|Tier frisst Gras auf der Weide
+ruminating|feed|cs|Ruminating|Wiederkäuen|Regurgitates and chews feed again (not ordinary feeding)|Tier würgt Futter hoch und kaut es erneut (keine gewöhnliche Futteraufnahme)
+drinking|feed|cps|Drinking|Trinken|Takes up water|Tier nimmt Wasser auf
+grooming|care|cps|Grooming|Körperpflege|Licks or scratches itself|Tier leckt oder kratzt sich
+elimination|care|cps|Elimination|Ausscheidung|Urinates or defecates|Tier uriniert oder setzt Kot ab
+social|soc|cps|Social interaction|Soziale Interaktion|Sniffing, touching or licking others (not always friendly)|Tiere beschnuppern, berühren oder belecken sich (nicht immer freundlich)
+aggression|soc|cps|Aggression / fighting|Aggression / Kämpfen|Pushing, biting, fighting|Stoßen, Beißen, Kämpfen
+exploration|exp|cps|Exploration|Erkundung|Sniffing, investigating surroundings|Schnüffeln, Umgebung untersuchen
+play|soc|cps|Play|Spielverhalten|Playful running or romping|Spielerisches Rennen oder Raufen
+other|oth|cps|Other / unclassified|Sonstiges / nicht klassifizierbar|Visible behavior that fits no other category|Sichtbares Verhalten, das keiner anderen Kategorie zugeordnet werden kann
+licking|soc|c|Licking|Lecken|Licking other cows|Ablecken anderer Kühe
+scratching|care|c|Scratching|Kratzen|Scratching on brush or post|Kratzen an Bürste oder Pfosten
+mounting|soc|cp|Mounting|Aufspringen|Mounts other animals, e.g. in heat|Aufspringen auf andere Tiere, z. B. bei Brunst
+calfnursing|mat|c|Calf nursing|Säugen von Kälbern|Calf suckles at the cow|Kalb säugt an der Kuh
+heatstress|oth|c|Heat stress behavior|Hitzestress-Verhalten|Panting, seeking shade|Hecheln, Schatten suchen
+rooting|feed|p|Rooting|Wühlen|Digging with the snout|Wühlen mit der Schnauze
+nosing|exp|p|Nosing|Beschnuppern / Anstupsen|Nudging or sniffing with the snout|Anstupsen oder Beschnuppern mit der Schnauze
+nesting|mat|p|Nesting|Nestbau|Gathering straw, building a nest|Stroh sammeln, Nest bauen
+suckling|mat|p|Suckling|Saugen|Piglet suckles at a teat|Ferkel saugt an einer Zitze
+tailbiting|soc|p|Tail biting|Schwanzbeißen|Bites another pig’s tail (undesired)|Beißt in den Schwanz eines anderen Schweins (unerwünscht)
+manip|exp|p|Manipulating objects|Gegenstände bearbeiten|Examining and working on objects|Gegenstände untersuchen und bearbeiten
+browsing|feed|s|Browsing|Laub fressen|Eating leaves and shrubs|Laub und andere Pflanzen abfressen
+flocking|soc|s|Flocking|Herdenverhalten|Moving or staying together as a group|Sich in der Gruppe bewegen oder zusammenbleiben
+isolation|soc|s|Isolation|Abseits stehen|Stands away from the group|Steht abseits der Gruppe
+lambnursing|mat|s|Lamb nursing|Säugen von Lämmern|Lamb suckles at the ewe|Lamm säugt am Mutterschaf
+headbutting|soc|s|Head butting|Kopfstoßen|Butting with the head|Stoßen mit dem Kopf
+vigilance|oth|s|Vigilance|Wachsamkeit|Head up, watching the surroundings|Kopf oben, beobachtet die Umgebung`.split('\n').map(l=>{const a=l.split('|');return{id:a[0],cat:a[1],sp:a[2],en:a[3],de:a[4],xe:a[5],xd:a[6]}});
+const CAT={rest:["Resting","Ruhen"],loc:["Locomotion","Fortbewegung"],feed:["Feeding","Fressen & Trinken"],care:["Maintenance","Körperpflege & Ausscheidung"],soc:["Social","Sozial"],exp:["Exploration","Erkundung"],mat:["Maternal","Mutter-Kind"],oth:["Other","Sonstiges"]};
+const SP={c:["Cattle","Rind"],p:["Pig","Schwein"],s:["Sheep","Schaf"]};
+const T={de:{ti:"Verhaltens-Tracker",tA:"Tiere",tO:"Erfassen",tD:"Daten",tI:"Info",name:"Name",num:"Nummer",sp:"Tierart",add:"Tier anlegen",need:"Bitte Name oder Nummer eingeben (mindestens eins).",noA:"Lege zuerst Tiere an.",goA:"Zu Tiere",del:"Löschen",cdel:"Tier und alle zugehörigen Daten löschen?",rem:"Erinnerung",every:"alle",s:"Sekunden",m:"Minuten",start:"Start",stop:"Stopp",now:"Jetzt erfassen",rt:"Zeit zum Erfassen!",rtx:"Aktueller Zustand wird für alle Tiere mit Zeitstempel gespeichert.",ok:"Erfassen",later:"Schließen",size:"Größe",aA:"Angelegte Tiere",cnt:"Tiere / Ereignisse / Momentaufnahmen",recent:"Letzte Ereignisse",exp:"JSON exportieren",copy:"Kopieren",clr:"Alle Daten löschen",cclr:"Wirklich ALLE Daten löschen?",dl:"Datei wurde zum Speichern angeboten.",cp:"In Zwischenablage kopiert.",run:"läuft",emp:"Noch keine Daten.",
+h_app_t:"So funktioniert’s",h_app:"<p><b>1. Tiere:</b> Lege unter „Tiere“ deine Tiere an (Name und/oder Nummer).</p><p><b>2. Erfassen:</b> Wähle ein Tier und tippe auf Verhaltensweisen. Mehrere gleichzeitig sind möglich; erneutes Tippen beendet das Verhalten.</p><p><b>3. Zeitstempel:</b> Start und Ende jedes Verhaltens werden mit Zeit gespeichert.</p><p><b>4. Erinnerung:</b> Optional meldet sich die App alle x Sekunden/Minuten.</p><p><b>5. Export:</b> Unter „Daten“ als JSON. Alles bleibt lokal in deinem Browser.</p>",
+h_animals_t:"Tiere anlegen",h_animals:"<p>Mindestens Name <i>oder</i> Nummer ist nötig, beides ist möglich.</p><p>Beispiele: „Berta“, „DE 0123“, „17 · Hannah“.</p><p>Die Tierart bestimmt, welche artspezifischen Verhaltensweisen angeboten werden (z. B. Wühlen bei Schweinen, Wiederkäuen bei Rind und Schaf).</p>",
+h_obs_t:"Verhalten erfassen",h_obs:"<p>Die Gruppen (Ebene A: z. B. Fressen, Ruhen, Sozial) ordnen die Buttons; die Buttons selbst sind konkrete Verhaltensweisen (Ebene B).</p><p>Mehrere Verhaltensweisen können gleichzeitig aktiv sein, z. B. <i>Stehen</i> + <i>Wiederkäuen</i>. Aktive Buttons sind grün und zeigen die Dauer.</p><p>Größe: XL = ein Button pro Bildschirm, L = zwei, M = drei, S = vier Spalten. Das ? an einem Button zeigt Beispiele.</p><p><span class=em>📷</span> QR wählt ein Tier per Kamera (QR-Code mit Nummer oder Name der Ohrmarke; Kamera-Berechtigung nötig).</p><p>☀︎ (oben) schaltet den Outdoor-Modus ein: schwarz/gelb, größere Tasten und Abstände – für Sonnenlicht und Handschuhe. Rückmeldungen gibt es auf mehreren Kanälen: Farbe, Text, Vibration (kurz = Start, doppelt = Ende) und Ansage für Screenreader. Im Tab „Erfassen“ bleibt der Bildschirm an.</p>",
+h_rem_t:"Erinnerung",h_rem:"<p>Beispiel: alle <b>5 Minuten</b> oder alle <b>30 Sekunden</b>. Zum Zeitpunkt gibt es Ton und Vibration; du bestätigst, und der aktuelle Zustand aller Tiere wird als Momentaufnahme gespeichert.</p><p>Die Seite muss geöffnet und der Bildschirm an bleiben.</p>",
+h_exp_t:"JSON-Export",h_exp:"<p>Enthält Tiere, Ereignisse (Start, Ende, Dauer in Sekunden), Momentaufnahmen und eine Verhaltens-Tabelle. Zeiten sind UTC (ISO 8601).</p><pre>{\n \"animals\":[{\"id\":\"a1\",\"name\":\"Berta\",\"number\":\"17\"}],\n \"events\":[{\"animalId\":\"a1\",\n  \"behavior\":\"ruminating\",\n  \"start\":\"2026-10-27T08:00:00Z\",\n  \"durationSec\":420}]\n}</pre>",
+ex:"Beispiel",ca:"Hauptverhalten",tS:"Auswertung",tG:"Heatmap",hm_beh:"Verhalten",hm_t:"Zeitraster-Heatmap",hm_hint:"Zeitraum (x: Tag/Wochentag/Woche) × Tageszeit (y). Zelle antippen für Details.",hm_mode_day:"Jeder Tag",hm_mode_wd:"Wochentag (gemittelt)",hm_mode_week:"Kalenderwoche",hm_m_dom:"Häufigstes Verhalten",hm_m_share:"Anteil eines Verhaltens",hm_m_entropy:"Verhaltensvielfalt (Entropie)",hm_m_nbeh:"Anzahl Verhaltensweisen",hm_m_cov:"Erfasste Zeit (Abdeckung)",hm_dd_n:"Ereignisse",hm_dd_dur:"Erfasste Dauer",hm_export_png:"PNG exportieren",hm_export_csv:"Matrix als CSV",hm_export_json:"Rohdaten als JSON",hm_export_cell:"Zelle als CSV",hm_trim:"Randtage ausblenden",storagefull_t:"Speicher voll",storagefull:"Speicherlimit (ca. 15 MB IndexedDB) erreicht. Exportiere JSON und loesche alte Eintraege.",beamer:"Beamer-Ordner (.zip)",shared:"Geteilt.",nozip:"ZIP-Funktion nicht verfügbar.",zipreadme:"Kompilieren mit: latexmk -pdf main.tex\n(oder TeX Live/MiKTeX bzw. Overleaf: Ordner als ZIP hochladen)\nBenötigte Pakete: beamer, pgfplots, pgfplotstable, booktabs.",hm_load:"Heatmap-Bibliothek wird geladen …",hm_off:"Plotly konnte nicht geladen werden. Die Heatmap braucht einmalig eine Internetverbindung – oder die Datei plotly-cartesian.min.js neben der HTML-Datei.",hm_retry:"Erneut versuchen",h_heat_t:"Zeitraster-Heatmap",h_heat:"<p>x-Achse: Aggregationszeitraum (jeder Tag, Wochentag über alle Wochen gemittelt, oder Kalenderwoche). y-Achse: Tageszeit in wählbarer Auflösung (5/15/30/60 min).</p><p><b>Metriken:</b> „Häufigstes Verhalten“ färbt die Zelle nach dem Verhalten mit der längsten Dauer; „Anteil“ zeigt den Zeitanteil eines gewählten Verhaltens; „Entropie“ misst die Verhaltensvielfalt (0 = ein Verhalten dominiert, 1 = gleichverteilt unter den in der Zelle vorkommenden Verhaltensweisen); „Abdeckung“ zeigt, wie viel der Zelle überhaupt mit Daten gefüllt ist (wichtig zur Interpretation!).</p><p>Ein Klick auf eine Zelle zeigt die zugrunde liegenden Werte, Anteile je Verhalten und eine Liste der Einzelereignisse – antippen öffnet den Ereignis-Editor. Die Grafik ist per Doppelklick auf Beschriftungen editierbar (Plotly) und lässt sich als PNG, die Matrix als CSV und die vollständigen Zellinhalte als JSON exportieren.</p><p><b>Nenner:</b> Zellendauer × Anzahl der beitragenden Tier-Tage (Tier × Kalendertag). „Abdeckung“ zählt überlappende Verhaltensweisen nur einmal. Nicht erfasste Zeit ist von „Verhalten nicht gezeigt“ nicht zu unterscheiden.</p><p><b>Randtage / DST:</b> Der erste und letzte Beobachtungstag sind oft nur teilweise erfasst – „Randtage ausblenden“ entfernt sie aus der Heatmap. Bin-Grenzen folgen der Wanduhr (lokal); an Sommer-/Winterzeit-Tagen bleibt die doppelte bzw. fehlende Stunde eine bekannte Mehrdeutigkeit.</p><p class='mut'>Hinweis: Dies ist eine explorative Zusatzdarstellung, kein validiertes Protokoll – Nenner/Interpretation bei Veröffentlichung selbst dokumentieren.</p>",outd:"Outdoor-Modus (Schwarz/Gelb, große Tasten)",night:"Nachtmodus (Rotlicht)",theme_day:"Tagesmodus",lock_t:"Bildschirm gesperrt",theme_hold:"Zum Wechseln 3 Sekunden gedrückt halten",mtemp:"Temp. °C",mhousing:"Haltungssystem",mdaynote:"Tagesnotiz",mdaynote_ph:"Wetter, Störungen, Besonderheiten…",irr_t:"Interobserver (κ)",irr_need:"Mindestens zwei Beobachternamen in den Ereignis-Metadaten nötig (Session → Beobachter vor dem Erfassen setzen).",irr_hint:"1-s-Raster überlappender Intervalle je Tier; Cohen κ zwischen zwei Beobachtern.",irr_pair:"Paar",irr_none:"Keine überlappenden Doppelkodierungen gefunden.",codebook:"Codebook (JSON)",photo:"Foto",photo_ok:"Foto gespeichert",photo_big:"Foto zu groß (max. ~2,5 MB)",afilter:"Tier suchen…",gear_t:"Weitere Optionen",gear_hint:"Seltener genutzte Werkzeuge und optionale Zweit-Sicherung.",backup_t:"Optionale Zweit-Sicherung",backup_limits:"Kein Gerät muss eine SD-Karte haben. Wenn vorhanden, kann unter Chrome/Edge eine JSON-Datei auf SD/USB gewählt werden – das ist nur ein Backup, kein Live-Spiegel. Safari/Firefox unterstützen die Datei-API oft nicht (dann manuell JSON exportieren). Nach längerem Stillstand kann die Schreibrechte erneut nötig sein.",backup_now:"Jetzt spiegeln",backup_set:"Datei wählen (SD/USB, falls vorhanden)",backup_clr:"Zweit-Sicherung aus",backup_hint:"Optional und geräteabhängig. Ohne SD: normaler JSON-Export genügt.",backup_on:"Zweit-Sicherung aktiv",backup_off:"Zweit-Sicherung beendet",backup_active:"Sicherung",backup_ok:"Auf Zweitmedium geschrieben",backup_fail:"Zweit-Sicherung fehlgeschlagen",backup_noapi:"Datei-API nicht verfügbar. Bitte Chrome/Edge nutzen oder manuell JSON exportieren.",print:"PDF/Druckbericht",print_block:"Popup blockiert – bitte erlauben.",ics:"Erinnerungen (ICS)",nv:"Ausser Sicht",nv_h:"Nicht beobachtbar – zählt nicht zum Verhaltens-Nenner",lock_h:"2 Sekunden halten zum Entsperren.",lock_hold:"Halten zum Entsperren",lock_off:"Entsperrt",geo:"GPS",geo_set:"GPS setzen",geo_none:"Kein GPS-Punkt",geo_fail:"GPS nicht verfuegbar",note:"Notiz",note_ph:"z.B. humpelt, nach Tierarzt",hist:"Aenderungshistorie",sync_hint:"Mehrgeraete: JSON exportieren und auf dem zweiten Geraet mergen.",astart:"gestartet",aend:"beendet",asel:"ausgewählt",adesel:"abgewählt",bkw:"Keine automatische Sicherung – regelmäßig exportieren.",bkl:"Letzter Export",gtab:"Tabellen",gtitle:"Diagramme",gtb:"Zeitbudget",gtl:"Tagesverlauf",gbt:"Phasen",gtm:"Übergänge",gsy:"Synchronität",gherd:"Herdenmittel",gall:"Alle Tage",gan:"Tiere",gnod:"Keine Daten für diese Auswahl.",gneed2:"Synchronität braucht mindestens zwei Tiere im Herdenmittel.",gx:"Mittlere Phasendauer (min)",gy:"Phasen pro Tag",demo:"Demodaten laden (6 Kühe, 2 Tage)",demodel:"Demodaten entfernen",gd_tb:"Anteil der erfassten Zeit je Verhalten (Balken: Mittel, Linie: ±SD, Punkte: einzelne Tiere). Überlappende Verhaltensweisen können zusammen über 100 % ergeben.",gd_tl:"Minuten je Stunde im Tagesverlauf für das gewählte Verhalten (dicke Linie: Herdenmittel ±SD, graue Linien: Einzeltiere).",gd_bt:"Jeder Punkt ist ein Tier: mittlere Dauer einer Phase (x) und Phasen pro Tag (y). Raute = Herdenmittel, rot = gewähltes Tier, grau = ausgeschlossen.",gd_tm:"Wie oft folgte auf ein Verhalten (Zeile) ein anderes (Spalte)? Farbe = Anteil innerhalb der Zeile.",gd_sy:"Anteil der gerade erfassten Tiere, die das Verhalten zeigen, in 5-Minuten-Schritten.",h_gch_t:"Diagramme",h_gch:"<p><b>Zeitbudget:</b> Anteil der erfassten Zeit je Verhalten. Es gilt als grundlegender Indikator für Tierwohl und Gesundheit, weil es je nach Haltung, Management und Gesundheitszustand variiert (z. B. Novák et al. 2017 für Milchkühe).</p><p><b>Tagesverlauf:</b> Minuten je Stunde. Zeigt Rhythmen und Störungen, z. B. Liegen oder Fressen zu ungewohnten Zeiten oder durch Melk- und Fütterungszeiten.</p><p><b>Phasen:</b> Anzahl und mittlere Dauer einzelner Phasen eines Verhaltens. Viele kurze Liegephasen sagen mehr als die Gesamtdauer allein. Fressverhalten wird in der Literatur u. a. über Fresszeit, Mahlzeitdauer und -häufigkeit beschrieben (Llonch et al. 2018).</p><p><b>Übergänge:</b> Verhaltenssequenzen: Welches Verhalten folgt auf welches? Auffällige Muster liefern Hinweise, ihre Deutung braucht Kontext.</p><p><b>Synchronität:</b> Anteil der Tiere, die gleichzeitig dasselbe Verhalten zeigen. Herden synchronisieren Ruhen und Fressen häufig; starke Abweichungen können mit Management, Platzangebot oder Rangkonflikten zusammenhängen.</p><p><b>Wichtig:</b> Wiederkäuen und Liegezeit gelten als nützliche, aber miteinander verknüpfte Indikatoren. Ihre Belastbarkeit ist umstritten, und feste Grenzwerte für die Liegedauer sind schwer zu begründen (Tucker et al. 2021). Phasen-, Übergangs- und Synchronitätsanalysen sind gängige Methoden der Verhaltensforschung, hier ohne Einzelnachweis. Verstehe die Diagramme als Hinweise, nicht als Diagnose.</p><p><b>Herdenmittel und Ausschluss einzelner Tiere:</b> ✓ = im Mittel enthalten, ✕ = ausgeschlossen (antippen zum Umschalten). Gründe, ein Tier herauszunehmen:</p><ul><li>krank, lahm, verletzt oder in Behandlung – es verzerrt das Mittel (als Einzeltier trotzdem ansehen);</li><li>Brunst, Abkalben/Ablammen, anderes Laktations- oder Trächtigkeitsstadium;</li><li>anderes Alter, andere Gruppe, Bucht oder Stallbereich, also nicht dieselbe Haltungsumwelt;</li><li>neu eingegliedert oder isoliert (Rangordnung);</li><li>zu wenig erfasste Zeit – wenige Daten machen die Werte verrauscht;</li><li>Erfassungsfehler oder Testdaten (z. B. Demodaten);</li><li>Vergleich eines Tieres mit der Herde: nimm das Tier selbst aus dem Herdenmittel, damit der Vergleich nicht zirkulär wird.</li></ul><p>Tierarten werden nie gemischt: das Herdenmittel gilt immer für eine Tierart.</p>",mgi:"Daten von Kollegen zusammenführen (JSON)",mgc:"Aus Zwischenablage",mg:"Daten zusammenführen",mgA:"Neue Tiere",mgM:"vorhandenen zugeordnet",mgE:"Neue Ereignisse",mgS:"Neue Scans/Momentaufnahmen",mgO:"Neue Beobachtungen",mgB:"Neue eigene Verhaltensweisen",mgD:"Duplikate übersprungen",mgK:"nicht zuordenbar",mgOp:"ohne Ende abgeschlossen",mgno:"Nichts Neues in dieser Datei.",mggo:"Zusammenführen",h_mg_t:"Daten zusammenführen",h_mg:"<p>Importiere den <b>JSON-Export</b> eines Kollegen und führe ihn mit deinen Daten zusammen, z. B. wenn ihr im selben Versuch unterschiedliche Tiere beobachtet oder bei einer Urlaubsvertretung.</p><p>Tiere werden zugeordnet, wenn die ID oder (Nummer bzw. Name) und die Tierart übereinstimmen; alle anderen werden neu angelegt. Bereits vorhandene Ereignisse und Scans werden nicht doppelt übernommen, du kannst dieselbe Datei also mehrfach importieren. Noch laufende Verhaltensweisen in der Datei werden zum Exportzeitpunkt beendet. Eigene Verhaltensweisen des Kollegen werden ergänzt. Gleiche Nummern in verschiedenen Beständen würden zusammengelegt – prüfe deshalb die Vorschau.</p><p>Tipp: Tragt unter „Tiere“ → Sitzung euren Namen als <b>Beobachter</b> ein. Er wird bei jedem Ereignis mitgespeichert und bleibt nach dem Zusammenführen erkennbar.</p>",qr:"QR-Code scannen",qrno:"Kein Tier mit diesem Code gefunden",qrex:"Tier existiert bereits",qrerr:"Kamera nicht verfügbar. Prüfe die Kamera-Berechtigung oder gib das Tier manuell ein.",wel:"Tierwohl-Indikatoren",wd:"Dauer (min)",wn:"Anzahl",radd:"Indikator hinzufügen",h_wel_t:"Tierwohl-Indikatoren",h_wel:"<p>Voreinstellungen blenden im Ethogramm alle für das Thema nicht benötigten Verhaltensweisen aus (rückgängig mit „Alle anzeigen“ oder im Ethogramm-Editor) und legen passende Indikatoren an. Es sind pragmatische Auswahlen aus dem App-Ethogramm, keine validierten Tierwohl-Protokolle.</p><p>Die Tabelle zeigt je Tier und gewähltem Tag die Dauer (Minuten) bzw. die Anzahl der Ereignisse. Trage einen Schwellenwert (≥) ein, dann wird der Wert rot. Schwellenwerte sind nicht vorbelegt – lege sie nach Literatur oder Betriebsstandard fest. Die Werte gelten nur für die beobachtete Zeit.</p>",val:"Validierung",vlab:"Video / Beobachtungs-ID",vmin:"Videolänge (min)",vstart:"● Beobachtung starten",vstop:"■ Beobachtung beenden",vlist:"Beobachtungen",vratio:"Zeit/Video",vtaps:"Eingaben",prot:"Studienprotokoll-Vorlage (.md)",vb:"BORIS-CSV",vg:"Raster-CSV",h_val_t:"Validierung",h_val:"<p>Für den Vergleich mit BORIS: Trage Video-ID und Länge ein und starte die Beobachtung genau mit dem Videostart; beende sie am Videoende. Die App misst die Codierzeit, zählt die Eingaben (Start, Stopp, Scan) und berechnet Codierzeit ÷ Videolänge.</p><p><b>BORIS-CSV:</b> START/STOP-Ereignisse mit Zeit in Sekunden ab Beobachtungsstart (BORIS-ähnlich). <b>Raster-CSV:</b> Zustand pro Sekunde und Tier, geeignet für Cohens Kappa. Die Protokoll-Vorlage beschreibt Ablauf und Auswertung.</p>",proto:"# Validierungsstudie: Verhaltens-Tracker vs. BORIS\n\n## 1. Fragestellung\nStimmen mit der App erfasste Verhaltensdaten mit einem Referenzwerkzeug (BORIS) überein, und wie hoch ist der Zeitaufwand?\n\n## 2. Material\n- Videos: ___ Clips à ___ min; Tierart: ___; Tiere pro Clip: ___\n- Ethogramm (Version/Datum): ___ (Export aus der App anhängen)\n\n## 3. Beobachter\n- Anzahl: ___; Erfahrung: ___; vorab geschult: ja / nein\n\n## 4. Ablauf\n1. Jeder Beobachter codiert dieselben Clips in beiden Werkzeugen; Reihenfolge (App/BORIS) ausbalancieren, Pause zwischen den Durchgängen mindestens ___ Tage.\n2. App: Video-ID und Länge eintragen, „Beobachtung starten“ zum Videostart, „beenden“ am Videoende.\n3. BORIS: dieselben Clips codieren, Ereignisse als CSV exportieren.\n4. Danach Usability-Fragebogen (SUS, 10 Fragen).\n\n## 5. Auswertung\n- Übereinstimmung: Cohens Kappa auf dem 1-s-Raster (Raster-CSV), je Verhalten und gesamt\n- Dauer je Verhalten: ICC bzw. Bland-Altman\n- Zeitaufwand: Codierzeit ÷ Videolänge, Anzahl Eingaben\n- Usability: SUS-Score\n\n## 6. Datenablage und Ethik\n- Rohdaten (JSON/CSV) archivieren\n- Tierwohl-/Ethikvotum: ___\n",hscan:"Herdenscan",msingle:"Einzeltier",mherd:"Herde",hinfo:"Beim Herdenscan erfasst du für jedes Tier, was es im Moment des Scans tut (Scan-Sampling). Wähle pro Tier das Verhalten und tippe auf „Speichern & weiter“.",hok:"Speichern & weiter",hskip:"Überspringen",hend:"Scan beenden",hneed:"Bitte mindestens ein Verhalten wählen (oder „Überspringen“).",hsum:"Tiere je Verhalten",csv3:"CSV (Scans)",h_herd_t:"Herdenscan",h_herd:"<p><b>Scan-Sampling:</b> Du erfasst für jedes Tier, was es im Moment des Scans tut. Wähle ein oder mehrere Verhaltensweisen und tippe auf „Speichern & weiter“; „Überspringen“ nutzt du, wenn ein Tier nicht sichtbar ist. Alle Tiere eines Durchgangs teilen sich dieselbe Scan-ID und die Startzeit; jedes Tier bekommt zusätzlich seinen eigenen Zeitstempel. Mit ✓ markierte Tiere kannst du antippen und korrigieren.</p><p>Mit der Erinnerung kannst du in festen Abständen einen Scan starten. Die Auswertung zeigt je Scan den Anteil der Tiere pro Verhalten (Mehrfachnennungen möglich), der Export „CSV (Scans)“ enthält alle Scan-Daten.</p>",eth:"Ethogramm",sess:"Sitzung",mstudy:"Studie / Projekt",mobs:"Beobachter",mgrp:"Gruppe / Bucht",mplace:"Ort",ethx:"Ethogramm exportieren",ethi:"Ethogramm importieren",imp_ok:"Importierte Verhaltensweisen:",imp_bad:"Datei konnte nicht gelesen werden.",h_sess_t:"Sitzungsdaten",h_sess:"<p>Studie, Beobachter, Gruppe/Bucht und Ort werden bei jedem <b>neu gestarteten</b> Ereignis mitgespeichert und stehen in JSON- und CSV-Export. Eine spätere Änderung betrifft nur neue Ereignisse. Die Angabe „Studie“ dient im START/STOP-CSV als Observation-ID.</p>",bn:"Neues Verhalten",bd:"Definition / Beispiel",badd:"Verhalten hinzufügen",bneed:"Name und mindestens eine Tierart nötig.",inuse:"Verhalten wird in Daten verwendet – bitte ausblenden statt löschen.",undo:"↶ Rückgängig",edt:"Ereignis bearbeiten",tstart:"Start",tend:"Ende (leer = läuft noch)",save:"Speichern",bad:"Das Ende muss nach dem Start liegen.",dup:"Dieses Verhalten läuft bei dem Tier bereits.",csv1:"CSV (Ereignisse)",csv2:"CSV (START/STOP)",edh:"antippen zum Bearbeiten",h_eth_t:"Ethogramm-Editor",h_eth:"<p>● = Verhalten wird beim Erfassen angezeigt, ○ = ausgeblendet. Eigene Verhaltensweisen (mit Definition und Tierart) kannst du hinzufügen und, solange keine Daten dazu existieren, wieder löschen (×). Das Ethogramm wird mit Definitionen im JSON-Export mitgeliefert. Unter „Daten“ kannst du es als JSON exportieren und importieren (importiert werden nur neue Verhaltensweisen).</p><p><b>Rückgängig</b> (Tab „Erfassen“) macht den letzten Start oder Stopp rückgängig. Unter „Daten“ tippst du ein Ereignis an, um Verhalten, Start und Ende zu korrigieren oder es zu löschen.</p><p><b>CSV:</b> „Ereignisse“ = eine Zeile pro Ereignis; „START/STOP“ = eine Zeile pro Start bzw. Stopp (BORIS-ähnlich, Zeit in Sekunden ab dem ersten Ereignis). Trennzeichen Komma, UTF-8.</p>",by:"Auflösung",day:"Tag",hour:"Stunde",tot:"Σ Dauer",n:"Anz.",gantt:"Gantt-Diagramm",nog:"Keine Ereignisse an diesem Tag.",sm:"Dauer je Verhalten",h_st_t:"Auswertung",h_st:"<p>Wähle oben ein Tier. <b>Tag</b> zeigt die Dauer je Verhalten für jeden Tag, <b>Stunde</b> für jede Stunde des gewählten Datums. Dunklere Zellen = längere Dauer; „Anz.“ ist die Zahl der Ereignisse. Gleichzeitige Verhaltensweisen werden einzeln gezählt, die Summen können also die Beobachtungszeit übersteigen.</p><p>Das <b>Gantt-Diagramm</b> zeigt jedes Verhalten als Balken über der Uhrzeit für das gewählte Datum. Laufende Verhaltensweisen reichen bis „jetzt“. Ein langer Druck auf einen Balken zeigt Start und Ende.</p>",ab:"Über die App",abx:"Erfassung von Nutztierverhalten (Rind, Schwein, Schaf) mit 15 allgemeinen und artspezifischen Verhaltensweisen. Alle Daten werden ausschließlich lokal in deinem Browser (localStorage) gespeichert; es erfolgt keine Übertragung an Server. Wenn du Browserdaten löschst, gehen sie verloren – exportiere regelmäßig.",imp:"Impressum",impx:"Angaben gemäß § 5 DDG:<br>[Name / Firma ergänzen]<br>[Straße, PLZ Ort ergänzen]<br>[E-Mail ergänzen]",web:"Zur Website harbers-agrarinformatik.de"},
+en:{ti:"Behavior Tracker",tA:"Animals",tO:"Record",tD:"Data",tI:"Info",name:"Name",num:"Number",sp:"Species",add:"Add animal",need:"Please enter a name or a number (at least one).",noA:"Add animals first.",goA:"Go to Animals",del:"Delete",cdel:"Delete animal and all its data?",rem:"Reminder",every:"every",s:"seconds",m:"minutes",start:"Start",stop:"Stop",now:"Record now",rt:"Time to record!",rtx:"The current state of all animals will be saved with a timestamp.",ok:"Record",later:"Close",size:"Size",aA:"Your animals",cnt:"Animals / events / snapshots",recent:"Recent events",exp:"Export JSON",copy:"Copy",clr:"Delete all data",cclr:"Really delete ALL data?",dl:"File offered for saving.",cp:"Copied to clipboard.",run:"running",emp:"No data yet.",
+h_app_t:"How it works",h_app:"<p><b>1. Animals:</b> Add your animals under “Animals” (name and/or number).</p><p><b>2. Record:</b> Pick an animal and tap behaviors. Several at once are possible; tap again to end a behavior.</p><p><b>3. Timestamps:</b> Start and end of every behavior are saved with the time.</p><p><b>4. Reminder:</b> Optionally the app reminds you every x seconds/minutes.</p><p><b>5. Export:</b> Under “Data” as JSON. Everything stays local in your browser.</p>",
+h_animals_t:"Adding animals",h_animals:"<p>At least a name <i>or</i> a number is required; both are fine.</p><p>Examples: “Berta”, “DE 0123”, “17 · Hannah”.</p><p>The species decides which species-specific behaviors are offered (e.g. rooting for pigs, ruminating for cattle and sheep).</p>",
+h_obs_t:"Recording behavior",h_obs:"<p>Groups (level A: e.g. feeding, resting, social) organize the buttons; the buttons are specific behaviors (level B).</p><p>Several behaviors can be active at once, e.g. <i>Standing</i> + <i>Ruminating</i>. Active buttons are green and show the duration.</p><p>Size: XL = one button per screen, L = two, M = three, S = four columns. The ? on a button shows examples.</p><p><span class=em>📷</span> QR selects an animal by camera (QR code containing the ear-tag number or name; camera permission required).</p><p>☀︎ (top) switches on outdoor mode: black/yellow, larger buttons and spacing – for sunlight and gloves. Feedback uses several channels: color, text, vibration (short = start, double = end) and a screen-reader announcement. The screen stays on in the Record tab.</p>",
+h_rem_t:"Reminder",h_rem:"<p>Example: every <b>5 minutes</b> or every <b>30 seconds</b>. When due you get a sound and vibration; confirm and the current state of all animals is saved as a snapshot.</p><p>The page must stay open with the screen on.</p>",
+h_exp_t:"JSON export",h_exp:"<p>Contains animals, events (start, end, duration in seconds), snapshots and a behavior table. Times are UTC (ISO 8601).</p><pre>{\n \"animals\":[{\"id\":\"a1\",\"name\":\"Berta\",\"number\":\"17\"}],\n \"events\":[{\"animalId\":\"a1\",\n  \"behavior\":\"ruminating\",\n  \"start\":\"2026-10-27T08:00:00Z\",\n  \"durationSec\":420}]\n}</pre>",
+ex:"Example",ca:"Main category",tS:"Analysis",tG:"Heatmap",hm_beh:"Behavior",hm_t:"Day/time heatmap",hm_hint:"Period (x: day/weekday/week) × time of day (y). Tap a cell for details.",hm_mode_day:"Each day",hm_mode_wd:"Weekday (averaged)",hm_mode_week:"Calendar week",hm_m_dom:"Dominant behavior",hm_m_share:"Share of one behavior",hm_m_entropy:"Behavioral diversity (entropy)",hm_m_nbeh:"Number of behaviors",hm_m_cov:"Recorded time (coverage)",hm_dd_n:"Events",hm_dd_dur:"Recorded duration",hm_export_png:"Export PNG",hm_export_csv:"Matrix as CSV",hm_export_json:"Raw data as JSON",hm_export_cell:"Cell as CSV",hm_trim:"Hide edge days",storagefull_t:"Storage full",storagefull:"Storage limit (~15 MB IndexedDB) reached. Export JSON and delete old entries.",beamer:"Beamer folder (.zip)",shared:"Shared.",nozip:"ZIP function not available.",zipreadme:"Compile with: latexmk -pdf main.tex\n(or TeX Live/MiKTeX / Overleaf: upload the ZIP)\nRequired packages: beamer, pgfplots, pgfplotstable, booktabs.",hm_load:"Loading heatmap library …",hm_off:"Plotly could not be loaded. The heatmap needs an internet connection once – or the file plotly-cartesian.min.js next to the HTML file.",hm_retry:"Try again",h_heat_t:"Day/time heatmap",h_heat:"<p>x-axis: aggregation period (each day, weekday averaged across weeks, or calendar week). y-axis: time of day at a chosen resolution (5/15/30/60 min).</p><p><b>Metrics:</b> “Dominant behavior” colors the cell by the longest-lasting behavior; “Share” shows the time share of a chosen behavior; “Entropy” measures behavioral diversity (0 = one behavior dominates, 1 = evenly spread among the behaviors present in the cell); “Coverage” shows how much of the cell actually has data (important for interpretation!).</p><p>Click a cell to see the underlying values, shares per behavior and a list of individual events – tap one to open the event editor. The chart is editable (double-click labels, Plotly) and can be exported as PNG, the matrix as CSV, and full cell contents as JSON.</p><p><b>Denominator:</b> cell duration × number of contributing animal-days (animal × calendar day). “Coverage” counts overlapping behaviors only once. Unrecorded time cannot be distinguished from “behavior not shown”.</p><p><b>Edge days / DST:</b> The first and last observation day are often only partially covered – “Hide edge days” removes them from the heatmap. Bin boundaries follow the wall clock (local); on DST transition days the duplicated or missing hour remains a known ambiguity.</p><p class='mut'>Note: this is an exploratory add-on visualization, not a validated protocol – document denominators/interpretation yourself for publication.</p>",outd:"Outdoor mode (black/yellow, large buttons)",night:"Night mode (red light)",theme_day:"Day mode",lock_t:"Screen locked",theme_hold:"Hold for 3 seconds to switch",mtemp:"Temp. °C",mhousing:"Housing system",mdaynote:"Day note",mdaynote_ph:"Weather, disturbances, notes…",irr_t:"Inter-observer (κ)",irr_need:"Need at least two observer names in event metadata (set Session → Observer before recording).",irr_hint:"1-s grid over overlapping intervals per animal; Cohen κ between two observers.",irr_pair:"Pair",irr_none:"No overlapping double-coding found.",codebook:"Codebook (JSON)",photo:"Photo",photo_ok:"Photo saved",photo_big:"Photo too large (max ~2.5 MB)",afilter:"Filter animals…",gear_t:"More options",gear_hint:"Less-used tools and optional secondary backup.",backup_t:"Optional secondary backup",backup_limits:"Not every device has an SD card. Where available, Chrome/Edge can write a JSON file to SD/USB – this is a backup only, not a live mirror. Safari/Firefox often lack the File System Access API (export JSON manually). After idle time, write permission may be requested again.",backup_now:"Mirror now",backup_set:"Choose file (SD/USB if available)",backup_clr:"Disable secondary backup",backup_hint:"Optional and device-dependent. Without SD: normal JSON export is enough.",backup_on:"Secondary backup on",backup_off:"Secondary backup off",backup_active:"Backup",backup_ok:"Written to secondary media",backup_fail:"Secondary backup failed",backup_noapi:"File API unavailable. Use Chrome/Edge or export JSON manually.",print:"PDF/print report",print_block:"Popup blocked – please allow.",ics:"Reminders (ICS)",nv:"Out of sight",nv_h:"Not observable – excluded from behaviour denominators",lock_h:"Hold 2 seconds to unlock.",lock_hold:"Hold to unlock",lock_off:"Unlocked",geo:"GPS",geo_set:"Set GPS",geo_none:"No GPS point",geo_fail:"GPS unavailable",note:"Note",note_ph:"e.g. limping, after vet",hist:"Change history",sync_hint:"Multi-device: export JSON and merge on the second device.",astart:"started",aend:"ended",asel:"selected",adesel:"deselected",bkw:"No automatic backup – export regularly.",bkl:"Last export",gtab:"Tables",gtitle:"Charts",gtb:"Time budget",gtl:"Daily pattern",gbt:"Bouts",gtm:"Transitions",gsy:"Synchrony",gherd:"Herd mean",gall:"All days",gan:"animals",gnod:"No data for this selection.",gneed2:"Synchrony needs at least two animals in the herd mean.",gx:"Mean bout duration (min)",gy:"Bouts per day",demo:"Load demo data (6 cows, 2 days)",demodel:"Remove demo data",gd_tb:"Share of observed time per behavior (bar: mean, line: ±SD, dots: individual animals). Overlapping behaviors can add up to more than 100 %.",gd_tl:"Minutes per hour over the day for the selected behavior (thick line: herd mean ±SD, grey lines: individual animals).",gd_bt:"Each dot is an animal: mean duration of a bout (x) and bouts per day (y). Diamond = herd mean, red = selected animal, grey = excluded.",gd_tm:"How often did one behavior (row) follow another (column)? Color = share within the row.",gd_sy:"Share of currently observed animals showing the behavior, in 5-minute steps.",h_gch_t:"Charts",h_gch:"<p><b>Time budget:</b> share of observed time per behavior. It is regarded as a basic indicator of welfare and health because it varies with housing, management and health status (e.g. Novák et al. 2017 for dairy cows).</p><p><b>Daily pattern:</b> minutes per hour. Shows rhythms and disturbances, e.g. lying or feeding at unusual times or driven by milking and feeding schedules.</p><p><b>Bouts:</b> number and mean duration of single bouts of a behavior. Many short lying bouts say more than total duration alone. Feeding behavior is described in the literature by feeding time, meal duration and meal frequency, among others (Llonch et al. 2018).</p><p><b>Transitions:</b> behavior sequences: which behavior follows which? Conspicuous patterns give hints; interpreting them needs context.</p><p><b>Synchrony:</b> share of animals showing the same behavior at the same time. Herds often synchronize resting and feeding; strong deviations may relate to management, space allowance or social conflicts.</p><p><b>Important:</b> rumination and lying time are useful but interrelated indicators. Their reliability is debated, and fixed thresholds for lying time are hard to justify (Tucker et al. 2021). Bout, transition and synchrony analyses are common methods in behavioral research, given here without individual references. Treat the charts as hints, not as a diagnosis.</p><p><b>Herd mean and excluding single animals:</b> ✓ = included in the mean, ✕ = excluded (tap to toggle). Reasons to take an animal out:</p><ul><li>sick, lame, injured or under treatment – it distorts the mean (still look at it as a single animal);</li><li>estrus, calving/lambing, different lactation or pregnancy stage;</li><li>different age, group, pen or barn area, i.e. not the same housing environment;</li><li>newly introduced or isolated (social rank);</li><li>too little observed time – few data make values noisy;</li><li>recording errors or test data (e.g. demo data);</li><li>comparing one animal with the herd: take that animal out of the herd mean so the comparison is not circular.</li></ul><p>Species are never mixed: the herd mean always refers to one species.</p>",mgi:"Merge colleagues’ data (JSON)",mgc:"From clipboard",mg:"Merge data",mgA:"New animals",mgM:"matched to existing",mgE:"New events",mgS:"New scans/snapshots",mgO:"New observations",mgB:"New custom behaviors",mgD:"duplicates skipped",mgK:"not assignable",mgOp:"closed without end",mgno:"Nothing new in this file.",mggo:"Merge",h_mg_t:"Merging data",h_mg:"<p>Import a colleague’s <b>JSON export</b> and merge it with your data, e.g. when you observe different animals in the same trial or for holiday cover.</p><p>Animals are matched when the ID or (number or name) and the species agree; all others are created. Existing events and scans are not imported twice, so you can import the same file repeatedly. Behaviors still running in the file are closed at the export time. The colleague’s custom behaviors are added. Identical numbers in different herds would be merged – so check the preview.</p><p>Tip: enter your name as <b>observer</b> under Animals → Session. It is saved with every event and stays recognizable after merging.</p>",qr:"Scan QR code",qrno:"No animal found for this code",qrex:"Animal already exists",qrerr:"Camera not available. Check the camera permission or enter the animal manually.",wel:"Welfare indicators",wd:"Duration (min)",wn:"Count",radd:"Add indicator",h_wel_t:"Welfare indicators",h_wel:"<p>Presets hide all behaviors not needed for the topic in the ethogram (undo with “Show all” or in the ethogram editor) and create matching indicators. They are pragmatic selections from the app ethogram, not validated welfare protocols.</p><p>The table shows, per animal and selected day, the duration (minutes) or the number of events. Enter a threshold (≥) and the value turns red. Thresholds are not preset – set them from literature or farm standards. Values cover the observed time only.</p>",val:"Validation",vlab:"Video / observation ID",vmin:"Video length (min)",vstart:"● Start observation",vstop:"■ End observation",vlist:"Observations",vratio:"Time/video",vtaps:"inputs",prot:"Study protocol template (.md)",vb:"BORIS CSV",vg:"Grid CSV",h_val_t:"Validation",h_val:"<p>For the comparison with BORIS: enter video ID and length, start the observation exactly when the video starts and end it when the video ends. The app measures coding time, counts inputs (start, stop, scan) and computes coding time ÷ video length.</p><p><b>BORIS CSV:</b> START/STOP events with time in seconds from observation start (BORIS-like). <b>Grid CSV:</b> state per second and animal, suitable for Cohen’s kappa. The protocol template describes procedure and analysis.</p>",proto:"# Validation study: Behavior Tracker vs. BORIS\n\n## 1. Research question\nDo behavior data recorded with the app agree with a reference tool (BORIS), and how much time does coding take?\n\n## 2. Material\n- Videos: ___ clips of ___ min; species: ___; animals per clip: ___\n- Ethogram (version/date): ___ (attach export from the app)\n\n## 3. Observers\n- Number: ___; experience: ___; trained beforehand: yes / no\n\n## 4. Procedure\n1. Each observer codes the same clips in both tools; counterbalance the order (app/BORIS), with a break of at least ___ days between rounds.\n2. App: enter video ID and length, tap “Start observation” when the video starts and “End observation” when it ends.\n3. BORIS: code the same clips and export events as CSV.\n4. Afterwards a usability questionnaire (SUS, 10 items).\n\n## 5. Analysis\n- Agreement: Cohen’s kappa on the 1-s grid (grid CSV), per behavior and overall\n- Duration per behavior: ICC or Bland-Altman\n- Effort: coding time ÷ video length, number of inputs\n- Usability: SUS score\n\n## 6. Data storage and ethics\n- Archive raw data (JSON/CSV)\n- Animal welfare / ethics approval: ___\n",hscan:"Herd scan",msingle:"Single animal",mherd:"Herd",hinfo:"In a herd scan you record, for every animal, what it is doing at the moment of the scan (scan sampling). Pick the behavior per animal and tap “Save & next”.",hok:"Save & next",hskip:"Skip",hend:"End scan",hneed:"Please pick at least one behavior (or “Skip”).",hsum:"animals per behavior",csv3:"CSV (scans)",h_herd_t:"Herd scan",h_herd:"<p><b>Scan sampling:</b> For each animal you record what it is doing at the moment of the scan. Pick one or more behaviors and tap “Save & next”; use “Skip” if an animal is not visible. All animals of one pass share the same scan ID and start time; each animal also gets its own timestamp. You can tap animals marked ✓ to correct them.</p><p>The reminder can start a scan at fixed intervals. The analysis shows, per scan, the share of animals per behavior (multiple answers possible); the “CSV (scans)” export contains all scan data.</p>",eth:"Ethogram",sess:"Session",mstudy:"Study / project",mobs:"Observer",mgrp:"Group / pen",mplace:"Location",ethx:"Export ethogram",ethi:"Import ethogram",imp_ok:"Imported behaviors:",imp_bad:"File could not be read.",h_sess_t:"Session data",h_sess:"<p>Study, observer, group/pen and location are saved with every <b>newly started</b> event and appear in the JSON and CSV exports. Later changes affect new events only. The study name is used as observation ID in the START/STOP CSV.</p>",bn:"New behavior",bd:"Definition / example",badd:"Add behavior",bneed:"A name and at least one species are required.",inuse:"Behavior is used in data – please hide instead of deleting.",undo:"↶ Undo",edt:"Edit event",tstart:"Start",tend:"End (empty = still running)",save:"Save",bad:"The end must be after the start.",dup:"This behavior is already running for this animal.",csv1:"CSV (events)",csv2:"CSV (START/STOP)",edh:"tap to edit",h_eth_t:"Ethogram editor",h_eth:"<p>● = behavior is shown when recording, ○ = hidden. You can add your own behaviors (with definition and species) and delete them (×) as long as no data uses them. The ethogram, including definitions, is part of the JSON export. Under “Data” you can export and import it as JSON (only new behaviors are imported).</p><p><b>Undo</b> (Record tab) reverts the last start or stop. Under “Data”, tap an event to correct behavior, start and end, or to delete it.</p><p><b>CSV:</b> “events” = one row per event; “START/STOP” = one row per start or stop (BORIS-like, time in seconds from the first event). Comma-separated, UTF-8.</p>",by:"Resolution",day:"Day",hour:"Hour",tot:"Σ duration",n:"Count",gantt:"Gantt chart",nog:"No events on this day.",sm:"Duration per behavior",h_st_t:"Analysis",h_st:"<p>Pick an animal above. <b>Day</b> shows the duration per behavior for each day, <b>Hour</b> for each hour of the selected date. Darker cells = longer duration; “Count” is the number of events. Simultaneous behaviors are counted separately, so totals can exceed the observation time.</p><p>The <b>Gantt chart</b> shows every behavior as a bar over the time of day for the selected date. Running behaviors extend to “now”. Long-press a bar to see start and end.</p>",ab:"About",abx:"Recording livestock behavior (cattle, pigs, sheep) with 15 general and species-specific behaviors. All data is stored only locally in your browser (localStorage); nothing is sent to a server. Clearing browser data deletes it – export regularly.",imp:"Legal notice (Impressum)",impx:"Information pursuant to § 5 DDG:<br>[add name / company]<br>[add street, postal code, city]<br>[add e-mail]",web:"Visit harbers-agrarinformatik.de"}};
+const D={animals:[],events:[],scans:[],lang:(navigator.language||"de").startsWith("de")?"de":"en",view:"A",cur:null,sz:"XL",rem:{val:5,unit:"m",on:false}};
+let S=D;try{const x=JSON.parse(localStorage.getItem("vt1"));if(x&&x.animals)S=Object.assign({},D,x)}catch(e){}
+const IDB_NAME="vt1-idb",IDB_STORE="state",SOFT_MB=15;
+function openIDB(){return new Promise(function(res,rej){if(!window.indexedDB){rej(new Error("no idb"));return}var r=indexedDB.open(IDB_NAME,1);r.onupgradeneeded=function(){var db=r.result;if(!db.objectStoreNames.contains(IDB_STORE))db.createObjectStore(IDB_STORE)};r.onsuccess=function(){res(r.result)};r.onerror=function(){rej(r.error)}})}
+function idbSet(obj){return openIDB().then(function(db){return new Promise(function(res,rej){var tx=db.transaction(IDB_STORE,"readwrite");tx.objectStore(IDB_STORE).put(obj,"main");tx.oncomplete=function(){res(true)};tx.onerror=function(){rej(tx.error)}})})}
+function idbGet(){return openIDB().then(function(db){return new Promise(function(res,rej){var q=db.transaction(IDB_STORE,"readonly").objectStore(IDB_STORE).get("main");q.onsuccess=function(){res(q.result||null)};q.onerror=function(){rej(q.error)}})})}
+function approxSize(){try{return new Blob([JSON.stringify(S)]).size}catch(e){return JSON.stringify(S).length}}
+
+async function idbBackupHandle(op,handle){
+  try{
+    var db=await openIDB();
+    return await new Promise(function(res,rej){
+      var tx=db.transaction(IDB_STORE,'readwrite');
+      if(op==='set')tx.objectStore(IDB_STORE).put(handle,'backupHandle');
+      else if(op==='get'){var q=tx.objectStore(IDB_STORE).get('backupHandle');q.onsuccess=function(){res(q.result||null)};q.onerror=function(){rej(q.error)};return}
+      else if(op==='del')tx.objectStore(IDB_STORE).delete('backupHandle');
+      tx.oncomplete=function(){res(true)};tx.onerror=function(){rej(tx.error)};
+    });
+  }catch(e){return null}
+}
+async function pickBackupFile(){
+  if(!window.showSaveFilePicker){modal(t('backup_noapi'));return}
+  try{
+    var handle=await showSaveFilePicker({
+      suggestedName:'verhaltens-tracker-backup.json',
+      types:[{description:'JSON',accept:{'application/json':['.json']}}],
+      excludeAcceptAllOption:false
+    });
+    await idbBackupHandle('set',handle);
+    S.backup={on:true,name:handle.name||'backup.json',last:null,err:null};
+    await mirrorBackup(true);
+    save();render();announce(t('backup_on')+' '+S.backup.name);
+  }catch(e){if(e&&e.name!=='AbortError')modal(t('backup_fail')+': '+esc(String(e.message||e)))}
+}
+async function clearBackup(){
+  await idbBackupHandle('del');
+  S.backup={on:false,name:'',last:null,err:null};
+  save();render();announce(t('backup_off'));
+}
+async function mirrorBackup(force){
+  if(!S.backup||!S.backup.on)return false;
+  try{
+    var handle=await idbBackupHandle('get');
+    if(!handle){S.backup.err='no handle';return false}
+    if(handle.queryPermission){
+      var p=await handle.queryPermission({mode:'readwrite'});
+      if(p!=='granted'){p=await handle.requestPermission({mode:'readwrite'});if(p!=='granted'){S.backup.err='permission';return false}}
+    }
+    var w=await handle.createWritable();
+    var payload=typeof doExport==='function'?doExport():JSON.stringify({app:'verhaltens-tracker',state:S,backupAt:new Date().toISOString()});
+    // doExport returns string - use export object
+    await w.write(payload);
+    await w.close();
+    S.backup.last=new Date().toISOString();S.backup.err=null;
+    return true;
+  }catch(e){S.backup.err=String(e.message||e);return false}
+}
+
+async function safeSave(){
+  var bytes=approxSize(),limit=SOFT_MB*1024*1024;
+  if(bytes>limit){modal('<h2 style="color:var(--warn)"><span class=em>⚠</span> '+t("storagefull_t")+'</h2><p>'+t("storagefull")+'</p><p class="mut">'+(bytes/1048576).toFixed(1)+' / '+SOFT_MB+' MB</p>');return false}
+  try{await idbSet(S);try{localStorage.setItem("vt1",JSON.stringify(S))}catch(e){try{localStorage.setItem("vt1-meta",JSON.stringify({idb:true,n:(S.events||[]).length,ts:Date.now()}))}catch(_e){}}try{if(S.backup&&S.backup.on){if(!S._bakT)S._bakT=setTimeout(function(){S._bakT=null;mirrorBackup()},4000)}}catch(_b){}return true}
+  catch(e){try{localStorage.setItem("vt1",JSON.stringify(S));return true}catch(e2){modal('<h2 style="color:var(--warn)"><span class=em>⚠</span> '+t("storagefull_t")+'</h2><p>'+t("storagefull")+'</p>');return false}}
+}
+const save=function(){safeSave()};
+async function loadFromIDB(){try{var x=await idbGet();if(x&&x.animals){S=Object.assign({},D,x);applyTheme();render();if(S.rem&&S.rem.on)startRem();if(S.locked)setLock(true)}}catch(e){}}
+loadFromIDB();
+S.custom=S.custom||[];S.meta=S.meta||{};S.geoOn=!!S.geoOn;S.trash=S.trash||[];S.use=S.use||{};S.backup=S.backup||{on:false};S.locked=!!S.locked;S.obs=S.obs||[];S.rules=S.rules||[];S.g=S.g||{mode:'herd',ch:'tb',sp:null,ex:[],day:'all',b:'lying'};S.sub=S.sub||'t';S.hid=S.hid||[];S.ul=S.ul||[];BE.push(...S.custom);
+const t=k=>T[S.lang][k]||k,$=s=>document.querySelector(s),uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const lab=a=>esc([a.num,a.name].filter(Boolean).join(" · "));
+const bl=b=>S.lang==="de"?b.de:b.en,Q=k=>`<span class="q" data-h="${k}" role="button" aria-label="Help">?</span>`;
+const fmt=ms=>{let s=Math.max(0,Math.floor(ms/1000)),h=Math.floor(s/3600),m=Math.floor(s%3600/60);s%=60;const p=n=>String(n).padStart(2,"0");return(h?h+":":"")+p(m)+":"+p(s)};
+const open=(a,b)=>S.events.find(e=>e.animal===a&&e.beh===b&&!e.end);
+let lastFocus=null;
+function trapFocus(e){
+  if(e.key==="Escape"){closeModal();return}
+  if(e.key!=="Tab")return;
+  const f=[...$("#mb").querySelectorAll("button,input,select,textarea,a[href],[tabindex]:not([tabindex='-1'])")].filter(x=>!x.disabled&&x.offsetParent!==null);
+  if(!f.length)return;
+  const first=f[0],last=f[f.length-1];
+  if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}
+  else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}
+}
+function openModal(h){
+  lastFocus=document.activeElement;
+  if(h!=null)$("#mb").innerHTML=h+(String(h).includes('data-a="close"')||String(h).includes("data-a='close'")?"":`<p><button class="btn" data-a="close" style="width:100%">OK</button></p>`);
+  $("#mo").style.display="flex";
+  const box=$("#mb"),h2=box.querySelector("h2");if(h2&&!h2.id)h2.id="mb-h";
+  const f=box.querySelector("button,input,select,a[href],[tabindex]");f&&f.focus();
+  box.onkeydown=trapFocus;
+}
+function closeModal(){$("#mo").style.display="none";if(lastFocus)try{lastFocus.focus()}catch(e){}}
+function modal(h){openModal(h)}
+function help(k){if(k.startsWith("b:")){const b=BE.find(x=>x.id===k.slice(2));modal(`<h2>${esc(bl(b))}</h2><p class="mut">${t("ca")}: ${CAT[b.cat][S.lang==="de"?1:0]} · ${[...b.sp].map(c=>SP[c][S.lang==="de"?1:0]).join(", ")}</p><p><b>${t("ex")}:</b> ${esc(S.lang==="de"?b.xd:b.xe)}</p>`)}else modal(`<h2>${t("h_"+k+"_t")}</h2>`+t("h_"+k))}
+function render(){
+ $("#ti").textContent=t("ti");document.documentElement.lang=S.lang;const th=document.querySelector('[data-a="theme"]');th.setAttribute('aria-pressed',String(!!S.theme));th.textContent=S.theme==='night'?'☾':S.theme==='outdoor'?'☀︎':'◐';th.setAttribute('aria-label',S.theme==='night'?t('night'):S.theme==='outdoor'?t('outd'):t('theme_day'));th.title=th.getAttribute('aria-label');document.querySelector('[data-a="lang"]').textContent=S.lang==="de"?"EN":"DE";
+ const sk=document.getElementById("skip");if(sk)sk.textContent=S.lang==="de"?"Zum Inhalt springen":"Skip to content";
+ $("#nv").innerHTML=[["A","tA"],["O","tO"],["S","tS"],["D","tD"],["I","tI"]].map(([v,k])=>`<button data-a="view" data-v="${v}" class="${S.view===v?"on":""}">${t(k)}</button>`).join("");
+ const v=$("#v");
+ if(S.view==="A"){v.innerHTML=`<div class="card"><div class="row"><b style="flex:none">${t("tA")}</b>${Q("animals")}</div><div class="row" style="margin-top:.6rem"><label class="sr-only" for="an">${t("name")}</label><input id="an" placeholder="${t("name")}" maxlength="40" aria-describedby="er"><label class="sr-only" for="anu">${t("num")}</label><input id="anu" placeholder="${t("num")}" maxlength="20"><label class="sr-only" for="asp">${t("sp")}</label><select id="asp" aria-label="${t("sp")}">${Object.keys(SP).map(k=>`<option value="${k}">${SP[k][S.lang==="de"?1:0]}</option>`).join("")}</select></div><p><button class="btn s" data-a="qra" style="width:100%;margin-bottom:.5rem"><span class=em>📷</span> ${t("qr")}</button><button class="btn" data-a="add" style="width:100%">${t("add")}</button></p><p id="er" class="mut" role="alert" aria-live="assertive" style="color:var(--warn)"></p></div><div class="card"><div class="row"><b style="flex:none">${t("aA")} (${S.animals.length})</b><input id="af" placeholder="${t("afilter")}" maxlength="40" style="flex:1" value="${esc(S._af||"")}"></div>${S.animals.filter(a=>{const q=(S._af||"").trim().toLowerCase();if(!q)return true;return (lab(a)+" "+(a.num||"")+" "+(SP[a.sp]||[]).join(" ")).toLowerCase().includes(q)}).map(a=>`<div class="li"><span>${lab(a)} <span class="mut">· ${SP[a.sp][S.lang==="de"?1:0]}</span></span><button class="btn w" data-a="del" data-v="${a.id}">${t("del")}</button></div>`).join("")}</div>`}
+ else if(S.view==="O"){
+  if(!S.animals.length){v.innerHTML=`<div class="card"><p>${t("noA")}</p><button class="btn" data-a="view" data-v="A">${t("goA")}</button></div>`}else{
+  if(!S.animals.find(a=>a.id===S.cur))S.cur=S.animals[0].id;const a=S.animals.find(x=>x.id===S.cur);
+  const list=BE.filter(b=>b.sp.includes(a.sp)&&!S.hid.includes(b.id)).slice().sort((p,q)=>((S.use||{})[q.id]||0)-((S.use||{})[p.id]||0));
+  v.innerHTML=`<div class="chips">${S.animals.map(x=>`<button class="btn ${x.id===S.cur?"":"s"}" data-a="cur" data-v="${x.id}">${lab(x)}</button>`).join("")}</div>
+  <div class="card"><div class="row"><b style="flex:none"><span class=em>⏰</span> ${t("rem")}</b>${Q("rem")}<span id="cd" class="mut"></span></div><div class="row" style="margin-top:.5rem"><span style="flex:none">${t("every")}</span><input id="rv" type="number" min="1" value="${S.rem.val}"><select id="ru"><option value="s" ${S.rem.unit==="s"?"selected":""}>${t("s")}</option><option value="m" ${S.rem.unit==="m"?"selected":""}>${t("m")}</option></select><button class="btn ${S.rem.on?"w":""}" data-a="rt">${S.rem.on?t("stop"):t("start")}</button><button class="btn s" data-a="snap">${t("now")}</button></div><div class="row" style="margin-top:.5rem"><button class="btn ${S.geoOn?"":"s"}" data-a="geotog" title="${t("geo")}"><span class=em>📍</span></button><span class="mut" style="flex:none">${t("size")}</span><button class="btn ${S.sz==="XL"?"":"s"}" data-a="sz" data-v="XL">XL</button><button class="btn ${S.sz==="L"?"":"s"}" data-a="sz" data-v="L">L</button><button class="btn ${S.sz==="M"?"":"s"}" data-a="sz" data-v="M">M</button><button class="btn ${S.sz==="S"?"":"s"}" data-a="sz" data-v="S">S</button><button class="btn s" data-a="undo">${t("undo")}</button>${Q("obs")}</div></div>
+  <div class="${S.sz==="L"?"two":S.sz==="M"?"three":S.sz==="S"?"four":""}"><div class="b nvb" role="button" tabindex="0" data-b="__nv__" aria-pressed="false" style="min-height:3.2rem;margin-bottom:.5rem">${t("nv")}<small class="mut">${t("nv_h")}</small><span class="tm"></span></div>${Object.keys(CAT).map(c=>{const bs=list.filter(b=>b.cat===c);return bs.length?`<h3 class="cat">${CAT[c][S.lang==="de"?1:0]}</h3><div class="grid">${bs.map(b=>`<div class="b" role="button" tabindex="0" data-b="${b.id}">${Q("b:"+b.id)}<span>${esc(bl(b))}</span><span class="tm"></span></div>`).join("")}</div>`:""}).join("")}</div>`;
+  tick()}}
+ else if(S.view==="S"){v.innerHTML=statsHTML()}
+ else if(S.view==="D"){const rec=[...S.events].reverse().slice(0,30);const gear=!!S.gearOpen;const bak=S.backup&&S.backup.on;
+ const gearPanel=gear?`<div class="card" style="border-style:dashed"><div class="row"><b style="flex:none"><span class=em>⚙</span> ${t("gear_t")}</b><button class="btn s" data-a="gear" style="flex:none">✕</button></div>
+<p class="mut">${t("gear_hint")}</p>
+<div class="row" style="margin-top:.4rem"><button class="btn s" data-a="print">${t("print")}</button><button class="btn s" data-a="ics">${t("ics")}</button></div>
+<div class="row" style="margin-top:.4rem"><button class="btn s" data-a="ethx">${t("ethx")}</button><button class="btn s" data-a="ethi">${t("ethi")}</button><button class="btn s" data-a="codebook">${t("codebook")}</button><input type="file" id="ei" accept=".json,application/json" style="display:none"></div>
+<div class="row" style="margin-top:.4rem"><button class="btn s" data-a="demo">${t("demo")}</button><button class="btn w" data-a="demodel">${t("demodel")}</button></div>
+<hr style="border:none;border-top:1px solid var(--bd);margin:.75rem 0">
+<b>${t("backup_t")}</b>
+<p class="mut">${t("backup_limits")}</p>
+<div class="row" style="margin-top:.4rem"><button class="btn s" data-a="bakset">${t("backup_set")}</button><button class="btn s" data-a="bakclr">${t("backup_clr")}</button>${bak?`<button class="btn s" data-a="baknow">${t("backup_now")}</button>`:''}</div>
+<p class="mut" style="margin:.35rem 0 0">${bak?(t("backup_active")+': '+esc(S.backup.name||'')+(S.backup.last?' · '+esc(S.backup.last):'')+(S.backup.err?' · <span class=em>⚠</span> '+esc(S.backup.err):'')):t("backup_hint")}</p>
+</div>`:'';
+ v.innerHTML=`<div class="card"><div class="row"><b style="flex:none">${t("cnt")}</b><button class="btn s" data-a="gear" title="${t("gear_t")}" aria-label="${t("gear_t")}" style="flex:none;min-width:2.75rem"><span class=em>⚙</span></button>${Q("exp")}</div>
+<p>${S.animals.length} / ${S.events.length} / ${S.scans.length}</p>
+<div class="row"><button class="btn" data-a="exp">${t("exp")}</button><button class="btn s" data-a="copy">${t("copy")}</button></div>
+<div class="row" style="margin-top:.5rem"><button class="btn" data-a="csv1">${t("csv1")}</button><button class="btn" data-a="csv2">${t("csv2")}</button><button class="btn" data-a="csv3">${t("csv3")}</button></div>
+<div class="row" style="margin-top:.5rem"><button class="btn" data-a="mgf">${t("mgi")}</button><button class="btn s" data-a="mgclip">${t("mgc")}</button>${Q("mg")}<input type="file" id="mi" accept=".json,application/json" style="display:none"></div>
+<p id="ms" class="mut"></p><textarea id="ta" rows="5" readonly style="display:none"></textarea></div>${gearPanel}<div class="card"><b>${t("recent")}</b> <span class="mut">(${t("edh")})</span>${rec.length?rec.map(e=>{const a=S.animals.find(x=>x.id===e.animal),b=BE.find(x=>x.id===e.beh);return`<div class="li" data-a="ed" data-v="${e.id}" style="cursor:pointer"><span>${a?lab(a):"?"} · ${esc(bl(b))}</span><span class="mut">${new Date(e.start).toLocaleTimeString(S.lang)} · ${e.end?fmt(new Date(e.end)-new Date(e.start)):t("run")}</span></div>`}).join(""):`<p class="mut">${t("emp")}</p>`}</div><button class="btn w" data-a="clr" style="width:100%">${t("clr")}</button>`}
+ else v.innerHTML=`<div class="card"><h2>${t("ab")}</h2><p>${t("abx")}</p><p><a class="btn" href="https://harbers-agrarinformatik.de" target="_blank" rel="noopener">${t("web")} →</a></p></div><div class="card"><h2>${t("imp")}</h2><p><a class="btn s" href="https://harbers-agrarinformatik.de/impressum.html" target="_blank" rel="noopener">${t("imp")} →</a></p></div>`}
+const dk=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const dl=k=>{const p=k.split('-');return new Date(+p[0],p[1]-1,+p[2]).toLocaleDateString(S.lang,{weekday:'short',day:'2-digit',month:'2-digit'})};
+function segs(aid,res){const out=[],now=Date.now();S.events.filter(e=>e.animal===aid).forEach(e=>{let s=new Date(e.start).getTime();const en=e.end?new Date(e.end).getTime():now;while(s<en){const d=new Date(s),nb=(res==='h'?new Date(d.getFullYear(),d.getMonth(),d.getDate(),d.getHours()+1):new Date(d.getFullYear(),d.getMonth(),d.getDate()+1)).getTime(),e2=Math.min(en,nb);out.push({b:e.beh,s:s,e:e2,k:dk(d)+(res==='h'?' '+String(d.getHours()).padStart(2,'0'):'')});s=e2}});return out}
+function ganttHTML(aid,day){const sg=segs(aid,'d').filter(x=>x.k===day);if(!sg.length)return `<p class='mut'>${t('nog')}</p>`;
+ const ids=BE.filter(b=>sg.some(x=>x.b===b.id)),H=3600000,a=new Date(Math.min(...sg.map(x=>x.s))),z=new Date(Math.max(...sg.map(x=>x.e)));a.setMinutes(0,0,0);if(z.getMinutes()||z.getSeconds()||z.getMilliseconds())z.setHours(z.getHours()+1);z.setMinutes(0,0,0);
+ const t0=a.getTime();let t1=z.getTime();if(t1<=t0)t1=t0+H;
+ const n=Math.round((t1-t0)/H),ph=Math.max(50,Math.round(640/n)),LW=150,W=LW+n*ph,RH=30,HH=24,HT=HH+ids.length*RH+4;
+ let g=`<svg class='gt' width='${W}' height='${HT}' viewBox='0 0 ${W} ${HT}' role='img'>`;
+ for(let i=0;i<=n;i++){const x=LW+i*ph,d=new Date(t0+i*H);g+=`<line x1='${x}' x2='${x}' y1='${HH-4}' y2='${HT}'/><text x='${x+3}' y='14'>${String(d.getHours()).padStart(2,'0')}:00</text>`}
+ ids.forEach((b,i)=>{const y=HH+i*RH,col=`hsl(${(BE.indexOf(b)*47)%360} 55% 48%)`;g+=`<text x='4' y='${y+19}'>${esc(bl(b).slice(0,20))}</text>`;sg.filter(x=>x.b===b.id).forEach(x=>{const xx=LW+(x.s-t0)/H*ph,w=Math.max(3,(x.e-x.s)/H*ph);g+=`<rect x='${xx}' y='${y+4}' width='${w}' height='${RH-8}' rx='4' fill='${col}'><title>${esc(bl(b))}: ${new Date(x.s).toLocaleTimeString(S.lang)} – ${new Date(x.e).toLocaleTimeString(S.lang)}</title></rect>`})});
+ return `<div style='overflow-x:auto'>${g}</svg></div>`}
+function statsHTML(){
+ if(!S.animals.length)return `<div class='card'><p>${t('noA')}</p><button class='btn' data-a='view' data-v='A'>${t('goA')}</button></div>`;
+ if(!S.animals.find(a=>a.id===S.cur))S.cur=S.animals[0].id;
+ const res=S.res||'d',days=[...new Set(segs(S.cur,'d').map(x=>x.k))].sort();
+ if(!days.includes(S.day))S.day=days[days.length-1]||null;
+ const h=`<div class='chips'>${S.animals.map(x=>`<button class='btn ${x.id===S.cur?'':'s'}' data-a='cur' data-v='${x.id}'>${lab(x)}</button>`).join('')}</div>`;
+ if(!days.length)return h+`<div class='card'><p class='mut'>${t('emp')}</p></div>`+scanHTML();
+ const sg=segs(S.cur,res).filter(x=>res==='d'||x.k.startsWith(S.day)),cols=[...new Set(sg.map(x=>x.k))].sort(),ids=BE.filter(b=>sg.some(x=>x.b===b.id)),m={};let mx=1;
+ sg.forEach(x=>{const k=x.b+'|'+x.k;m[k]=(m[k]||0)+x.e-x.s;mx=Math.max(mx,m[k])});
+ const cl=k=>res==='h'?k.slice(11)+'h':(S.lang==='de'?k.slice(8)+'.'+k.slice(5,7)+'.':k.slice(5,7)+'/'+k.slice(8));
+ const rows=ids.map(b=>{let tot=0;const cs=cols.map(k=>{const v=m[b.id+'|'+k]||0;tot+=v;return v?`<td style='background:color-mix(in srgb,var(--ac) ${Math.round(12+60*v/mx)}%,transparent)'>${fmt(v)}</td>`:`<td class='mut'>·</td>`}).join('');const n=S.events.filter(e=>e.animal===S.cur&&e.beh===b.id&&(res==='d'||dk(new Date(e.start))===S.day)).length;return `<tr><td>${esc(bl(b))}</td>${cs}<td><b>${fmt(tot)}</b></td><td>${n}</td></tr>`}).join('');
+ return h+`<div class='card'><div class='row'><b style='flex:none'>${t('sm')}</b>${Q('st')}</div><div class='row' style='margin-top:.5rem'><span class='mut' style='flex:none'>${t('by')}</span><button class='btn ${res==='d'?'':'s'}' data-a='res' data-v='d'>${t('day')}</button><button class='btn ${res==='h'?'':'s'}' data-a='res' data-v='h'>${t('hour')}</button><select id='dsel'>${days.map(k=>`<option value='${k}' ${k===S.day?'selected':''}>${dl(k)}</option>`).join('')}</select></div><div style='overflow-x:auto;margin-top:.6rem'><table class='tb'><tr><th></th>${cols.map(k=>`<th>${cl(k)}</th>`).join('')}<th>${t('tot')}</th><th>${t('n')}</th></tr>${rows}</table></div></div><div class='card'><b>${t('gantt')}</b> <span class='mut'>${dl(S.day)}</span>${ganttHTML(S.cur,S.day)}</div>`+scanHTML()}
+const loc=iso=>{const d=new Date(iso),p=n=>String(n).padStart(2,'0');return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())+'T'+p(d.getHours())+':'+p(d.getMinutes())+':'+p(d.getSeconds())};
+const q=s=>'"'+String(s==null?'':s).replace(/"/g,'""')+'"';
+function csv1(){const r=[['animal_id','animal_name','animal_number','species','behavior_id','behavior_en','behavior_de','main_category','start_utc','end_utc','duration_s','study','observer','group','place','note','edited','not_visible']];S.events.slice().sort((a,b)=>a.start<b.start?-1:1).forEach(e=>{const a=S.animals.find(x=>x.id===e.animal)||{};const b=e.beh==='__nv__'?{en:'Not visible',de:'Ausser Sicht',cat:''}:(BE.find(x=>x.id===e.beh)||{});const edited=(e.hist||[]).some(h=>h.a==='edit'||h.a==='photo'||h.a==='geo')?'yes':'no';r.push([e.animal,a.name,a.num,a.sp?SP[a.sp][0]:'',e.beh,b.en||'',b.de||'',b.cat?CAT[b.cat][0]:'',e.start,e.end,e.end?Math.round((new Date(e.end)-new Date(e.start))/1000):'',(e.m||{}).study,(e.m||{}).observer,(e.m||{}).group,(e.m||{}).place,e.note||'',edited,e.beh==='__nv__'?'yes':'no'])});return r.map(x=>x.map(q).join(',')).join('\r\n')}
+function csv2(){const ev=S.events,z=ev.length?Math.min(...ev.map(e=>new Date(e.start))):0,r=[['Observation id','Subject','Behavior','Behavior type','Time','Datetime_utc']],rows=[];ev.forEach(e=>{const a=S.animals.find(x=>x.id===e.animal)||{},b=BE.find(x=>x.id===e.beh)||{},sj=[a.num,a.name].filter(Boolean).join(' ');rows.push([e.start,sj,b.en,'START',(e.m||{}).study||'obs1']);if(e.end)rows.push([e.end,sj,b.en,'STOP',(e.m||{}).study||'obs1'])});rows.sort((x,y)=>x[0]<y[0]?-1:1).forEach(x=>r.push([x[4],x[1],x[2],x[3],((new Date(x[0])-z)/1000).toFixed(3),x[0]]));return r.map(x=>x.map(q).join(',')).join('\r\n')}
+async function shareBlob(blob,filename,mime){
+  try{const file=new File([blob],filename,{type:mime});
+    if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],title:filename});return true}
+  }catch(e){if(e.name==='AbortError')return true}
+  return false
+}
+async function outFile(name,data,mime='text/plain;charset=utf-8'){
+  const blob=data instanceof Blob?data:new Blob([data],{type:mime});
+  if(await shareBlob(blob,name,mime)){(($('#ms')||{}).textContent=t('shared'));S.lastExp=Date.now();save();return}
+  try{const d=window.claude&&claude.use?await claude.use('downloads'):null;
+    if(d){await d.save({filename:name,data:data instanceof Blob?await data.text():data});(($('#ms')||{}).textContent=t('dl'));S.lastExp=Date.now();save();return}}catch(e){}
+  try{const u=URL.createObjectURL(blob),l=document.createElement('a');l.href=u;l.download=name;
+    document.body.appendChild(l);l.click();l.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);
+    (($('#ms')||{}).textContent=t('dl'));S.lastExp=Date.now();save();return}catch(e){}
+  if(!(data instanceof Blob)){const x=$('#ta');if(x){x.value=data;x.style.display='block';x.select()}}
+}
+function editEv(id){const e=S.events.find(x=>x.id===id);if(!e)return;const a=S.animals.find(x=>x.id===e.animal);
+ const hist=(e.hist||[]).slice(-8).reverse().map(h=>'<li class="mut">'+esc(h.t)+' · '+esc(h.a)+(h.by?(' · '+esc(h.by)):"")+'</li>').join('')||'<li class="mut">—</li>';
+ const geo=e.geo?('<p class="mut">GPS: '+e.geo.lat.toFixed(5)+', '+e.geo.lon.toFixed(5)+(e.geo.acc!=null?(' ±'+Math.round(e.geo.acc)+'m'):'')+'</p>'):('<p class="mut">'+t('geo_none')+'</p>');
+ openModal('<h2 id="mb-h">'+t('edt')+'</h2><p class="mut">'+(a?lab(a):'')+'</p><p><select id="eb">'+BE.map(b=>'<option value="'+b.id+'" '+(b.id===e.beh?'selected':'')+'>'+esc(bl(b))+'</option>').join('')+'</select></p><p><label class="mut">'+t('tstart')+'</label><input id="es" type="datetime-local" step="1" value="'+loc(e.start)+'"></p><p><label class="mut">'+t('tend')+'</label><input id="ee" type="datetime-local" step="1" value="'+(e.end?loc(e.end):'')+'"></p><p><label class="mut">'+t('note')+'</label><textarea id="enote" rows="2" maxlength="500" placeholder="'+t('note_ph')+'">'+esc(e.note||'')+'</textarea></p>'+geo+'<p><label class="mut">'+t('photo')+'</label><input type="file" id="ephoto" accept="image/*" capture="environment"></p>'+(e.photo?'<p class="mut">'+t('photo_ok')+'</p>':'')+'<p class="mut"><b>'+t('hist')+'</b></p><ul style="margin:0;padding-left:1.1rem;max-height:6rem;overflow:auto">'+hist+'</ul><div class="row"><button class="btn" data-a="esave" data-v="'+id+'">'+t('save')+'</button><button class="btn s" data-a="geofix" data-v="'+id+'">'+t('geo_set')+'</button><button class="btn w" data-a="edel" data-v="'+id+'">'+t('del')+'</button><button class="btn s" data-a="close">'+t('later')+'</button></div>')}
+function ethHTML(){const L=S.lang==='de'?1:0,cs=Object.keys(CAT).map(c=>`<option value='${c}'>${CAT[c][L]}</option>`).join('');
+ return `<div class='card'><div class='row'><b style='flex:none'>${t('eth')}</b>${Q('eth')}</div><div class='row' style='margin-top:.5rem'><input id='bn' placeholder='${t('bn')}' maxlength='40'><input id='bd' placeholder='${t('bd')}' maxlength='120'></div><div class='row' style='margin-top:.5rem'><select id='bc'>${cs}</select>${Object.keys(SP).map(k=>`<label style='flex:none'><input type='checkbox' class='bsp' value='${k}' checked style='width:auto'> ${SP[k][L]}</label>`).join('')}</div><p><button class='btn' data-a='badd' style='width:100%'>${t('badd')}</button></p><p id='be' class='mut' style='color:var(--warn)'></p><details><summary>${t('eth')} (${BE.length})</summary>${BE.map(b=>{const h=S.hid.includes(b.id);return `<div class='li'><span>${esc(bl(b))} <span class='mut'>· ${CAT[b.cat][L]}</span></span><span style='display:flex;gap:.4rem'><button class='btn ${h?'s':''}' data-a='hid' data-v='${b.id}'>${h?'○':'●'}</button>${b.id.startsWith('c_')?`<button class='btn w' data-a='bdel' data-v='${b.id}'>×</button>`:''}</span></div>`}).join('')}</details></div>`}
+
+function eventGrid(events,animalId,t0,t1,stepMs){
+  const n=Math.max(0,Math.floor((t1-t0)/stepMs));
+  const g=new Array(n).fill('');
+  events.filter(e=>e.animal===animalId).forEach(e=>{
+    const s=Math.max(t0,new Date(e.start).getTime());
+    const en=Math.min(t1,new Date(e.end||t1).getTime());
+    if(en<=s)return;
+    const i0=Math.floor((s-t0)/stepMs),i1=Math.ceil((en-t0)/stepMs);
+    for(let i=i0;i<i1&&i<n;i++)if(i>=0)g[i]=e.beh||'';
+  });
+  return g;
+}
+function cohenKappa(g1,g2){
+  const n=Math.min(g1.length,g2.length);if(!n)return null;
+  const labels=Array.from(new Set([...g1.slice(0,n),...g2.slice(0,n)]));
+  const idx={};labels.forEach((l,i)=>idx[l]=i);
+  const k=labels.length,m=Array.from({length:k},()=>Array(k).fill(0));
+  for(let i=0;i<n;i++){m[idx[g1[i]]][idx[g2[i]]]++}
+  let agree=0;for(let i=0;i<k;i++)agree+=m[i][i];
+  const po=agree/n;
+  const row=m.map(r=>r.reduce((a,b)=>a+b,0)),col=labels.map((_,j)=>m.reduce((a,r)=>a+r[j],0));
+  let pe=0;for(let i=0;i<k;i++)pe+=(row[i]*col[i])/(n*n);
+  const kappa=pe===1?1:(po-pe)/(1-pe);
+  return {kappa,po,pe,n,labels,matrix:m};
+}
+function irrHTML(){
+  const obs=Array.from(new Set(S.events.map(e=>e.m&&e.m.observer).filter(Boolean)));
+  const animals=S.animals;
+  if(obs.length<2)return `<div class='card'><b>${t('irr_t')}</b><p class='mut'>${t('irr_need')}</p></div>`;
+  const o1=obs[0],o2=obs[1];
+  let rows='';
+  animals.forEach(a=>{
+    const e1=S.events.filter(e=>e.animal===a.id&&e.m&&e.m.observer===o1);
+    const e2=S.events.filter(e=>e.animal===a.id&&e.m&&e.m.observer===o2);
+    if(!e1.length||!e2.length)return;
+    const t0=Math.min(...[...e1,...e2].map(e=>new Date(e.start).getTime()));
+    const t1=Math.max(...[...e1,...e2].map(e=>new Date(e.end||e.start).getTime()));
+    if(!(t1>t0))return;
+    const r=cohenKappa(eventGrid(e1,a.id,t0,t1,1000),eventGrid(e2,a.id,t0,t1,1000));
+    if(!r)return;
+    rows+=`<tr><td>${esc(lab(a))}</td><td>${esc(o1)} vs ${esc(o2)}</td><td>${r.n}</td><td><b>${r.kappa.toFixed(3)}</b></td><td>${(r.po*100).toFixed(1)}%</td></tr>`;
+  });
+  return `<div class='card'><div class='row'><b style='flex:none'>${t('irr_t')}</b>${Q('irr')}</div>
+<p class='mut'>${t('irr_hint')}</p>
+<p class='mut'>${t('mobs')}: ${obs.map(esc).join(', ')||'—'}</p>
+${rows?`<table style='width:100%;font-size:.9rem'><tr><th>${t('tA')}</th><th>${t('irr_pair')}</th><th>n (s)</th><th>κ</th><th>Po</th></tr>${rows}</table>`:`<p class='mut'>${t('irr_none')}</p>`}
+</div>`;
+}
+
+function metaHTML(){const f=(k,l,mx)=>`<input data-mk='${k}' maxlength='${mx||60}' placeholder='${t(l)}' value='${esc(S.meta[k]||'')}'>`;return `<div class='card'><div class='row'><b style='flex:none'>${t('sess')}</b>${Q('sess')}</div><div class='row' style='margin-top:.5rem'>${f('study','mstudy')}${f('observer','mobs')}</div><div class='row' style='margin-top:.5rem'>${f('group','mgrp')}${f('place','mplace')}</div><div class='row' style='margin-top:.5rem'>${f('temp','mtemp',8)}${f('housing','mhousing')}</div><p style='margin:.5rem 0 0'><label class='mut'>${t('mdaynote')}</label><textarea data-mk='daynote' rows='2' maxlength='500' placeholder='${t('mdaynote_ph')}'>${esc(S.meta.daynote||'')}</textarea></p></div>`}
+
+function codebookExport(){
+  const cols=[
+    {name:'event_id',meaning:'Unique event id',unit:'—',values:'string'},
+    {name:'animal_id',meaning:'Animal id',unit:'—',values:'string'},
+    {name:'animal_name',meaning:'Display name',unit:'—',values:'string'},
+    {name:'animal_number',meaning:'Farm/number tag',unit:'—',values:'string'},
+    {name:'species',meaning:'Species code',unit:'—',values:'c=cattle,p=pig,s=sheep'},
+    {name:'behavior_id',meaning:'Ethogram behavior id',unit:'—',values:BE.map(b=>b.id).join('|')},
+    {name:'behavior_en',meaning:'Behavior label (EN)',unit:'—',values:'string'},
+    {name:'behavior_de',meaning:'Behavior label (DE)',unit:'—',values:'string'},
+    {name:'category',meaning:'Main category',unit:'—',values:Object.keys(CAT).join('|')},
+    {name:'start_utc',meaning:'Interval start',unit:'ISO-8601',values:'timestamp'},
+    {name:'end_utc',meaning:'Interval end (null if open)',unit:'ISO-8601',values:'timestamp|null'},
+    {name:'duration_s',meaning:'Duration',unit:'seconds',values:'number'},
+    {name:'observer',meaning:'Observer from session meta',unit:'—',values:'string'},
+    {name:'note',meaning:'Free-text note on event',unit:'—',values:'string'},
+    {name:'geo_lat',meaning:'Latitude if recorded',unit:'degrees',values:'number'},
+    {name:'geo_lon',meaning:'Longitude if recorded',unit:'degrees',values:'number'},
+    {name:'temp_c',meaning:'Session temperature meta',unit:'°C',values:'number|string'},
+    {name:'housing',meaning:'Housing system note',unit:'—',values:'string'},
+    {name:'daynote',meaning:'Day/session context note',unit:'—',values:'string'},{name:'hist',meaning:'Revision history array on event (JSON export)',unit:'—',values:'array'},{name:'edited',meaning:'Event was edited after create',unit:'—',values:'yes|no'},{name:'not_visible',meaning:'Out of sight / not observable interval',unit:'—',values:'behavior_id=__nv__'}
+  ];
+  const behaviors=BE.map(b=>({id:b.id,category:b.cat,species:b.sp,en:b.en,de:b.de,definition_en:b.xe,definition_de:b.xd}));
+  return JSON.stringify({type:'codebook',version:1,app:'verhaltens-tracker',generatedAt:new Date().toISOString(),columns:cols,behaviors:behaviors,categories:CAT,species:SP},null,2);
+}
+
+function ethExport(){return JSON.stringify({type:'ethogram',version:1,exportedAt:new Date().toISOString(),hidden:S.hid,behaviors:BE.map(b=>({id:b.id,category:b.cat,species:b.sp,en:b.en,de:b.de,definitionEn:b.xe,definitionDe:b.xd}))},null,2)}
+function ethImport(txt){let n=0;try{const o=JSON.parse(txt);(o.behaviors||[]).forEach(x=>{let id=String(x.id||'');if(!id||BE.some(b=>b.id===id))return;if(!id.startsWith('c_'))id='c_'+id;id=id.replace(/[^\w-]/g,'');if(BE.some(b=>b.id===id))return;const sp=String(x.species||'').replace(/[^cps]/g,'');if(!CAT[x.category]||!sp||!x.en)return;const b={id:id,cat:x.category,sp:sp,en:String(x.en).slice(0,40),de:String(x.de||x.en).slice(0,40),xe:String(x.definitionEn||'–').slice(0,120),xd:String(x.definitionDe||x.definitionEn||'–').slice(0,120)};S.custom.push(b);BE.push(b);n++});(o.hidden||[]).forEach(h=>{if(BE.some(b=>b.id===h)&&!S.hid.includes(h))S.hid.push(h)});save();render();alert(t('imp_ok')+' '+n)}catch(e){alert(t('imp_bad'))}}
+document.addEventListener('input',e=>{const k=e.target.dataset&&e.target.dataset.mk;if(k){S.meta[k]=e.target.value;save()}if(e.target&&e.target.id==='af'){S._af=e.target.value;render()}});
+document.addEventListener('change',e=>{const k=e.target.dataset&&e.target.dataset.mk;if(k&&e.target.tagName==='TEXTAREA'){S.meta[k]=e.target.value;save()}});
+document.addEventListener('change',e=>{if(e.target.id==='ei'&&e.target.files[0]){e.target.files[0].text().then(ethImport);e.target.value=''}});
+function modeBar(){const h=S.mode==='herd',rb=S.run?`<div class='row' style='margin-bottom:.6rem'><b style='flex:none;color:var(--warn)'>● <span id='rtm'>${fmt(Date.now()-new Date(S.run.start))}</span></b><button class='btn w' data-a='vrun'>${t('vstop')}</button></div>`:'';return rb+bk()+`<div class='row' style='margin-bottom:.6rem'><button class='btn ${h?'s':''}' data-a='mode' data-v='single'>${t('msingle')}</button><button class='btn ${h?'':'s'}' data-a='mode' data-v='herd'>${t('mherd')}</button><button class='btn s' data-a='qr'><span class=em>📷</span> QR</button>${Q('herd')}</div>`}
+function hsel(el){const H=S.herd;if(!H)return;const id=el.dataset.hb,i=H.sel.indexOf(id);if(i<0)H.sel.push(id);else H.sel.splice(i,1);el.classList.toggle('on',i<0);save();announce(el.textContent.replace('?','').trim()+' '+(i<0?t('asel'):t('adesel')))}
+function hnext(){const H=S.herd,nx=S.animals.find(x=>!(x.id in H.rec));if(nx){H.cur=nx.id;H.sel=[]}else S.herd=null;save();render();window.scrollTo(0,0)}
+function herdHTML(){const H=S.herd,L=S.lang==='de'?1:0,bar=modeBar();
+ if(!H){const n=new Set(S.scans.filter(s=>s.src==='herd').map(s=>s.scan)).size;return bar+`<div class='card'><p>${t('hinfo')}</p><p class='mut'>${t('hscan')}: ${n}</p><button class='btn' data-a='hstart' style='width:100%;min-height:5rem;font-size:1.3rem'>${t('hscan')} (${S.animals.length})</button></div>`}
+ const a=S.animals.find(x=>x.id===H.cur)||S.animals[0];H.cur=a.id;const list=BE.filter(b=>b.sp.includes(a.sp)&&!S.hid.includes(b.id)).slice().sort((p,q)=>((S.use||{})[q.id]||0)-((S.use||{})[p.id]||0));
+ const chips=S.animals.map(x=>`<button class='btn ${x.id===H.cur?'':'s'}' data-a='hcur' data-v='${x.id}'>${x.id in H.rec?(H.rec[x.id].length?'✓ ':'– '):''}${lab(x)}</button>`).join('');
+ const groups=Object.keys(CAT).map(c=>{const bs=list.filter(b=>b.cat===c);return bs.length?`<h3 class='cat'>${CAT[c][L]}</h3><div class='grid'>${bs.map(b=>`<div class='b hb ${H.sel.includes(b.id)?'on':''}' role='button' tabindex='0' data-hb='${b.id}'>${Q('b:'+b.id)}<span>${esc(bl(b))}</span></div>`).join('')}</div>`:''}).join('');
+ return bar+`<div class='card'><div class='row'><b style='flex:none'>${Object.keys(H.rec).length}/${S.animals.length}</b><button class='btn w' data-a='hend'>${t('hend')}</button></div><div class='chips' style='margin-top:.4rem'>${chips}</div></div><div class='two'>${groups}</div><div style='position:sticky;bottom:calc(3.6rem + env(safe-area-inset-bottom,0px));padding:.5rem 0;background:var(--bg)'><p id='hm' class='mut' style='color:var(--warn);margin:0'></p><div class='row'><button class='btn' data-a='hok' style='min-height:3.4rem'>${t('hok')}</button><button class='btn s' data-a='hskip' style='min-height:3.4rem'>${t('hskip')}</button></div></div>`}
+function scanHTML(){const hs=S.scans.filter(s=>s.src==='herd');if(!hs.length)return '';const ids=[...new Set(hs.map(s=>s.scan))],sc=ids.map(i=>hs.filter(s=>s.scan===i)),bs=BE.filter(b=>hs.some(s=>s.beh.includes(b.id)));
+ const head=sc.map(g=>`<th>${new Date(g[0].t0).toLocaleString(S.lang,{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})}<br><span class='mut'>n=${g.length}</span></th>`).join('');
+ const rows=bs.map(b=>`<tr><td>${esc(bl(b))}</td>${sc.map(g=>{const k=g.filter(s=>s.beh.includes(b.id)).length;return k?`<td style='background:color-mix(in srgb,var(--ac) ${Math.round(12+60*k/g.length)}%,transparent)'>${k} · ${Math.round(100*k/g.length)}%</td>`:`<td class='mut'>·</td>`}).join('')}</tr>`).join('');
+ return `<div class='card'><b>${t('hscan')}</b> <span class='mut'>(${t('hsum')})</span><div style='overflow-x:auto;margin-top:.5rem'><table class='tb'><tr><th></th>${head}</tr>${rows}</table></div></div>`}
+function csv3(){const r=[['scan_id','source','time_utc','scan_start_utc','animal_id','animal_name','animal_number','species','behavior_id','behavior_en','behavior_de','main_category']];S.scans.forEach(s=>{const a=S.animals.find(x=>x.id===s.animal)||{};(s.beh.length?s.beh:['']).forEach(id=>{const b=BE.find(x=>x.id===id)||{};r.push([s.scan||s.ts,s.src||'reminder',s.ts,s.t0||s.ts,s.animal,a.name,a.num,a.sp?SP[a.sp][0]:'',id,b.en,b.de,b.cat?CAT[b.cat][0]:''])})});return r.map(x=>x.map(q).join(',')).join('\r\n')}
+function valHTML(){const run=S.run,list=(S.obs||[]).slice().reverse().map(o=>{const d=(new Date(o.end)-new Date(o.start))/1000,r=o.vmin?(d/(o.vmin*60)).toFixed(2)+'×':'–';return `<div class='li' style='flex-wrap:wrap'><span>${esc(o.label||o.id)}<br><span class='mut'>${fmt(d*1000)} · ${t('vratio')} ${r} · ${o.taps} ${t('vtaps')}</span></span><span style='display:flex;gap:.3rem'><button class='btn s' data-a='vb' data-v='${o.id}'>${t('vb')}</button><button class='btn s' data-a='vg' data-v='${o.id}'>${t('vg')}</button><button class='btn w' data-a='vdel' data-v='${o.id}'>×</button></span></div>`}).join('');
+ return `<div class='card'><div class='row'><b style='flex:none'>${t('val')}</b>${Q('val')}</div><div class='row' style='margin-top:.5rem'><input id='vl' placeholder='${t('vlab')}' maxlength='40'><input id='vm' type='number' min='0' step='0.1' placeholder='${t('vmin')}'></div><p><button class='btn ${run?'w':''}' data-a='vrun' style='width:100%'>${run?t('vstop'):t('vstart')}</button></p><button class='btn s' data-a='prot' style='width:100%'>${t('prot')}</button><div style='margin-top:.6rem'><b>${t('vlist')} (${(S.obs||[]).length})</b>${list}</div></div>`}
+function obsEv(o){const a0=new Date(o.start).getTime(),a1=new Date(o.end).getTime();return S.events.filter(e=>{const s=new Date(e.start).getTime(),en=e.end?new Date(e.end).getTime():a1;return s<a1&&en>a0}).map(e=>({e:e,s:Math.max(new Date(e.start).getTime(),a0),n:Math.min(e.end?new Date(e.end).getTime():a1,a1)}))}
+const subj=id=>{const a=S.animals.find(x=>x.id===id)||{};return [a.num,a.name].filter(Boolean).join(' ')};
+function csvB(o){const a0=new Date(o.start).getTime(),r=[['Observation id','Subject','Behavior','Behavior type','Time']],rows=[];obsEv(o).forEach(x=>{const b=BE.find(y=>y.id===x.e.beh)||{},sj=subj(x.e.animal);rows.push([x.s,sj,b.en,'START']);rows.push([x.n,sj,b.en,'STOP'])});rows.sort((p,w)=>p[0]-w[0]).forEach(x=>r.push([o.label||o.id,x[1],x[2],x[3],((x[0]-a0)/1000).toFixed(3)]));return r.map(x=>x.map(q).join(',')).join('\r\n')}
+function csvG(o){const a0=new Date(o.start).getTime(),n=Math.floor((new Date(o.end)-a0)/1000),ev=obsEv(o),r=[['Observation id','time_s','Subject','Behaviors']];S.animals.forEach(a=>{const mine=ev.filter(x=>x.e.animal===a.id);if(!mine.length)return;for(let i=0;i<=n;i++){const ts=a0+i*1000,ac=mine.filter(x=>x.s<=ts&&ts<x.n).map(x=>(BE.find(y=>y.id===x.e.beh)||{}).en).join(';');r.push([o.label||o.id,i,subj(a.id),ac])}});return r.map(x=>x.map(q).join(',')).join('\r\n')}
+setInterval(()=>{const r=$('#rtm');if(r&&S.run)r.textContent=fmt(Date.now()-new Date(S.run.start))},1000);
+const findAn=k=>{k=String(k).trim().toLowerCase();return S.animals.find(a=>[a.num,a.name,a.id].some(x=>x&&String(x).trim().toLowerCase()===k))};
+let qs=null;
+function qrStop(){if(qs){qs.on=false;if(qs.s)qs.s.getTracks().forEach(x=>x.stop());qs=null}}
+async function qrScan(cb){
+ $('#mb').innerHTML=`<h2>${t('qr')}</h2><video id='qv' playsinline muted style='width:100%;border-radius:.7rem;background:#000'></video><p id='qm' class='mut'></p><button class='btn s' data-a='close' style='width:100%'>${t('later')}</button>`;$('#mo').style.display='flex';
+ const m=$('#qm');qs={on:true};
+ try{const s=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}});if(!qs){s.getTracks().forEach(x=>x.stop());return}qs.s=s;const v=$('#qv');v.srcObject=s;await v.play();
+  let det=null;if('BarcodeDetector' in window)det=new BarcodeDetector({formats:['qr_code']});else await new Promise((res,rej)=>{if(window.jsQR)return res();const sc=document.createElement('script');sc.src='./lib/jsQR.min.js';sc.onload=res;sc.onerror=()=>{const s2=document.createElement('script');s2.src='https://cdnjs.cloudflare.com/ajax/libs/jsQR/1.4.0/jsQR.min.js';s2.onload=res;s2.onerror=rej;document.head.appendChild(s2)};document.head.appendChild(sc)});
+  const cv=document.createElement('canvas'),cx=cv.getContext('2d',{willReadFrequently:true});
+  const loop=async()=>{if(!qs||!qs.on)return;let val=null;try{if(det){const r=await det.detect(v);if(r[0])val=r[0].rawValue}else if(v.videoWidth){cv.width=v.videoWidth;cv.height=v.videoHeight;cx.drawImage(v,0,0);const im=cx.getImageData(0,0,cv.width,cv.height),r=jsQR(im.data,im.width,im.height);if(r)val=r.data}}catch(e){}if(val){qrStop();closeModal();cb(String(val).trim());return}setTimeout(loop,200)};loop()
+ }catch(e){m.textContent=t('qrerr');qrStop()}}
+const WP=[{id:'cattle',n:['Cattle welfare','Rind: Tierwohl'],show:'lying standing walking postural feeding grazing ruminating drinking aggression heatstress other'.split(' '),rules:[['lying','d'],['ruminating','d'],['heatstress','d'],['aggression','n']]},{id:'pig',n:['Pig welfare','Schwein: Tierwohl'],show:'lying standing walking feeding drinking rooting nosing manip aggression tailbiting mounting other'.split(' '),rules:[['tailbiting','n'],['aggression','n'],['manip','d']]},{id:'sheep',n:['Sheep welfare','Schaf: Tierwohl'],show:'lying standing walking grazing ruminating drinking isolation vigilance flocking headbutting aggression other'.split(' '),rules:[['isolation','d'],['lying','d'],['headbutting','n']]},{id:'all',n:['Show all','Alle anzeigen'],show:null,rules:null}];
+function ruleVal(aid,r,day){if(r.m==='n')return S.events.filter(e=>e.animal===aid&&e.beh===r.beh&&dk(new Date(e.start))===day).length;return segs(aid,'d').filter(x=>x.k===day&&x.b===r.beh).reduce((s,x)=>s+x.e-x.s,0)/60000}
+function welfareHTML(){const L=S.lang==='de'?1:0,day=S.day||dk(new Date()),R=S.rules||[];
+ const pre=WP.map(p=>`<button class='btn s' data-a='wp' data-v='${p.id}'>${p.n[L]}</button>`).join('');
+ const head=R.map((r,i)=>{const b=BE.find(x=>x.id===r.beh)||{};return `<th>${esc(bl(b))}<br><span class='mut'>${r.m==='n'?t('wn'):t('wd')} ≥ <input data-rk='${i}' type='number' min='0' step='any' value='${r.thr==null?'':r.thr}' style='width:4.5rem;padding:.2rem'> <span data-a='rdel' data-v='${i}' style='cursor:pointer;color:var(--warn)'>×</span></span></th>`}).join('');
+ const rows=S.animals.map(a=>`<tr><td>${lab(a)}</td>${R.map(r=>{const v=ruleVal(a.id,r,day),hit=r.thr!=null&&v>=r.thr;return `<td style='${hit?'background:var(--warn);color:#fff;font-weight:700':''}'>${r.m==='n'?v:v.toFixed(1)}</td>`}).join('')}</tr>`).join('');
+ return `<div class='card'><div class='row'><b style='flex:none'>${t('wel')}</b>${Q('wel')}<span class='mut' style='flex:none'>${dl(day)}</span></div><div class='row' style='margin-top:.5rem'>${pre}</div>${R.length&&S.animals.length?`<div style='overflow-x:auto;margin-top:.6rem'><table class='tb'><tr><th></th>${head}</tr>${rows}</table></div>`:''}<div class='row' style='margin-top:.6rem'><select id='rb'>${BE.map(b=>`<option value='${b.id}'>${esc(bl(b))}</option>`).join('')}</select><select id='rm'><option value='d'>${t('wd')}</option><option value='n'>${t('wn')}</option></select><button class='btn' data-a='radd'>${t('radd')}</button></div></div>`}
+document.addEventListener('input',e=>{const i=e.target.dataset&&e.target.dataset.rk;if(i!==undefined&&S.rules[i]){S.rules[i].thr=e.target.value===''?null:+e.target.value;save()}});
+document.addEventListener('change',e=>{if(e.target.dataset&&e.target.dataset.rk!==undefined)render()});
+let MP=null;
+const iso=x=>{const d=new Date(x);return x&&!isNaN(d)?d.toISOString():null};
+const okid=x=>/^[\w-]{1,24}$/.test(String(x||''));
+const cm=s=>{if(!s||typeof s!=='object')return undefined;const m={};['study','observer','group','place'].forEach(k=>{if(s[k])m[k]=String(s[k]).slice(0,60)});return Object.keys(m).length?m:undefined};
+function mergePlan(o){
+ if(!o||o.app!=='verhaltens-tracker'||!Array.isArray(o.animals)||!Array.isArray(o.events))throw new Error('bad');
+ const key=s=>String(s||'').trim().toLowerCase(),sp=n=>Object.keys(SP).find(k=>SP[k][0]===n),cat=n=>Object.keys(CAT).find(k=>CAT[k][0]===n),P={map:{},newA:[],newB:[],ev:[],sc:[],ob:[],dup:0,skip:0,open:0,mapped:0},bset=new Set(BE.map(b=>b.id)),pool=S.animals.slice(),used=new Set(S.animals.map(a=>a.id));
+ Object.keys(o.behaviors||{}).forEach(id=>{const b=o.behaviors[id];if(bset.has(id)||!b||!b.custom||!/^c_[\w-]{1,30}$/.test(id))return;const c=cat(b.mainCategory),s=(b.species||[]).map(sp).filter(Boolean).join('');if(!c||!s||!b.en)return;P.newB.push({id:id,cat:c,sp:s,en:String(b.en).slice(0,40),de:String(b.de||b.en).slice(0,40),xe:String(b.definitionEn||'–').slice(0,120),xd:String(b.definitionDe||b.definitionEn||'–').slice(0,120)});bset.add(id)});
+ o.animals.forEach(a=>{const s=a&&sp(a.species);if(!s||!a.id)return;const num=key(a.number),nm=key(a.name),m=pool.find(x=>x.id===a.id&&x.sp===s)||pool.find(x=>x.sp===s&&(num?key(x.num)===num:(nm&&key(x.name)===nm)));if(m){P.map[a.id]=m.id;P.mapped++;return}if(!nm&&!num)return;const n={id:okid(a.id)&&!used.has(a.id)?a.id:uid(),name:String(a.name||'').slice(0,40),num:String(a.number||'').slice(0,20),sp:s};used.add(n.id);pool.push(n);P.newA.push(n);P.map[a.id]=n.id});
+ const ek=new Set(S.events.map(e=>e.animal+'|'+e.beh+'|'+e.start));
+ o.events.forEach(e=>{const an=e&&P.map[e.animalId],st=e&&iso(e.start);if(!an||!st||!bset.has(e.behavior)){P.skip++;return}let en=iso(e.end);if(!en){en=iso(o.exportedAt)||st;P.open++}if(en<st)en=st;const k=an+'|'+e.behavior+'|'+st;if(ek.has(k)){P.dup++;return}ek.add(k);P.ev.push({id:uid(),animal:an,beh:e.behavior,start:st,end:en,m:cm(e.session)})});
+ const sk=new Set(S.scans.map(s=>s.ts+'|'+s.animal+'|'+s.beh.join(',')));
+ (o.snapshots||[]).forEach(s=>{const an=s&&P.map[s.animalId],ts=s&&iso(s.time);if(!an||!ts){P.skip++;return}const beh=(s.activeBehaviors||[]).filter(b=>bset.has(b)),k=ts+'|'+an+'|'+beh.join(',');if(sk.has(k)){P.dup++;return}sk.add(k);const n={id:uid(),ts:ts,animal:an,beh:beh};if(s.source==='herd'){n.src='herd';n.scan=String(s.scanId||'').replace(/[^\w-]/g,'').slice(0,24)||uid();n.t0=iso(s.scanStart)||ts}P.sc.push(n)});
+ const ok=new Set(S.obs.map(x=>x.id));
+ (o.observations||[]).forEach(x=>{if(!x||!okid(x.id)||ok.has(x.id)||!iso(x.start)||!iso(x.end))return;ok.add(x.id);P.ob.push({id:x.id,label:String(x.label||'').slice(0,40),vmin:+x.vmin||0,start:iso(x.start),end:iso(x.end),taps:+x.taps||0,nev:+x.nev||0})});
+ return P}
+function mergeModal(P){const n=P.newA.length+P.ev.length+P.sc.length+P.ob.length+P.newB.length;
+ if(!n){modal(t('mgno')+'<p class=\'mut\'>'+t('mgD')+': '+P.dup+' · '+t('mgK')+': '+P.skip+'</p>');return}
+ $('#mb').innerHTML=`<h2>${t('mg')}</h2><p>${t('mgA')}: <b>${P.newA.length}</b> (${P.mapped} ${t('mgM')})${P.newA.length?'<br><span class=\'mut\'>'+P.newA.slice(0,12).map(lab).join(', ')+(P.newA.length>12?' …':'')+'</span>':''}<br>${t('mgE')}: <b>${P.ev.length}</b><br>${t('mgS')}: <b>${P.sc.length}</b><br>${t('mgO')}: <b>${P.ob.length}</b>${P.newB.length?'<br>'+t('mgB')+': <b>'+P.newB.length+'</b>':''}</p><p class='mut'>${t('mgD')}: ${P.dup} · ${t('mgK')}: ${P.skip}${P.open?' · '+t('mgOp')+': '+P.open:''}</p><div class='row'><button class='btn' data-a='mgok'>${t('mggo')}</button><button class='btn s' data-a='close'>${t('later')}</button></div>`;$('#mo').style.display='flex'}
+function mergeText(txt){try{MP=mergePlan(JSON.parse(txt));mergeModal(MP)}catch(e){MP=null;modal(t('imp_bad'))}}
+function mergeApply(){const P=MP;if(!P)return;P.newB.forEach(b=>{S.custom.push(b);BE.push(b)});S.animals.push(...P.newA);S.events.push(...P.ev);S.scans.push(...P.sc);S.obs.push(...P.ob);S.events.sort((a,b)=>a.start<b.start?-1:1);S.scans.sort((a,b)=>a.ts<b.ts?-1:1);MP=null;save();render()}
+document.addEventListener('change',e=>{if(e.target.id==='mi'&&e.target.files[0]){e.target.files[0].text().then(mergeText);e.target.value=''}});
+const mean=a=>a.reduce((x,y)=>x+y,0)/a.length,sd=a=>{if(a.length<2)return 0;const m=mean(a);return Math.sqrt(a.reduce((s,x)=>s+(x-m)*(x-m),0)/(a.length-1))};
+const SV=(w,h,b)=>`<svg class='ch' viewBox='0 0 ${w} ${h}' style='width:100%;height:auto'>${b}</svg>`;
+const inP=k=>S.g.day==='all'||k.slice(0,10)===S.g.day,gSeg=(id,r)=>segs(id,r).filter(x=>inP(x.k)),gEv=id=>S.events.filter(e=>e.animal===id&&(S.g.day==='all'||dk(new Date(e.start))===S.g.day));
+function uni(sg){const a=sg.map(x=>[x.s,x.e]).sort((p,q)=>p[0]-q[0]);let t=0,c=null;a.forEach(x=>{if(!c)c=x.slice();else if(x[0]<=c[1])c[1]=Math.max(c[1],x[1]);else{t+=c[1]-c[0];c=x.slice()}});if(c)t+=c[1]-c[0];return t}
+function gAn(){const g=S.g,cur=S.animals.find(a=>a.id===S.cur)||S.animals[0];if(!g.sp||!S.animals.some(a=>a.sp===g.sp))g.sp=cur.sp;if(g.mode==='one')return{an:[cur],cur:cur,all:S.animals.filter(a=>a.sp===cur.sp)};const all=S.animals.filter(a=>a.sp===g.sp);return{an:all.filter(a=>!g.ex.includes(a.id)),cur:cur,all:all}}
+function chTB(an){const rows={};let n=0;an.forEach(a=>{const sg=gSeg(a.id,'d'),sgV=sg.filter(x=>x.b!=='__nv__'),o=uni(sgV);if(!o)return;n++;const m={};sgV.forEach(x=>m[x.b]=(m[x.b]||0)+x.e-x.s);Object.keys(m).forEach(b=>(rows[b]=rows[b]||[]).push(100*m[b]/o))});
+ const ids=Object.keys(rows).map(b=>({b:b,v:rows[b],m:mean(rows[b]),s:sd(rows[b])})).sort((p,q)=>q.m-p.m);if(!ids.length)return null;
+ const mx=Math.ceil(Math.max(10,...ids.map(r=>Math.max(...r.v,r.m+r.s)))/10)*10,X=v=>150+v/mx*440,H=ids.length*26+28;let g=`<line class='ax' x1='150' x2='150' y1='0' y2='${H-20}'/>`;
+ [0,.25,.5,.75,1].forEach(f=>{g+=`<text x='${X(mx*f)}' y='${H-6}' text-anchor='middle'>${Math.round(mx*f)}%</text>`});
+ ids.forEach((r,i)=>{const y=i*26+4,b=BE.find(x=>x.id===r.b)||{};g+=`<text x='144' y='${y+14}' text-anchor='end'>${esc(bl(b).slice(0,22))}</text><rect x='150' y='${y+3}' width='${Math.max(1,X(r.m)-150)}' height='14' rx='3' fill='var(--ac)' opacity='.75'/>`;
+  if(r.v.length>1){g+=`<line class='ax' style='stroke:var(--fg)' x1='${X(Math.max(0,r.m-r.s))}' x2='${X(r.m+r.s)}' y1='${y+10}' y2='${y+10}'/>`;r.v.forEach(v=>{g+=`<circle cx='${X(v)}' cy='${y+10}' r='3' fill='var(--fg)' opacity='.55'/>`})}
+  g+=`<text x='${X(Math.max(r.m+r.s,...r.v))+6}' y='${y+14}'>${r.m.toFixed(1)}%</text>`});return{svg:SV(640,H,g),n:n}}
+function chTL(an,b){const per=an.map(a=>{const sg=gSeg(a.id,'h'),obs={},val={};sg.forEach(x=>{obs[x.k]=1;if(x.b===b)val[x.k]=(val[x.k]||0)+(x.e-x.s)/60000});const hv=Array(24).fill(null);for(let h=0;h<24;h++){const ks=Object.keys(obs).filter(k=>+k.slice(11)===h);if(ks.length)hv[h]=mean(ks.map(k=>val[k]||0))}return{a:a,hv:hv}}).filter(p=>p.hv.some(v=>v!==null));
+ if(!per.length)return null;const Y=v=>200-Math.min(60,v)/60*180,X=h=>62+h*23.75;let g='';
+ [0,15,30,45,60].forEach(v=>{g+=`<line class='ax' x1='50' x2='630' y1='${Y(v)}' y2='${Y(v)}'/><text x='44' y='${Y(v)+4}' text-anchor='end'>${v}</text>`});for(let h=0;h<24;h+=3)g+=`<text x='${X(h)}' y='222' text-anchor='middle'>${h}h</text>`;
+ const mv=Array.from({length:24},(_,h)=>{const v=per.map(p=>p.hv[h]).filter(x=>x!==null);return v.length?{m:mean(v),s:sd(v)}:null});
+ if(per.length===1){per[0].hv.forEach((v,h)=>{if(v!==null)g+=`<rect x='${X(h)-8}' y='${Y(v)}' width='16' height='${200-Y(v)}' rx='2' fill='var(--ac)' opacity='.8'/>`})}
+ else{per.forEach(p=>{const pts=p.hv.map((v,h)=>v===null?null:X(h)+','+Y(v)).filter(Boolean).join(' ');g+=`<polyline points='${pts}' fill='none' stroke='var(--mut)' opacity='.45' stroke-width='1'/>`});
+  const up=[],lo=[];mv.forEach((m,h)=>{if(m){up.push(X(h)+','+Y(m.m+m.s));lo.unshift(X(h)+','+Y(Math.max(0,m.m-m.s)))}});g+=`<polygon points='${up.concat(lo).join(' ')}' fill='var(--ac)' opacity='.18'/><polyline points='${mv.map((m,h)=>m?X(h)+','+Y(m.m):null).filter(Boolean).join(' ')}' fill='none' stroke='var(--ac)' stroke-width='2.5'/>`}
+ return{svg:SV(640,230,g),n:per.length}}
+function chBT(an,all,cur){const now=Date.now(),b=S.g.b,pts=all.map(a=>{const e2=gEv(a.id).filter(e=>e.beh===b);if(!e2.length)return null;const days=new Set(gSeg(a.id,'d').map(x=>x.k)).size||1,d=e2.map(e=>((e.end?new Date(e.end).getTime():now)-new Date(e.start).getTime())/60000);return{a:a,x:mean(d),y:e2.length/days,inc:an.includes(a)}}).filter(Boolean);
+ if(!pts.length)return null;const rg=k=>{const v=pts.map(p=>p[k]),lo=Math.min(...v),hi=Math.max(...v),pd=(hi-lo)*.25||hi*.1||1;return[Math.max(0,lo-pd),hi+pd]},[x0,x1]=rg('x'),[y0,y1]=rg('y'),X=v=>60+(v-x0)/(x1-x0)*550,Y=v=>260-(v-y0)/(y1-y0)*240;let g=`<line class='ax' x1='60' x2='610' y1='260' y2='260'/><line class='ax' x1='60' x2='60' y1='20' y2='260'/>`;
+ [0,.5,1].forEach(f=>{const xv=x0+(x1-x0)*f,yv=y0+(y1-y0)*f;g+=`<text x='${X(xv)}' y='278' text-anchor='middle'>${xv.toFixed(0)}</text><text x='54' y='${Y(yv)+4}' text-anchor='end'>${yv.toFixed(1)}</text>`});g+=`<text x='335' y='296' text-anchor='middle'>${t('gx')}</text><text x='8' y='14'>${t('gy')}</text>`;
+ pts.forEach(p=>{const me=S.g.mode==='one'&&cur&&p.a.id===cur.id;g+=`<circle cx='${X(p.x)}' cy='${Y(p.y)}' r='${me?7:5}' fill='${me?'var(--warn)':p.inc?'var(--ac)':'var(--mut)'}' opacity='${p.inc?.85:.4}'/><text x='${X(p.x)+8}' y='${Y(p.y)+4}'>${esc([p.a.num,p.a.name].filter(Boolean).join(' ').slice(0,10))}</text>`});
+ const inc=pts.filter(p=>p.inc);if(S.g.mode==='herd'&&inc.length>1){const a1=mean(inc.map(p=>p.x)),a2=mean(inc.map(p=>p.y));g+=`<path d='M${X(a1)} ${Y(a2)-9} l9 9 l-9 9 l-9 -9 z' fill='none' stroke='var(--fg)' stroke-width='2'/>`}return{svg:SV(640,300,g),n:inc.length||pts.length}}
+function chTM(an){const c={},ids=new Set();an.forEach(a=>{const ev=gEv(a.id).slice().sort((p,q)=>p.start<q.start?-1:1);for(let i=1;i<ev.length;i++){const f=ev[i-1].beh,to=ev[i].beh;if(f===to)continue;ids.add(f);ids.add(to);(c[f]=c[f]||{})[to]=(c[f][to]||0)+1}});const bs=BE.filter(b=>ids.has(b.id));if(!bs.length)return null;
+ const head=bs.map(b=>`<th>${esc(bl(b).slice(0,10))}</th>`).join(''),rows=bs.map(f=>{const row=c[f.id]||{},tot=Object.values(row).reduce((s,x)=>s+x,0);return `<tr><td>${esc(bl(f))}</td>${bs.map(b=>{const v=row[b.id]||0;return v?`<td style='background:color-mix(in srgb,var(--ac) ${Math.round(15+65*v/tot)}%,transparent)'>${v}</td>`:`<td class='mut'>·</td>`}).join('')}</tr>`}).join('');
+ return{svg:`<div style='overflow-x:auto'><table class='tb'><tr><th></th>${head}</tr>${rows}</table></div>`,n:an.length}}
+function chSY(an){if(an.length<2)return{msg:t('gneed2')};let day=S.g.day;const ds=[...new Set(an.flatMap(a=>segs(a.id,'d').map(x=>x.k)))].sort();if(day==='all')day=ds[ds.length-1];if(!day)return null;
+ const p=day.split('-'),z=new Date(+p[0],p[1]-1,+p[2]).getTime(),B=300000,N=288,b=S.g.b,evs=an.map(a=>S.events.filter(e=>e.animal===a.id).map(e=>[new Date(e.start).getTime(),e.end?new Date(e.end).getTime():Date.now(),e.beh])),ser=[];
+ for(let i=0;i<N;i++){const ts=z+i*B+B/2;let o=0,k=0;evs.forEach(ev=>{const act=ev.filter(x=>x[0]<=ts&&ts<x[1]);if(act.length){o++;if(act.some(x=>x[2]===b))k++}});ser.push(o?100*k/o:null)}
+ if(ser.every(v=>v===null))return null;const X=i=>50+i/N*580,Y=v=>200-v*1.8;let g='';[0,25,50,75,100].forEach(v=>{g+=`<line class='ax' x1='50' x2='630' y1='${Y(v)}' y2='${Y(v)}'/><text x='44' y='${Y(v)+4}' text-anchor='end'>${v}%</text>`});for(let h=0;h<24;h+=3)g+=`<text x='${X(h*12)}' y='222' text-anchor='middle'>${h}h</text>`;
+ let seg=[];const fl=()=>{if(seg.length>1)g+=`<polyline points='${seg.join(' ')}' fill='none' stroke='var(--ac)' stroke-width='2'/>`;else if(seg.length===1){const q=seg[0].split(',');g+=`<circle cx='${q[0]}' cy='${q[1]}' r='1.5' fill='var(--ac)'/>`}seg=[]};ser.forEach((v,i)=>{if(v===null)fl();else seg.push(X(i).toFixed(1)+','+Y(v).toFixed(1))});fl();return{svg:SV(640,230,g),n:an.length,day:day}}
+function subBar(){const u=S.sub==='g'||S.sub==='h'?S.sub:'t';return `<div class='row' style='margin-bottom:.6rem'>${[['t','gtab'],['g','gtitle'],['h','tG']].map(x=>`<button class='btn ${u===x[0]?'':'s'}' data-a='sub' data-v='${x[0]}'>${t(x[1])}</button>`).join('')}</div>`}
+function chartsHTML(){const g=S.g,L=S.lang==='de'?1:0;if(!S.animals.length)return `<div class='card'><p>${t('noA')}</p></div>`;
+ const R=gAn(),an=R.an,cur=R.cur,all=R.all,days=[...new Set(S.animals.flatMap(a=>segs(a.id,'d').map(x=>x.k)))].sort(),spk=[...new Set(S.animals.map(a=>a.sp))];
+ const btns=[['tb','gtb'],['tl','gtl'],['bt','gbt'],['tm','gtm'],['sy','gsy']].map(x=>`<button class='btn ${g.ch===x[0]?'':'s'}' data-a='gch' data-v='${x[0]}'>${t(x[1])}</button>`).join('');
+ const sc=`<div class='row'><button class='btn ${g.mode==='one'?'':'s'}' data-a='gmode' data-v='one'>${t('msingle')}</button><button class='btn ${g.mode==='herd'?'':'s'}' data-a='gmode' data-v='herd'>${t('gherd')}</button></div>`;
+ const chips=g.mode==='one'?S.animals.map(x=>`<button class='btn ${x.id===S.cur?'':'s'}' data-a='cur' data-v='${x.id}'>${lab(x)}</button>`).join(''):(spk.length>1?spk.map(k=>`<button class='btn ${k===g.sp?'':'s'}' data-a='gsp' data-v='${k}'>${SP[k][L]}</button>`).join(''):'')+all.map(x=>{const off=g.ex.includes(x.id);return `<button class='btn ${off?'w':'s'}' data-a='gex' data-v='${x.id}'>${off?'✕ ':'✓ '}${lab(x)}</button>`}).join('');
+ const needB=['tl','bt','sy'].includes(g.ch),sel=`<div class='row' style='margin-top:.5rem'><select id='gd'><option value='all'>${t('gall')}</option>${days.map(k=>`<option value='${k}' ${k===g.day?'selected':''}>${dl(k)}</option>`).join('')}</select>${needB?`<select id='gbs'>${BE.map(b=>`<option value='${b.id}' ${b.id===g.b?'selected':''}>${esc(bl(b))}</option>`).join('')}</select>`:''}</div>`;
+ const fn={tb:()=>chTB(an),tl:()=>chTL(an,g.b),bt:()=>chBT(an,all,cur),tm:()=>chTM(an),sy:()=>chSY(an)};let r=null;try{r=fn[g.ch]()}catch(e){r=null}
+ const body=r&&r.svg?r.svg+`<p class='mut'>n = ${r.n} ${t('gan')}${r.day?' · '+dl(r.day):''}</p><p class='mut'>${t('gd_'+g.ch)}</p>`:`<p class='mut'>${(r&&r.msg)||t('gnod')}</p>`;
+ return `<div class='card'><div class='row'><b style='flex:none'>${t('gtitle')}</b>${Q('gch')}</div><div class='chips' style='margin-top:.4rem'>${btns}</div>${sc}<div class='chips' style='margin-top:.5rem'>${chips}</div>${sel}</div><div class='card'>${body}</div>`}
+function demoLoad(){if(S.animals.some(a=>a.demo))return;let sd0=42;const rnd=()=>(sd0=(sd0*1664525+1013904223)%4294967296)/4294967296,now=new Date();
+ for(let i=0;i<6;i++){const a={id:uid(),name:'Demo',num:'D'+(i+1),sp:'c',demo:true};S.animals.push(a);[1,0].forEach(dd=>{const t0=new Date(now.getFullYear(),now.getMonth(),now.getDate()-dd).getTime(),end=t0+24*36e5;let tt=t0;
+  while(tt<end){const h=(tt-t0)/36e5,r=rnd(),lp=(h<6||h>21?.8:.35)-(i===5?.25:0);let st;if(r<lp)st='lying';else if(r<lp+.25&&(Math.abs(h-7)<1.5||Math.abs(h-17)<1.5||rnd()<.3))st='feeding';else if(r<.9)st='standing';else st=rnd()<.5?'walking':'drinking';
+   const dur=st==='lying'?(30+rnd()*70)*6e4:(5+rnd()*30)*6e4,e=Math.min(end,tt+dur);S.events.push({id:uid(),animal:a.id,beh:st,start:new Date(tt).toISOString(),end:new Date(e).toISOString(),m:{observer:'Demo'}});
+   if(st==='lying'&&rnd()<.55&&e-tt>20*6e4)S.events.push({id:uid(),animal:a.id,beh:'ruminating',start:new Date(tt+5*6e4).toISOString(),end:new Date(e-5*6e4).toISOString(),m:{observer:'Demo'}});tt=e}})}
+ S.events.sort((p,q)=>p.start<q.start?-1:1);save();render()}
+function demoDel(){const ids=S.animals.filter(a=>a.demo).map(a=>a.id);S.animals=S.animals.filter(a=>!a.demo);S.events=S.events.filter(e=>!ids.includes(e.animal));S.scans=S.scans.filter(s=>!ids.includes(s.animal));S.cur=null;save();render()}
+document.addEventListener('change',e=>{if(e.target.id==='gd'){S.g.day=e.target.value;save();render()}if(e.target.id==='gbs'){S.g.b=e.target.value;save();render()}});
+function maybeGeo(){
+  if(!S.geoOn||!navigator.geolocation)return;
+  navigator.geolocation.getCurrentPosition(function(pos){
+    S._geo={lat:pos.coords.latitude,lon:pos.coords.longitude,acc:pos.coords.accuracy};
+    save();
+  },function(){},{enableHighAccuracy:true,maximumAge:60000,timeout:8000});
+}
+function geoOnce(cb){
+  if(!navigator.geolocation){modal(t('geo_fail'));return}
+  navigator.geolocation.getCurrentPosition(function(pos){
+    var g={lat:pos.coords.latitude,lon:pos.coords.longitude,acc:pos.coords.accuracy,at:new Date().toISOString()};
+    if(cb)cb(g);
+  },function(){modal(t('geo_fail'))},{enableHighAccuracy:true,timeout:12000});
+}
+function setLock(on){
+  S.locked=!!on;save();
+  var ov=document.getElementById('lockov');
+  if(S.locked){
+    if(!ov){
+      ov=document.createElement('div');ov.id='lockov';
+      ov.innerHTML='<div class="lockbox"><p style="font-size:1.2rem;font-weight:700">&#128274; '+t('lock_t')+'</p><p class="mut">'+t('lock_h')+'</p><button type="button" class="btn" id="lockhold">'+t('lock_hold')+'</button></div>';
+      document.body.appendChild(ov);
+      var tmr=null;
+      ov.querySelector('#lockhold').addEventListener('pointerdown',function(e){e.preventDefault();tmr=setTimeout(function(){setLock(false);announce(t('lock_off'))},1800)});
+      ov.querySelector('#lockhold').addEventListener('pointerup',function(){clearTimeout(tmr)});
+      ov.querySelector('#lockhold').addEventListener('pointerleave',function(){clearTimeout(tmr)});
+    }
+    ov.style.display='flex';
+  }else if(ov)ov.style.display='none';
+}
+function applyTheme(){if(S.theme)document.documentElement.dataset.theme=S.theme;else delete document.documentElement.dataset.theme}
+function announce(m){const l=$('#lv');if(l){l.textContent='';setTimeout(()=>{l.textContent=m},30)}}
+const bk=()=>S.events.length&&(!S.lastExp||Date.now()-S.lastExp>864e5)?`<p class='mut' role='note' style='margin:0 0 .6rem;color:var(--warn)'><span class=em>⚠</span> ${t('bkw')}</p>`:'';
+function keepOn(){if(S.view==='O'&&!wl&&navigator.wakeLock)navigator.wakeLock.request('screen').then(w=>{wl=w;w.addEventListener('release',()=>{wl=null})}).catch(()=>{})}
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)keepOn()});
+const HWD=[['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],['Mo','Di','Mi','Do','Fr','Sa','So']];
+let HM=null,HMC=null,_plp=null;
+function hmIsoWeek(k){const d=new Date(k+'T00:00:00');d.setDate(d.getDate()+4-(d.getDay()||7));const y0=new Date(d.getFullYear(),0,1);return d.getFullYear()+'-W'+String(Math.ceil((((d-y0)/864e5)+1)/7)).padStart(2,'0')}
+const hmWdIdx=k=>(new Date(k+'T00:00:00').getDay()+6)%7,hmColKey=(k,m)=>m==='wd'?String(hmWdIdx(k)):m==='week'?hmIsoWeek(k):k,hmColLabel=(k,m)=>m==='wd'?HWD[S.lang==='de'?1:0][+k]:k;
+function hmSplit(s,e,binMin){
+  const out=[];let cur=s,guard=0;
+  while(cur<e&&guard++<100000){
+    const d=new Date(cur);
+    const mins=d.getHours()*60+d.getMinutes()+d.getSeconds()/60+d.getMilliseconds()/60000;
+    const bi=Math.floor(mins/binMin),binEndMins=(bi+1)*binMin;
+    let binEnd;
+    if(binEndMins>=1440){binEnd=new Date(d.getFullYear(),d.getMonth(),d.getDate()+1,0,0,0,0).getTime()}
+    else{const be=new Date(d.getFullYear(),d.getMonth(),d.getDate(),0,0,0,0);be.setMinutes(binEndMins);binEnd=be.getTime()}
+    const segEnd=Math.min(e,Math.max(binEnd,cur+1));
+    out.push({day:dk(d),bin:bi,s:cur,e:segEnd,isStart:cur===s});
+    cur=segEnd
+  }
+  return out
+}
+function hmFirstLastDay(animals){
+  let lo=null,hi=null;
+  S.events.filter(e=>animals.includes(e.animal)).forEach(e=>{
+    const s=dk(new Date(e.start));if(!lo||s<lo)lo=s;
+    const en=dk(new Date(e.end?e.end:Date.now()));if(!hi||en>hi)hi=en;
+  });
+  return {lo,hi}
+}
+function hmBuild(){const H=S.heat,now=Date.now(),cells={},animals=H.animals||[];
+ const edge=H.trimEdges?hmFirstLastDay(animals):{lo:null,hi:null};
+ animals.forEach(aid=>{S.events.filter(e=>e.animal===aid).forEach(e=>{
+  const s=new Date(e.start).getTime(),en=e.end?new Date(e.end).getTime():now;
+  hmSplit(s,en,H.binMin).forEach(g=>{
+   if(H.trimEdges&&edge.lo&&(g.day===edge.lo||g.day===edge.hi))return;
+   const key=hmColKey(g.day,H.mode)+'|'+g.bin,c=cells[key]||(cells[key]={byBeh:{},events:new Set(),ad:{},nv:0}),ak=aid+'|'+g.day;
+   c.events.add(e.id);
+   if(e.beh==='__nv__'){c.nv=(c.nv||0)+(g.e-g.s)}
+   else{(c.ad[ak]=c.ad[ak]||[]).push({s:g.s,e:g.e});const bb=c.byBeh[e.beh]||(c.byBeh[e.beh]={dur:0,ev:new Set()});bb.dur+=g.e-g.s;bb.ev.add(e.id)}
+  })
+ })});
+ return cells}
+function hmCellValue(c,H){if(!c)return null;const tot=Object.values(c.byBeh).reduce((s,b)=>s+b.dur,0),keys=Object.keys(c.ad),nv=c.nv||0,denRaw=H.binMin*6e4*Math.max(keys.length,1),den=Math.max(1,denRaw-nv);
+ if(H.metric==='coverage'){const obs=keys.reduce((s,k)=>s+uni(c.ad[k]),0);return Math.min(1,obs/denRaw)}
+ if(H.metric==='share'){const b=c.byBeh[H.beh];return b?Math.min(1,b.dur/den):0}
+ if(H.metric==='nbeh')return Object.keys(c.byBeh).length;
+ if(H.metric==='entropy'){const ks=Object.keys(c.byBeh);if(ks.length<2)return 0;return -ks.reduce((s,k)=>{const p=c.byBeh[k].dur/tot;return s+(p>0?p*Math.log(p):0)},0)/Math.log(ks.length)}
+ return tot}
+function hmDominant(c){if(!c)return null;let best=null,bd=-1;Object.keys(c.byBeh).forEach(k=>{if(c.byBeh[k].dur>bd){bd=c.byBeh[k].dur;best=k}});return best}
+function loadPlotly(){if(window.Plotly)return Promise.resolve();if(_plp)return _plp;const src=['plotly-cartesian.min.js','https://cdn.jsdelivr.net/npm/plotly.js-cartesian-dist-min@2.35.2/plotly-cartesian.min.js'];_plp=src.reduce((p,u)=>p.catch(()=>new Promise((res,rej)=>{const s=document.createElement('script');s.src=u;s.onload=()=>window.Plotly?res():rej();s.onerror=rej;document.head.appendChild(s)})),Promise.reject()).catch(e=>{_plp=null;throw e});return _plp}
+function hmLoad(){const el=document.getElementById('hmPlot');if(!el)return;if(window.Plotly){hmDraw();return}el.innerHTML=`<p class='mut'>${t('hm_load')}</p>`;loadPlotly().then(()=>{if(document.getElementById('hmPlot'))hmDraw()}).catch(()=>{const e2=document.getElementById('hmPlot');if(e2)e2.innerHTML=`<p class='mut' style='color:var(--warn)'>${t('hm_off')}</p><button class='btn s' data-a='hmretry'>${t('hm_retry')}</button>`})}
+function hmDraw(){const el=document.getElementById('hmPlot');if(!el||!window.Plotly)return;const H=S.heat,cells=hmBuild(),nB=Math.round(1440/H.binMin),
+ yl=[...Array(nB)].map((_,i)=>{const m=i*H.binMin;return String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0')}),
+ cols=[...new Set(Object.keys(cells).map(k=>k.split('|')[0]))].sort(H.mode==='wd'?((a,b)=>a-b):undefined),labels=cols.map(c=>hmColLabel(c,H.mode));
+ if(!cols.length){try{Plotly.purge(el)}catch(e){}el.innerHTML=`<p class='mut'>${t('gnod')}</p>`;HM=null;return}
+ const fg=(getComputedStyle(document.documentElement).getPropertyValue('--fg')||'#000').trim(),z=[],tx=[];let cscale=S.theme==='night'?[[0,'#000000'],[0.4,'#660000'],[0.7,'#cc0000'],[1,'#ff4444']]:'Viridis',cbar={len:.9,thickness:12,tickfont:{size:10}},behList=null;
+ if(H.metric==='dominant'){behList=[...new Set(Object.values(cells).map(hmDominant).filter(Boolean))].sort((a,b)=>BE.findIndex(x=>x.id===a)-BE.findIndex(x=>x.id===b));const k=Math.max(1,behList.length);cscale=[];
+  const viridis=['#440154','#482878','#3e4a89','#31688e','#26828e','#1f9e89','#35b779','#6dcd59','#b4de2c','#fde725'];const nightRB=['#1a0000','#4d0000','#800000','#b30000','#e60000','#ff1a1a','#ff6666'];const pal=S.theme==='night'?nightRB:viridis;behList.forEach((id,i)=>{const col=pal[i%pal.length];cscale.push([i/k,col],[(i+1)/k,col])});if(!cscale.length)cscale=[[0,'#333'],[1,'#333']];
+  cbar={len:.9,thickness:12,tickfont:{size:10},tickvals:behList.map((_,i)=>(i+.5)/k),ticktext:behList.map(id=>bl(BE.find(x=>x.id===id)))};
+  for(let r=0;r<nB;r++){const zr=[],tr=[];for(let ci=0;ci<cols.length;ci++){const c=cells[cols[ci]+'|'+r],d=hmDominant(c);if(d==null){zr.push(null);tr.push('')}else{zr.push(behList.indexOf(d)+.5);const tot=Object.values(c.byBeh).reduce((s,b)=>s+b.dur,0);tr.push(bl(BE.find(x=>x.id===d))+' ('+Math.round(100*c.byBeh[d].dur/tot)+'%, n='+c.events.size+')')}}z.push(zr);tx.push(tr)}
+ }else{for(let r=0;r<nB;r++){const zr=[],tr=[];for(let ci=0;ci<cols.length;ci++){const c=cells[cols[ci]+'|'+r];zr.push(hmCellValue(c,H));tr.push(c?'n='+c.events.size:'')}z.push(zr);tx.push(tr)}}
+ const anns=[];if(H.metric==='dominant'&&behList){for(let r=0;r<nB;r++){for(let ci=0;ci<cols.length;ci++){const d=hmDominant(cells[cols[ci]+'|'+r]);if(!d)continue;const b=BE.find(x=>x.id===d);const abbr=(b?(S.lang==='de'?b.de:b.en):d).slice(0,3);anns.push({x:labels[ci],y:yl[r],text:abbr,showarrow:false,font:{size:9,color:S.theme==='night'?'#ffcccc':'#ffffff'},xref:'x',yref:'y'})}}}
+ const data=[{type:'heatmap',x:labels,y:yl,z:z,text:tx,hoverinfo:'x+y+text',hoverongaps:false,colorscale:cscale,showscale:true,colorbar:cbar,zmin:H.metric==='dominant'?0:undefined,zmax:H.metric==='dominant'?behList.length:undefined}],
+ layout={annotations:anns,margin:{l:52,r:12,t:34,b:56},font:{size:11,color:fg},paper_bgcolor:'rgba(0,0,0,0)',plot_bgcolor:'rgba(0,0,0,0)',title:{text:t('hm_m_'+({dominant:'dom',share:'share',entropy:'entropy',nbeh:'nbeh',coverage:'cov'})[H.metric])+(H.metric==='share'?': '+bl(BE.find(b=>b.id===H.beh)||{}):''),font:{size:12},x:.02,xanchor:'left'},xaxis:{type:'category',title:{text:t('hm_mode_'+H.mode)}},yaxis:{type:'category',autorange:'reversed',dtick:Math.max(1,Math.round(60/H.binMin)),title:{text:S.lang==='de'?'Tageszeit':'Time of day'}},height:Math.max(320,Math.min(760,nB*18))};
+ if(S.theme==='night'){const R='#ff2a2a',R2='#ff6666',D='#660000',G='#330000',tf={color:R,size:11},ax={showline:true,mirror:true,linewidth:2,linecolor:R,gridcolor:G,zerolinecolor:D,tickcolor:R,ticks:'outside',tickfont:tf};
+  ['xaxis','yaxis'].forEach(k=>{const t0=layout[k].title||{};layout[k]=Object.assign(layout[k],ax,{title:Object.assign({},t0,{font:{color:R,size:12}})})});
+  layout.title.font={size:12,color:R};layout.font={size:11,color:R};
+  layout.hoverlabel={bgcolor:'#000',bordercolor:R,font:{color:R}};layout.modebar={color:R,bgcolor:'#000',activecolor:R2};
+  Object.assign(cbar,{outlinecolor:R,outlinewidth:2,bordercolor:R,borderwidth:0,tickcolor:R,ticks:'outside',tickfont:tf});}
+ Plotly.newPlot(el,data,layout,{responsive:true,displaylogo:false,edits:{titleText:true,axisTitleText:true,legendText:true,annotationText:true}});if(el.removeAllListeners)el.removeAllListeners('plotly_click');
+ el.on('plotly_click',ev=>{const p=ev.points[0],ci=labels.indexOf(p.x),ri=yl.indexOf(p.y);hmShowCell(cells[cols[ci]+'|'+ri],labels[ci],yl[ri])});HM={cells:cells,cols:cols,labels:labels,yl:yl,H:Object.assign({},H)}}
+function hmShowCell(c,cl,rl){if(!c){modal(`<h2>${cl} · ${rl}</h2><p class='mut'>${t('emp')}</p>`);return}
+ const tot=Object.values(c.byBeh).reduce((s,b)=>s+b.dur,0),rows=Object.keys(c.byBeh).sort((a,b)=>c.byBeh[b].dur-c.byBeh[a].dur).map(id=>{const b=BE.find(x=>x.id===id)||{},bb=c.byBeh[id];return `<tr><td>${esc(bl(b))}</td><td>${fmt(bb.dur)}</td><td>${tot?Math.round(100*bb.dur/tot):0}%</td><td>${bb.ev.size}</td></tr>`}).join(''),
+ evs=[...c.events].slice(0,40).map(id=>{const e=S.events.find(x=>x.id===id);if(!e)return '';const a=S.animals.find(x=>x.id===e.animal),b=BE.find(x=>x.id===e.beh)||{};return `<div class='li' data-a='ed' data-v='${id}' style='cursor:pointer'><span>${a?lab(a):'?'} · ${esc(bl(b))}</span><span class='mut'>${new Date(e.start).toLocaleString(S.lang)}</span></div>`}).join('');
+ HMC={c:c,cl:cl,rl:rl};
+ $('#mb').innerHTML=`<h2>${cl} · ${rl}</h2><p class='mut'>${t('hm_dd_n')}: <b>${c.events.size}</b> · ${t('hm_dd_dur')}: <b>${fmt(tot)}</b></p><div style='overflow-x:auto'><table class='tb'><tr><th>${t('hm_beh')}</th><th>${t('tot')}</th><th>%</th><th>${t('n')}</th></tr>${rows}</table></div><h3 class='cat'>${t('recent')}</h3>${evs||"<p class='mut'>–</p>"}<div class='row' style='margin-top:.6rem'><button class='btn s' data-a='hmcellcsv'>${t('hm_export_cell')}</button><button class='btn s' data-a='close'>${t('later')}</button></div>`;$('#mo').style.display='flex'}
+
+async function hmExportBeamerZip(){
+  if(!window.JSZip){modal(t('nozip'));return null}
+  if(!HM)return null;
+  const h=HM,zip=new JSZip();
+  let dat="x\ty\tz\n";
+  h.yl.forEach((yl,ri)=>{h.cols.forEach((ci,xi)=>{const c=h.cells[ci+"|"+ri],v=c?hmCellValue(c,h.H):"";dat+=`${xi}\t${ri}\t${v===""||v==null?"nan":v}\n`});dat+="\n"});
+  zip.file("data/heatmap.dat",dat);
+  zip.file("data/events.csv",csv1());
+  zip.file("data/ethogramm.json",ethExport());
+  zip.file("main.tex",beamerTex(h));
+  zip.file("Makefile","all:\n\tlatexmk -pdf -interaction=nonstopmode main.tex\n\nclean:\n\tlatexmk -C\n");
+  zip.file("README.md",t('zipreadme'));
+  return zip.generateAsync({type:"blob"})
+}
+function beamerTex(h){
+  const xl=h.labels.map(l=>String(l).replace(/[_&%#]/g,"\\$&"));
+  const yl=h.yl.map(l=>String(l).replace(/[_&%#]/g,"\\$&"));
+  return `\\documentclass[aspectratio=169]{beamer}
+\\usepackage[utf8]{inputenc}
+\\usepackage{pgfplots,pgfplotstable,booktabs}
+\\pgfplotsset{compat=1.18}
+\\usetheme{Madrid}
+\\title{Verhaltensauswertung}
+\\date{\\today}
+\\begin{document}
+\\frame{\\titlepage}
+\\begin{frame}{Zeitraster-Heatmap}
+\\centering
+\\begin{tikzpicture}
+\\begin{axis}[view={0}{90},colorbar,colormap/viridis,
+  xlabel={Zeitraum},ylabel={Tageszeit},
+  xtick=data,ytick=data,
+  xticklabels={${xl.join(",")}},
+  yticklabels={${yl.join(",")}},
+  width=.9\\textwidth,height=.7\\textheight]
+\\addplot3[surf,mesh/rows=${h.yl.length},shader=flat]
+  table {data/heatmap.dat};
+\\end{axis}
+\\end{tikzpicture}
+\\end{frame}
+\\begin{frame}{Ereignisse (Auszug)}
+\\footnotesize
+\\pgfplotstabletypeset[
+  columns={behavior_de,duration_s},
+  columns/behavior_de/.style={column name=Verhalten,string type},
+  columns/duration_s/.style={column name={Dauer (s)},column type={r}},
+  every head row/.style={before row=\\toprule,after row=\\midrule},
+  every last row/.style={after row=\\bottomrule}
+]{data/events.csv}
+\\end{frame}
+\\end{document}
+`
+}
+function hmExportCSV(){if(!HM)return;const r=[['',...HM.labels]];HM.yl.forEach((y,ri)=>{const row=[y];HM.cols.forEach(ci=>{const c=HM.cells[ci+'|'+ri];row.push(c?hmCellValue(c,HM.H):'')});r.push(row)});outFile('heatmap-matrix.csv',r.map(x=>x.map(q).join(',')).join('\r\n'))}
+function hmExportJSON(){if(!HM)return;const out={};Object.keys(HM.cells).forEach(k=>{const c=HM.cells[k];out[k]={events:c.events.size,animalDays:Object.keys(c.ad).length,behaviors:Object.fromEntries(Object.entries(c.byBeh).map(([id,b])=>[id,{durationSec:Math.round(b.dur/1000),count:b.ev.size}]))}});outFile('heatmap-rohdaten.json',JSON.stringify({settings:HM.H,cells:out},null,2))}
+function hmExportCellCSV(){if(!HMC)return;const r=[['behavior','duration_s','share_pct','count']],tot=Object.values(HMC.c.byBeh).reduce((s,b)=>s+b.dur,0);Object.keys(HMC.c.byBeh).forEach(id=>{const b=BE.find(x=>x.id===id)||{},bb=HMC.c.byBeh[id];r.push([b.en||id,Math.round(bb.dur/1000),tot?Math.round(100*bb.dur/tot):0,bb.ev.size])});outFile('zelle-'+HMC.cl+'-'+HMC.rl.replace(':','')+'.csv',r.map(x=>x.map(q).join(',')).join('\r\n'))}
+function heatHTML(){S.heat=S.heat||{animals:[],binMin:30,mode:'day',metric:'dominant',beh:'lying',trimEdges:false};const H=S.heat;H.animals=(H.animals||[]).filter(id=>S.animals.some(a=>a.id===id));if(!H.animals.length)H.animals=S.animals.map(a=>a.id);
+ const chips=S.animals.map(a=>`<button class='btn ${H.animals.includes(a.id)?'':'s'}' data-a='hma' data-v='${a.id}'>${lab(a)}</button>`).join(''),sel=(id,opts)=>`<select id='${id}'>${opts}</select>`,o=(v,cur,l)=>`<option value='${v}' ${String(cur)===String(v)?'selected':''}>${l}</option>`;
+ return `<div class='card'><div class='row'><b style='flex:none'>${t('hm_t')}</b>${Q('heat')}</div><p class='mut'>${t('hm_hint')}</p><div class='chips' style='margin:.4rem 0'>${chips}</div><div class='row'>${sel('hmMode',o('day',H.mode,t('hm_mode_day'))+o('wd',H.mode,t('hm_mode_wd'))+o('week',H.mode,t('hm_mode_week')))}${sel('hmBin',[5,15,30,60].map(m=>o(m,H.binMin,m+' min')).join(''))}<label style='flex:none;display:flex;align-items:center;gap:.35rem'><input type='checkbox' id='hmTrim' ${H.trimEdges?'checked':''} style='width:auto;min-width:0'> ${t('hm_trim')}</label></div><div class='row' style='margin-top:.5rem'>${sel('hmMetric',o('dominant',H.metric,t('hm_m_dom'))+o('share',H.metric,t('hm_m_share'))+o('entropy',H.metric,t('hm_m_entropy'))+o('nbeh',H.metric,t('hm_m_nbeh'))+o('coverage',H.metric,t('hm_m_cov')))}<select id='hmBeh' style='${H.metric==='share'?'':'display:none'}'>${BE.map(b=>o(b.id,H.beh,esc(bl(b)))).join('')}</select></div><div id='hmPlot' style='margin-top:.6rem'></div><div class='row' style='margin-top:.5rem'><button class='btn s' data-a='hmpng'>${t('hm_export_png')}</button><button class='btn s' data-a='hmcsv'>${t('hm_export_csv')}</button><button class='btn s' data-a='hmjson'>${t('hm_export_json')}</button><button class='btn' data-a='hmbeamer'>${t('beamer')}</button></div></div>`}
+document.addEventListener('change',e=>{const i=e.target.id,H=S.heat;if(!H)return;if(i==='hmMode'){H.mode=e.target.value;save();hmDraw()}else if(i==='hmBin'){H.binMin=+e.target.value;save();hmDraw()}else if(i==='hmMetric'){H.metric=e.target.value;const be=document.getElementById('hmBeh');if(be)be.style.display=e.target.value==='share'?'':'none';save();hmDraw()}else if(i==='hmBeh'){H.beh=e.target.value;save();hmDraw()}else if(i==='hmTrim'){H.trimEdges=e.target.checked;save();hmDraw()}});
+const _r=render;render=function(){_r();keepOn();if(S.view==='A')$('#v').insertAdjacentHTML('beforeend',metaHTML()+ethHTML());if(S.view==='D'){$('#v').firstElementChild.insertAdjacentHTML('afterend',valHTML());$('#v').insertAdjacentHTML('afterbegin',`<p class='mut' role='note'><span class=em>⚠</span> ${t('bkw')}${S.lastExp?' · '+t('bkl')+': '+new Date(S.lastExp).toLocaleString(S.lang):''}</p>`)}if(S.view==='S'){if(S.sub==='g')$('#v').innerHTML=subBar()+chartsHTML();else if(S.sub==='h'){$('#v').innerHTML=subBar()+heatHTML();hmLoad()}else{$('#v').insertAdjacentHTML('afterbegin',subBar());$('#v').insertAdjacentHTML('beforeend',welfareHTML())}}if(S.view==='O'&&S.animals.length){if(S.mode==='herd')$('#v').innerHTML=herdHTML();else $('#v').insertAdjacentHTML('afterbegin',modeBar())}};
+function tick(){document.querySelectorAll(".b:not(.hb)").forEach(el=>{const e=open(S.cur,el.dataset.b);el.classList.toggle("on",!!e);el.setAttribute("aria-pressed",e?"true":"false");const tm=el.querySelector(".tm");if(tm)tm.textContent=e?"● "+fmt(Date.now()-new Date(e.start)):""});
+ const c=$("#cd");if(c)c.textContent=S.rem.on&&nextAt?"→ "+fmt(nextAt-Date.now()):""}
+
+function saveEvFromForm(id){
+  const e=S.events.find(x=>x.id===id),s=$('#es')&&$('#es').value,en=$('#ee')&&$('#ee').value,bb=$('#eb')&&$('#eb').value;
+  if(!e||!s)return;
+  const si=new Date(s).toISOString(),ei=en?new Date(en).toISOString():null;
+  if(ei&&ei<si){alert(t('bad'));return}
+  if(!ei&&S.events.some(x=>x!==e&&!x.end&&x.animal===e.animal&&x.beh===bb)){alert(t('dup'));return}
+  const note=((($('#enote')||{}).value)||'').trim().slice(0,500);
+  const patch={beh:[e.beh,bb],start:[e.start,si],end:[e.end,ei],note:[e.note||'',note]};
+  const fin=function(){pushHist(e,'edit',patch);e.beh=bb;e.start=si;e.end=ei;e.note=note;save();closeModal();render()};
+  const inp=$('#ephoto');
+  if(inp&&inp.files&&inp.files[0]){
+    const f=inp.files[0];
+    if(f.size>2.5e6){alert(t('photo_big'));return}
+    const rd=new FileReader();
+    rd.onload=function(){
+      const img=new Image();
+      img.onload=function(){
+        const max=800,sc=Math.min(1,max/Math.max(img.width,img.height));
+        const c=document.createElement('canvas');c.width=Math.round(img.width*sc);c.height=Math.round(img.height*sc);
+        c.getContext('2d').drawImage(img,0,0,c.width,c.height);
+        e.photo=c.toDataURL('image/jpeg',0.7);pushHist(e,'photo',{bytes:e.photo.length});fin();
+      };
+      img.src=rd.result;
+    };
+    rd.readAsDataURL(f);
+  }else fin();
+}
+
+function pushHist(e,action,patch){if(!e)return;e.hist=e.hist||[];e.hist.push({t:new Date().toISOString(),a:action,by:(S.meta&&S.meta.obs)||"",patch:patch||null});if(e.hist.length>40)e.hist=e.hist.slice(-40)}
+function toggle(b){const stopOpen=pred=>{S.events.filter(e=>!e.end&&e.animal===S.cur&&pred(e)).forEach(e=>{e.end=new Date().toISOString();if(typeof pushHist==='function')pushHist(e,'stop',{end:e.end});(S.ul=S.ul||[]).push([e.id,'e'])})};const e=open(S.cur,b);if(e){e.end=new Date().toISOString();if(typeof pushHist==='function')pushHist(e,'stop',{end:e.end});(S.ul=S.ul||[]).push([e.id,'e'])}else{if(b==='__nv__')stopOpen(x=>x.beh!=='__nv__');else stopOpen(x=>x.beh==='__nv__');const n={id:uid(),animal:S.cur,beh:b,start:new Date().toISOString(),end:null,m:{...S.meta},hist:[{t:new Date().toISOString(),a:'create',by:(S.meta&&S.meta.obs)||''}]};if(S._geo)n.geo=Object.assign({},S._geo,{at:new Date().toISOString()});S.use=S.use||{};S.use[b]=(S.use[b]||0)+1;S.events.push(n);(S.ul=S.ul||[]).push([n.id,'s']);if(typeof maybeGeo==='function')maybeGeo()}S.ul=S.ul.slice(-30);save();tick();const labB=b==='__nv__'?t('nv'):bl(BE.find(x=>x.id===b)||{en:b,de:b});announce(labB+' '+(e?t('aend'):t('astart')));try{navigator.vibrate&&navigator.vibrate(e?[30,60,30]:30)}catch(x){}}
+function snap(){const ts=new Date().toISOString();S.animals.forEach(a=>S.scans.push({id:uid(),ts,animal:a.id,beh:S.events.filter(e=>e.animal===a.id&&!e.end).map(e=>e.beh)}));save()}
+let nextAt=0,iv=null,wl=null;
+const ms=()=>Math.max(1,+S.rem.val||1)*(S.rem.unit==="m"?60000:1000);
+function beep(){try{const c=new(window.AudioContext||window.webkitAudioContext)(),o=c.createOscillator();o.connect(c.destination);o.frequency.value=880;o.start();setTimeout(()=>{o.stop();c.close()},450)}catch(e){}try{navigator.vibrate&&navigator.vibrate([300,150,300])}catch(e){}}
+function startRem(){clearInterval(iv);if(!S.rem.on){nextAt=0;return}nextAt=Date.now()+ms();try{navigator.wakeLock&&navigator.wakeLock.request("screen").then(w=>wl=w).catch(()=>{})}catch(e){}
+ iv=setInterval(()=>{if(Date.now()>=nextAt){nextAt=Date.now()+ms();beep();$("#mb").innerHTML=`<h2><span class=em>⏰</span> ${t("rt")}</h2><p>${t("rtx")}</p><div class="row"><button class="btn" data-a="snapok">${t("ok")}</button><button class="btn" data-a="hscan">${t("hscan")}</button><button class="btn s" data-a="close">${t("later")}</button></div>`;$("#mo").style.display="flex"}},500)}
+function icsExport(){
+  const rem=S.rem||{},val=Math.max(1,+rem.val||5),unit=rem.unit||'m';
+  const ms=unit==='h'?val*3600000:val*60000;
+  const pad=n=>String(n).padStart(2,'0');
+  const fmt=d=>{const x=new Date(d);return x.getUTCFullYear()+pad(x.getUTCMonth()+1)+pad(x.getUTCDate())+'T'+pad(x.getUTCHours())+pad(x.getUTCMinutes())+pad(x.getUTCSeconds())+'Z'};
+  let t=Date.now(),out='BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Verhaltens-Tracker//EN\r\n';
+  for(let i=0;i<24;i++){
+    t+=ms;
+    out+='BEGIN:VEVENT\r\nUID:vt-rem-'+i+'-'+t+'@local\r\nDTSTAMP:'+fmt(Date.now())+'\r\nDTSTART:'+fmt(t)+'\r\nSUMMARY:'+(S.lang==='de'?'Verhaltens-Erinnerung':'Behaviour reminder')+'\r\nDESCRIPTION:Scan/observation interval '+val+(unit==='h'?'h':'min')+'\r\nEND:VEVENT\r\n';
+  }
+  out+='END:VCALENDAR\r\n';
+  return out;
+}
+
+
+function printReport(){
+  const rows=S.events.slice().sort((a,b)=>a.start<b.start?-1:1).slice(0,200).map(e=>{
+    const a=S.animals.find(x=>x.id===e.animal),b=e.beh==='__nv__'?{en:'Out of sight',de:'Ausser Sicht'}:BE.find(x=>x.id===e.beh);
+    return '<tr><td>'+esc(e.start)+'</td><td>'+esc(a?lab(a):e.animal)+'</td><td>'+esc(b?(S.lang==='de'?b.de:b.en):e.beh)+'</td><td>'+(e.end?esc(e.end):'…')+'</td><td>'+esc(e.note||'')+'</td></tr>';
+  }).join('');
+  const w=window.open('','_blank');
+  if(!w){modal(t('print_block'));return}
+  w.document.write('<!doctype html><html><head><title>VT Report</title><style>body{font:12pt/1.4 system-ui,sans-serif;margin:1.5cm;color:#111}h1{font-size:16pt}table{border-collapse:collapse;width:100%}td,th{border:1px solid #999;padding:.25rem .4rem;text-align:left}th{background:#eee}@media print{body{margin:1cm}}</style><\/head><body>');
+  w.document.write('<h1>Verhaltens-Tracker / Behaviour Report</h1>');
+  w.document.write('<p>'+esc(JSON.stringify(S.meta||{}))+'</p>');
+  w.document.write('<p>Animals: '+S.animals.length+' · Events: '+S.events.length+' · '+new Date().toISOString()+'</p>');
+  w.document.write('<table><thead><tr><th>Start</th><th>Animal</th><th>Behavior</th><th>End</th><th>Note</th></tr></thead><tbody>'+rows+'</tbody></table>');
+  w.document.write('<\/body><\/html>');
+  w.document.close();
+  setTimeout(function(){w.print()},300);
+}
+
+function doExport(){const o={app:"verhaltens-tracker",version:1,session:S.meta,observations:S.obs,exportedAt:new Date().toISOString(),timezone:Intl.DateTimeFormat().resolvedOptions().timeZone,animals:S.animals.map(a=>({id:a.id,name:a.name||null,number:a.num||null,species:SP[a.sp][0],demo:a.demo||undefined})),events:S.events.map(e=>({animalId:e.animal,behavior:e.beh,session:e.m||null,start:e.start,end:e.end,durationSec:e.end?Math.round((new Date(e.end)-new Date(e.start))/1000):null,note:e.note||null,geo:e.geo||null,hasPhoto:!!e.photo,hist:e.hist||[],edited:!!(e.hist&&e.hist.some(h=>h.a==="edit"||h.a==="photo"||h.a==="geo"))})),snapshots:S.scans.map(s=>({time:s.ts,animalId:s.animal,activeBehaviors:s.beh,source:s.src||'reminder',scanId:s.scan||null,scanStart:s.t0||null})),behaviors:Object.fromEntries(BE.map(b=>[b.id,{en:b.en,de:b.de,mainCategory:CAT[b.cat][0],species:[...b.sp].map(c=>SP[c][0]),definitionEn:b.xe,definitionDe:b.xd,custom:b.id.startsWith('c_')}])),reminder:{every:S.rem.val,unit:S.rem.unit==="m"?"minutes":"seconds"}};return JSON.stringify(o,null,2)}
+async function act(a,v){
+ if(a==="close"){qrStop();closeModal()}
+ else if(a==="lang"){S.lang=S.lang==="de"?"en":"de";save();render()}
+ else if(a==="view"){S.view=v;save();render();window.scrollTo(0,0)}
+ else if(a==="cur"){S.cur=v;save();render()}
+ else if(a==="sz"){S.sz=v;save();render()}
+ else if(a==="res"){S.res=v;save();render()}
+ else if(a==='undo'){const u=(S.ul||[]).pop();if(u){const e=S.events.find(x=>x.id===u[0]);if(e){if(u[1]==='s')S.events=S.events.filter(x=>x!==e);else e.end=null;save();if(e.animal===S.cur)tick();else{S.cur=e.animal;render()}}}}
+ else if(a==='ed'){editEv(v)}
+ else if(a==='ethx')outFile('ethogramm.json',ethExport())
+ else if(a==='codebook')outFile('codebook.json',codebookExport())
+ else if(a==='print')printReport()
+ else if(a==='ics')outFile('vt-reminders.ics',icsExport(),'text/calendar')
+ else if(a==='gear'){S.gearOpen=!S.gearOpen;render()}
+ else if(a==='bakset')pickBackupFile()
+ else if(a==='bakclr')clearBackup()
+ else if(a==='baknow'){mirrorBackup(true).then(function(ok){announce(ok?t('backup_ok'):t('backup_fail'));render()})}
+ else if(a==='ethi')$('#ei').click()
+ else if(a==='mode'){S.mode=v;save();render()}
+ else if(a==='hstart'||a==='hscan'){if(!S.animals.length)return;closeModal();S.herd={id:uid(),start:new Date().toISOString(),rec:{},sel:[],cur:S.animals[0].id};S.view='O';S.mode='herd';save();render();window.scrollTo(0,0)}
+ else if(a==='hcur'){S.herd.cur=v;S.herd.sel=(S.herd.rec[v]||[]).slice();render()}
+ else if(a==='hok'){const H=S.herd;if(!H.sel.length){$('#hm').textContent=t('hneed');return}S.scans=S.scans.filter(s=>!(s.scan===H.id&&s.animal===H.cur));S.scans.push({id:uid(),ts:new Date().toISOString(),animal:H.cur,beh:H.sel.slice(),src:'herd',scan:H.id,t0:H.start});H.rec[H.cur]=H.sel.slice();hnext()}
+ else if(a==='hskip'){const H=S.herd;S.scans=S.scans.filter(s=>!(s.scan===H.id&&s.animal===H.cur));H.rec[H.cur]=[];hnext()}
+ else if(a==='hend'){S.herd=null;save();render()}
+ else if(a==='vrun'){if(S.run){const o=S.run,a0=new Date(o.start).getTime(),a1=Date.now(),inw=x=>{const k=new Date(x).getTime();return k>=a0&&k<=a1};o.end=new Date().toISOString();o.nev=S.events.filter(e=>inw(e.start)).length;o.taps=o.nev+S.events.filter(e=>e.end&&inw(e.end)).length+S.scans.filter(s=>inw(s.ts)).length;S.obs.push(o);S.run=null;save();render()}else{S.run={id:uid(),start:new Date().toISOString(),label:($('#vl')||{}).value||'',vmin:+(($('#vm')||{}).value)||0};S.view='O';save();render();window.scrollTo(0,0)}}
+ else if(a==='vb'||a==='vg'){const o=S.obs.find(x=>x.id===v);if(o)outFile((a==='vb'?'boris-vergleich-':'raster-')+(o.label||o.id).replace(/[^\w-]/g,'_')+'.csv',a==='vb'?csvB(o):csvG(o))}
+ else if(a==='vdel'){S.obs=S.obs.filter(x=>x.id!==v);save();render()}
+ else if(a==='qr'){qrScan(k=>{const an=findAn(k);if(!an){modal(t('qrno')+': <b>'+esc(k)+'</b>');return}if(S.mode==='herd'&&S.herd){S.herd.cur=an.id;S.herd.sel=(S.herd.rec[an.id]||[]).slice()}else S.cur=an.id;save();render()})}
+ else if(a==='qra'){qrScan(k=>{if(findAn(k)){modal(t('qrex')+': <b>'+esc(k)+'</b>');return}$('#anu').value=k.slice(0,20);$('#anu').focus()})}
+ else if(a==='wp'){const p=WP.find(x=>x.id===v);S.hid=p.show?BE.filter(b=>!b.id.startsWith('c_')&&!p.show.includes(b.id)).map(b=>b.id):[];if(p.rules)S.rules=p.rules.map(x=>({beh:x[0],m:x[1],thr:null}));save();render()}
+ else if(a==='radd'){S.rules.push({beh:$('#rb').value,m:$('#rm').value,thr:null});save();render()}
+ else if(a==='rdel'){S.rules.splice(+v,1);save();render()}
+ else if(a==='mgf')$('#mi').click()
+ else if(a==='mgclip'){try{navigator.clipboard.readText().then(mergeText).catch(()=>modal(t('imp_bad')))}catch(e){modal(t('imp_bad'))}}
+ else if(a==='mgok'){mergeApply();closeModal()}
+ else if(a==='sub'){S.sub=v;save();render()}
+ else if(a==='gch'){S.g.ch=v;save();render()}
+ else if(a==='gmode'){S.g.mode=v;save();render()}
+ else if(a==='gsp'){S.g.sp=v;save();render()}
+ else if(a==='gex'){const i=S.g.ex.indexOf(v);if(i<0)S.g.ex.push(v);else S.g.ex.splice(i,1);save();render()}
+ else if(a==='demo')demoLoad()
+ else if(a==='demodel')demoDel()
+ else if(a==='hma'){const H=S.heat,i=H.animals.indexOf(v);if(i<0)H.animals.push(v);else if(H.animals.length>1)H.animals.splice(i,1);save();render()}
+ else if(a==='hmpng'){if(window.Plotly&&document.getElementById('hmPlot'))Plotly.downloadImage(document.getElementById('hmPlot'),{format:'png',filename:'heatmap-'+new Date().toISOString().slice(0,10),scale:2})}
+ else if(a==='hmcsv')hmExportCSV()
+ else if(a==='hmjson')hmExportJSON()
+ else if(a==='hmcellcsv')hmExportCellCSV()
+ else if(a==='hmbeamer'){const b=await hmExportBeamerZip();if(b)await outFile('beamer-export.zip',b,'application/zip')}
+ else if(a==='hmretry')hmLoad()
+ else if(a==='theme'){const order=['','outdoor','night'];const i=order.indexOf(S.theme||'');S.theme=order[(i<0?0:i+1)%order.length]||'';applyTheme();save();render();const lab=S.theme==='night'?t('night'):S.theme==='outdoor'?t('outd'):t('theme_day');announce(lab)}
+ else if(a==='lock'){setLock(true);announce(t('lock_t'))}
+ else if(a==='geotog'){S.geoOn=!S.geoOn;if(S.geoOn)maybeGeo();save();render();announce(t('geo')+': '+(S.geoOn?t('astart'):t('aend')))}
+ else if(a==='geofix'){geoOnce(function(g){var e=S.events.find(function(x){return x.id===v});if(!e)return;pushHist(e,'geo',e.geo||null);e.geo=g;save();editEv(v)})}
+
+ else if(a==='prot')outFile('studienprotokoll-verhaltens-tracker.md',t('proto'))
+ else if(a==='csv3')outFile('verhalten-scans-'+new Date().toISOString().slice(0,10)+'.csv',csv3())
+ else if(a==='edel'){const e=S.events.find(x=>x.id===v);if(e){pushHist(e,'delete',{beh:e.beh,start:e.start,end:e.end});(S.trash=S.trash||[]).push(Object.assign({},e,{deletedAt:new Date().toISOString()}));if(S.trash.length>200)S.trash=S.trash.slice(-200)}S.events=S.events.filter(x=>x.id!==v);save();closeModal();render()}
+ else if(a==='esave'){saveEvFromForm(v)}
+ else if(a==='csv1')outFile('verhalten-ereignisse-'+new Date().toISOString().slice(0,10)+'.csv',csv1())
+ else if(a==='csv2')outFile('verhalten-startstop-'+new Date().toISOString().slice(0,10)+'.csv',csv2())
+ else if(a==='badd'){const n=$('#bn').value.trim(),sp=[...document.querySelectorAll('.bsp:checked')].map(x=>x.value).join(''),d=$('#bd').value.trim()||'–';if(!n||!sp){$('#be').textContent=t('bneed');return}const b={id:'c_'+uid(),cat:$('#bc').value,sp:sp,en:n,de:n,xe:d,xd:d};S.custom.push(b);BE.push(b);save();render()}
+ else if(a==='bdel'){if(S.events.some(e=>e.beh===v)){alert(t('inuse'));return}S.custom=S.custom.filter(b=>b.id!==v);BE.splice(BE.findIndex(b=>b.id===v),1);S.hid=S.hid.filter(x=>x!==v);save();render()}
+ else if(a==='hid'){const i=S.hid.indexOf(v);if(i<0)S.hid.push(v);else S.hid.splice(i,1);save();const el=document.querySelector(`[data-a='hid'][data-v='${v}']`),h=S.hid.includes(v);if(el){el.className='btn '+(h?'s':'');el.textContent=h?'○':'●'}}
+ else if(a==="add"){const n=$("#an").value.trim(),u=$("#anu").value.trim();if(!n&&!u){$("#er").textContent=t("need");return}S.animals.push({id:uid(),name:n,num:u,sp:$("#asp").value});save();render()}
+ else if(a==="del"){if(confirm(t("cdel"))){S.animals=S.animals.filter(x=>x.id!==v);S.events=S.events.filter(e=>e.animal!==v);S.scans=S.scans.filter(e=>e.animal!==v);save();render()}}
+ else if(a==="rt"){S.rem.val=Math.max(1,+$("#rv").value||1);S.rem.unit=$("#ru").value;S.rem.on=!S.rem.on;save();startRem();render()}
+ else if(a==="snap"||a==="snapok"){snap();closeModal();if(S.rem.on)nextAt=Date.now()+ms()}
+ else if(a==="exp"){const j=await doExport();let ok=false;try{const d=await claude.use("downloads");if(d){await d.save({filename:"verhalten-"+new Date().toISOString().slice(0,10)+".json",data:j});ok=true;S.lastExp=Date.now();save();$("#ms").textContent=t("dl")}}catch(e){}if(!ok){const x=$("#ta");x.value=j;x.style.display="block";x.select()}}
+ else if(a==="copy"){const j=await doExport(),x=$("#ta");x.value=j;x.style.display="block";x.select();try{await navigator.clipboard.writeText(j);$("#ms").textContent=t("cp")}catch(e){try{document.execCommand("copy");$("#ms").textContent=t("cp")}catch(e2){}}}
+ else if(a==="clr"){if(confirm(t("cclr"))){S.animals=[];S.events=[];S.scans=[];S.cur=null;save();render()}}}
+let thT=null,thSkip=false,thHintT=null;
+function thBtn(){return document.querySelector('[data-a="theme"]')}
+function thCancel(){if(thT){clearTimeout(thT);thT=null}const b=thBtn();if(b)b.classList.remove('hold')}
+function thHint(){const m=t('theme_hold');announce(m);let h=document.getElementById('thh');if(!h){h=document.createElement('div');h.id='thh';h.className='thh';h.setAttribute('role','status');document.body.appendChild(h)}h.textContent=m;clearTimeout(thHintT);thHintT=setTimeout(()=>{h.remove()},2200)}
+function thStart(){if(thT)return;const b=thBtn();if(b)b.classList.add('hold');try{navigator.vibrate&&navigator.vibrate(20)}catch(e){}thT=setTimeout(()=>{thT=null;const b2=thBtn();if(b2)b2.classList.remove('hold');thSkip=true;setTimeout(()=>{thSkip=false},800);const h=document.getElementById('thh');if(h)h.remove();act('theme')},3000)}
+document.addEventListener('pointerdown',e=>{if(S.theme==='night'&&e.target.closest&&e.target.closest('[data-a="theme"]'))thStart()});
+['pointerup','pointercancel'].forEach(n=>document.addEventListener(n,()=>{if(thT){thCancel();if(S.theme==='night')thHint()}}));
+document.addEventListener('contextmenu',e=>{if(e.target.closest&&e.target.closest('[data-a="theme"]'))e.preventDefault()});
+document.addEventListener('keydown',e=>{if(S.theme==='night'&&(e.key==='Enter'||e.key===' ')&&e.target.closest&&e.target.closest('[data-a="theme"]')){e.preventDefault();if(!e.repeat)thStart()}});
+document.addEventListener('keyup',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.closest&&e.target.closest('[data-a="theme"]')){if(thT){e.preventDefault();thCancel();thHint()}else if(S.theme==='night')e.preventDefault()}});
+document.addEventListener("click",e=>{const q=e.target.closest("[data-h]");if(q){e.stopPropagation();help(q.dataset.h);return}
+ if(e.target.id==="mo"){act("close");return}
+ const hb=e.target.closest(".hb");if(hb){hsel(hb);return}
+ const b=e.target.closest(".b");if(b){toggle(b.dataset.b);return}
+ const x=e.target.closest("[data-a]");if(x&&x.dataset.a==="theme"&&(thSkip||S.theme==="night")){thSkip=false;return}if(x&&x.id!=="mo")act(x.dataset.a,x.dataset.v)});
+document.addEventListener("keydown",e=>{if((e.key==="Enter"||e.key===" ")&&e.target.classList&&e.target.classList.contains("b")){e.preventDefault();if(e.target.classList.contains("hb"))hsel(e.target);else toggle(e.target.dataset.b)}});
+document.addEventListener('change',e=>{if(e.target.id==='dsel'){S.day=e.target.value;save();render()}});
+setInterval(()=>{if(S.view==="O")tick()},1000);
+applyTheme();render();if(S.rem.on)startRem();if(S.locked)setLock(true);
+try{if(screen.orientation&&screen.orientation.lock)screen.orientation.lock('portrait').catch(function(){})}catch(e){}
+</script>
+</body>
+</html>
