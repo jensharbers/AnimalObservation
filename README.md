@@ -488,9 +488,25 @@ Current Chrome, Edge, Firefox and Safari on Android, iOS and desktop. Some featu
 
 A step-by-step tour with screenshots (demo data, outdoor and night mode, screen lock) is in [`docs/VIGNETTE.md`](docs/VIGNETTE.md).
 
-## Third-party components
+# Third-party components
 
-JSZip (MIT or GPL-3.0, used under MIT), jsQR (Apache-2.0) and Plotly.js (MIT). Details and license texts: [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md) and `lib/licenses/`.
+The Behavior Tracker itself is released under the [MIT License](LICENSE).
+It optionally loads three third-party JavaScript libraries. They are loaded
+from local files first (`lib/` and the app folder) and only fall back to a
+public CDN if the local file is missing.
+
+| Library | Version | Used for | License | Local file | Full license text |
+|---|---|---|---|---|---|
+| [JSZip](https://stuk.github.io/jszip/) | 3.10.1 | Beamer/LaTeX ZIP export of the heatmap | MIT **or** GPL-3.0-or-later (used here under MIT) | `lib/jszip.min.js` | `lib/licenses/JSZip-LICENSE.markdown` |
+| [jsQR](https://github.com/cozmo/jsQR) | 1.4.0 | QR-code scan of ear tags where the browser has no `BarcodeDetector` | Apache-2.0 | `lib/jsQR.min.js` | `lib/licenses/jsQR-LICENSE` |
+| [Plotly.js](https://plotly.com/javascript/) (cartesian dist, minified) | 2.35.2 | Heatmap rendering | MIT | `plotly-cartesian.min.js` | `lib/licenses/Plotly-LICENSE` |
+
+All three are compatible with an MIT-licensed project. If you redistribute
+the app together with these files, keep the license texts in `lib/licenses/`
+(Apache-2.0 and MIT both require the notice to travel with the code).
+
+Note: `lib/jsQR.min.js` is the unmodified `dist/jsQR.js` build of jsQR 1.4.0
+from npm, renamed to the file name the app expects.
 
 ## License
 
