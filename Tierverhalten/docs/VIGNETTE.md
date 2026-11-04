@@ -3,7 +3,7 @@
 This walkthrough follows one complete workflow, from setting up animals to exporting data, using the built-in **demo data** (6 cows, 2 days). All screenshots were taken on a phone-sized screen. No real animals or farms are shown.
 
 Live version: <https://jensharbers.github.io/AnimalObservation/Tierverhalten/>
-Back to the [README](../README.md) for the full reference.
+Back to the [README](../../README.md) for the full reference.
 
 ---
 
