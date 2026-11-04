@@ -7,7 +7,7 @@ It is built for **farmers** (quick checks, welfare indicators) and **scientists*
 > **Try it online:** <https://jensharbers.github.io/AnimalObservation/Tierverhalten/>
 > No account, no installation. Your data never leaves your device.
 
-![Recording screen](docs/screenshots/03_record.png)
+![Recording screen](Tierverhalten/docs/screenshots/03_record.png)
 
 *(All screenshots in this repository use generated demo data, not real animals.)*
 
@@ -246,7 +246,7 @@ A **Skip to content** link is available for keyboard and screen-reader users.
 
 ### 1. Animals
 
-![Animals tab](docs/screenshots/01_animals.png)
+![Animals tab](Tierverhalten/docs/screenshots/01_animals.png)
 
 From top to bottom:
 
@@ -259,11 +259,11 @@ From top to bottom:
 3. **Session card** (study metadata): *Study / project*, *Observer*, *Group / pen*, *Location*, *Temp. °C*, *Housing system* and a free-text *Day note*. These values are saved with every **newly started** event and appear in the JSON and CSV exports. Tip: enter your name as observer, so your records stay identifiable after merging with a colleague's data.
 4. **Ethogram editor**: add your own behavior (name, definition/example, main category, species), and open the **Ethogram (32)** list to show or hide behaviors (● shown, ○ hidden) or delete your own behaviors with × (only possible while no data uses them; hide instead).
 
-![Session and ethogram editor](docs/screenshots/02_session_ethogram.png)
+![Session and ethogram editor](Tierverhalten/docs/screenshots/02_session_ethogram.png)
 
 ### 2. Record
 
-![Recording with active behaviors](docs/screenshots/04_record_active.png)
+![Recording with active behaviors](Tierverhalten/docs/screenshots/04_record_active.png)
 
 From top to bottom:
 
@@ -285,11 +285,11 @@ From top to bottom:
    - Feedback is given by colour, text, vibration (short = start, double = end) and a screen-reader announcement.
    - The screen stays on while this tab is open.
 
-![Button sizes](docs/screenshots/06_record_size_S.png)
+![Button sizes](Tierverhalten/docs/screenshots/06_record_size_S.png)
 
 **Herd scan (scan sampling).** Switch to **Herd** and tap **Herd scan (n)**. For each animal in turn, choose the behavior(s) at the moment of the scan and tap **Save & next**, or **Skip** if the animal is not visible. The chips at the top show progress (✓ recorded, – skipped); tap one to correct it. **End scan** stops the pass. All animals of one pass share the same scan ID and start time. The reminder timer can prompt you for scans at fixed intervals.
 
-![Herd scan](docs/screenshots/07_herd_scan_start.png)
+![Herd scan](Tierverhalten/docs/screenshots/07_herd_scan_start.png)
 
 ### 3. Analysis
 
@@ -297,7 +297,7 @@ Three sub-tabs, left to right: **Tables · Charts · Heatmap**.
 
 #### Tables
 
-![Tables](docs/screenshots/09_analysis_tables.png)
+![Tables](Tierverhalten/docs/screenshots/09_analysis_tables.png)
 
 1. **Animal chips** to choose the animal.
 2. **Duration per behavior:** choose the resolution (*Day* or *Hour*) and a date. The table shows duration per behavior and day (or hour), the total (Σ duration) and the event count. Darker cells mean longer durations. Overlapping behaviors are counted separately, so totals can exceed the observation time.
@@ -307,7 +307,7 @@ Three sub-tabs, left to right: **Tables · Charts · Heatmap**.
 
 #### Charts
 
-![Time budget chart](docs/screenshots/10_chart_timebudget.png)
+![Time budget chart](Tierverhalten/docs/screenshots/10_chart_timebudget.png)
 
 1. **Chart type:** *Time budget* · *Daily pattern* · *Bouts* · *Transitions* · *Synchrony*.
 2. **Scope:** *Single animal* or *Herd mean*. In herd mode, chips with ✓ / ✕ include or exclude single animals from the mean (tap to toggle). Species are never mixed; if you have several species, species chips appear.
@@ -319,13 +319,13 @@ Three sub-tabs, left to right: **Tables · Charts · Heatmap**.
    - *Transitions*: which behavior follows which (row to column, share within the row).
    - *Synchrony*: share of observed animals showing the behavior, in 5-minute steps.
 
-   More examples: [daily pattern](docs/screenshots/11_chart_daily.png), [bouts](docs/screenshots/12_chart_bouts.png), [transitions](docs/screenshots/13_chart_transitions.png), [synchrony](docs/screenshots/14_chart_synchrony.png).
+   More examples: [daily pattern](Tierverhalten/docs/screenshots/11_chart_daily.png), [bouts](Tierverhalten/docs/screenshots/12_chart_bouts.png), [transitions](Tierverhalten/docs/screenshots/13_chart_transitions.png), [synchrony](Tierverhalten/docs/screenshots/14_chart_synchrony.png).
 
 The **?** next to *Charts* explains when to exclude an animal from the herd mean (sick, in estrus, different pen or age, too little data, test data, or when comparing one animal against the rest of the herd).
 
 #### Heatmap
 
-![Heatmap](docs/screenshots/15_heatmap.png)
+![Heatmap](Tierverhalten/docs/screenshots/15_heatmap.png)
 
 1. **Animal chips:** which animals contribute.
 2. **Aggregation period (x-axis):** *Each day*, *Weekday (averaged)* or *Calendar week*.
@@ -339,7 +339,7 @@ The heatmap needs Plotly (`plotly-cartesian.min.js`). If neither the local file 
 
 ### 4. Data
 
-![Data tab](docs/screenshots/16_data.png)
+![Data tab](Tierverhalten/docs/screenshots/16_data.png)
 
 From top to bottom:
 
@@ -357,13 +357,13 @@ From top to bottom:
 5. **Recent events** (last 30, newest first). Tap an event to correct its behavior, start and end, or to delete it. A change history is kept per event.
 6. **Delete all data** (red). Asks for confirmation.
 
-![More options](docs/screenshots/17_more_options.png)
+![More options](Tierverhalten/docs/screenshots/17_more_options.png)
 
 ### 5. Info
 
 Short description of the app, a link to the author's website and the legal notice (Impressum).
 
-![Info](docs/screenshots/18_info.png)
+![Info](Tierverhalten/docs/screenshots/18_info.png)
 
 ## Built-in ethogram
 
@@ -486,7 +486,7 @@ Current Chrome, Edge, Firefox and Safari on Android, iOS and desktop. Some featu
 
 ## Illustrated walkthrough (vignette)
 
-A step-by-step tour with screenshots (demo data, outdoor and night mode, screen lock) is in [`docs/VIGNETTE.md`](docs/VIGNETTE.md).
+A step-by-step tour with screenshots (demo data, outdoor and night mode, screen lock) is in [`Tierverhalten/docs/VIGNETTE.md`](Tierverhalten/docs/VIGNETTE.md).
 
 # Third-party components
 
